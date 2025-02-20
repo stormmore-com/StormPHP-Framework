@@ -2,7 +2,7 @@
     "name": "stormmore/framework",
     "autoload": {
         "psr-4": {
-            "Stormmore\\Framework\\": "src/"
+            "Stormmore\\Framework\\": "src"
         }
     },
     "authors": [
