@@ -36,7 +36,7 @@ readonly class Resolver
     }
 
     /**
-     * @throws DiResolveException
+     * @throws ResolverException
      */
     public function resolveReflectionMethod(ReflectionMethod $reflection): array
     {
@@ -59,7 +59,7 @@ readonly class Resolver
             }
             $method == "__construct" ? $method = 'Constructur' : $method = "Method [$method]";
             $message = "Could not create [$class]. $method parameter [$parameter] can't be resolved.";
-            throw new DiResolveException($message, 0, $e);
+            throw new ResolverException($message, 0, $e);
         }
 
         return $args;

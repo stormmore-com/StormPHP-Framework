@@ -4,6 +4,6 @@ namespace Stormmore\Framework\DependencyInjection;
 
 use Exception;
 
-class DiResolveException extends Exception
+class ResolverException extends Exception
 {
 }
