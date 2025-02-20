@@ -28,6 +28,17 @@ class AppConfiguration
         return str_starts_with($this->environment, 'development');
     }
 
+    public function setProjectDirectory(string $projectDirectory): void
+    {
+        if (empty($projectDirectory)) {
+            $projectDirectory = getcwd();
+        }
+        if (!file_exists($projectDirectory)) {
+            throw new Error("Project directory '$projectDirectory' does not exist: ");
+        }
+        $this->projectDirectory = realpath($projectDirectory);
+    }
+
     public function setSourceDirectory(string $sourceDirectory): void
     {
         if (empty($sourceDirectory)) {
