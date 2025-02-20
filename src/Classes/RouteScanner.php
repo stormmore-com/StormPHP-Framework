@@ -2,6 +2,8 @@
 
 namespace Stormmore\Framework\Classes;
 
+use PhpToken;
+
 class RouteScanner
 {
     public function scan(array $classes): array

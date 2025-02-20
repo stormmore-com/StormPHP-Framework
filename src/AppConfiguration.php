@@ -2,6 +2,8 @@
 
 namespace Stormmore\Framework;
 
+use Error;
+
 class AppConfiguration
 {
     public string $projectDirectory;
@@ -14,7 +16,11 @@ class AppConfiguration
 
     function __construct()
     {
-        $this->environment = getenv("STORM_ENV");
+        $env = getenv('STORM_ENV');
+        if (!$env) {
+            $env = 'development';
+        }
+        $this->environment = $env;
     }
 
     public function isDevelopment(): bool
@@ -22,12 +28,31 @@ class AppConfiguration
         return str_starts_with($this->environment, 'development');
     }
 
+    public function setSourceDirectory(string $sourceDirectory): void
+    {
+        if (empty($sourceDirectory)) {
+            $sourceDirectory = getcwd();
+        }
+        if (!file_exists($sourceDirectory)) {
+            throw new Error("Source directory '$sourceDirectory' does not exist: ");
+        }
+        $this->sourceDirectory = realpath($sourceDirectory);
+    }
+
+    public function setCacheDirectory(string $cacheDirectory): void
+    {
+        if (empty($cacheDirectory)) {
+            $cacheDirectory = concatenate_paths(getcwd(), ".cache");
+        }
+        if (!is_dir($cacheDirectory)) {
+            mkdir($cacheDirectory, 0777, true);
+        }
+        $this->cacheDirectory = realpath($cacheDirectory);
+    }
+
     public function getCacheDirectory(): string
     {
-        if ($this->cacheDirectory) {
-            return $this->cacheDirectory;
-        }
-        return concatenate_paths($this->sourceDirectory, "/storm-cache/");
+        return $this->cacheDirectory;
     }
 
     public function addAliases(array $aliases): void

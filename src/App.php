@@ -41,13 +41,13 @@ class App
     private closure|null $onSuccess = null;
     private closure|null $onFailure = null;
 
-    public static function create(string $sourceDir, string $cacheDir): App
+    public static function create(string $sourceDir = "", string $cacheDir = ""): App
     {
         ob_start();
 
         $appConfiguration = new AppConfiguration();
-        $appConfiguration->cacheDirectory = realpath($cacheDir);
-        $appConfiguration->sourceDirectory = realpath($sourceDir);
+        $appConfiguration->setSourceDirectory($sourceDir);
+        $appConfiguration->setCacheDirectory($cacheDir);
         $appConfiguration->aliases['@src'] = $appConfiguration->sourceDirectory;
 
         self::$instance = new App($appConfiguration);

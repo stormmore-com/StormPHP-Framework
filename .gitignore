@@ -1,6 +1,7 @@
 .idea
 
 vendor/
+test/.cache
 
 .DS_Store
 *.pem
