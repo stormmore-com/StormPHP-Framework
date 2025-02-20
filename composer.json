@@ -1,0 +1,15 @@
+{
+    "name": "stormmore/framework",
+    "autoload": {
+        "psr-4": {
+            "Stormmore\\Framework\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Michał Czerski",
+            "email": "czerski.michal@gmail.com"
+        }
+    ],
+    "require": {}
+}
