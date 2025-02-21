@@ -14,7 +14,7 @@ class View
 
     public function __construct(
         private readonly string       $fileName,
-        private readonly array|object $data)
+        private readonly array|object $data = [])
     {
     }
 
