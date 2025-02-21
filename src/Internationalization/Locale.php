@@ -10,16 +10,16 @@ class Locale implements JsonSerializable
     public string $languageCode;
     public string $countryCode;
 
-    public function __construct($tag)
+    public function __construct(string $tag = "en-US")
     {
         $this->tag = $tag;
         if (str_contains($this->tag, '-')) {
-            list($langCode,) = explode('-', $this->tag);
+            list($langCode, $countryCode) = explode('-', $this->tag);
             $this->languageCode = $langCode;
-            $this->countryCode = strtolower($this->tag);
+            $this->countryCode = $countryCode;
         } else {
             $this->languageCode = $this->tag;
-            $this->countryCode = $this->tag . '-' . $this->tag;
+            $this->countryCode = $this->tag . '-' . strtoupper($this->tag);
         }
     }
 

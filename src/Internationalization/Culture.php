@@ -6,14 +6,13 @@ use DateTimeZone;
 
 class Culture
 {
-    public string $locale = "en-US";
     public string $dateFormat = "Y-m-d";
     public string $dateTimeFormat = "Y-m-d H:i";
     public string $currency = "USD";
     public DateTimeZone $timeZone;
 
-    public function getLanguage(): Locale
+    public function __construct()
     {
-        return new Locale($this->locale);
+        $this->timeZone = new DateTimeZone(date_default_timezone_get());
     }
 }

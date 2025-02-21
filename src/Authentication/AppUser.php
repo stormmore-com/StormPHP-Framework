@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Authentication;
 
-class IdentityUser
+class AppUser
 {
     private bool $isAuthenticated = false;
     public bool $isAnonymous = true;

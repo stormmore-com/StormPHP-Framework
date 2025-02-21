@@ -4,6 +4,10 @@ namespace Stormmore\Framework\Mvc;
 
 use Exception;
 use Stormmore\Framework\App;
+use Stormmore\Framework\Authentication\AppUser;
+use Stormmore\Framework\Internationalization\Culture;
+use Stormmore\Framework\Internationalization\Locale;
+use Stormmore\Framework\Request\Request;
 use Throwable;
 use stdClass;
 
@@ -14,14 +18,14 @@ class View extends stdClass
     private array $htmlMetaJsScripts = [];
     private array $htmlMetaCssScripts = [];
 
-
     public function __construct(
-        private readonly string $fileName,
-        array|object            $data = [])
+        private readonly string    $fileName,
+        array|object               $data = [])
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->{$key} = $value;
         }
+        $container = App::getInstance()->getContainer();
     }
 
     /**
@@ -54,7 +58,7 @@ class View extends stdClass
         ob_start();
         $view = $this;
         require $templateFileName;
-        $content =  ob_get_clean();
+        $content = ob_get_clean();
         if ($this->layoutFileName) {
             $layoutView = new View($this->layoutFileName);
             $layoutView->content = $content;
@@ -66,9 +70,26 @@ class View extends stdClass
         return $content;
     }
 
+    public function getRequest(): Request
+    {
+        return App::getInstance()->getContainer()->resolve(Request::class);
+    }
+    public function getCulture(): Culture
+    {
+        return App::getInstance()->getContainer()->resolve(Culture::class);
+    }
+    public function getLocale(): Locale
+    {
+        return App::getInstance()->getContainer()->resolve(Locale::class);
+    }
+    public function getAppUser(): AppUser
+    {
+        return App::getInstance()->getContainer()->resolve(AppUser::class);
+    }
+
     public function setLayout(string $filename): void
     {
-        $this->layoutFileName  = $filename;
+        $this->layoutFileName = $filename;
     }
 
     public function setTitle(string $title): void
@@ -102,14 +123,14 @@ class View extends stdClass
 
     public function printJs(): void
     {
-        foreach($this->htmlMetaJsScripts as $js) {
+        foreach ($this->htmlMetaJsScripts as $js) {
             echo "<script type=\"text/javascript\" src=\"$js\"></script>\n";
         }
     }
 
     public function printCss(): void
     {
-        foreach($this->htmlMetaCssScripts as $css) {
+        foreach ($this->htmlMetaCssScripts as $css) {
             echo "<link href=\"$css\" rel=\"stylesheet\">\n";
         }
     }

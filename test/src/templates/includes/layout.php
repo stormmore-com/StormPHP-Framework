@@ -5,7 +5,7 @@
     <?php
         $view->printCss();
         $view->printJs();
-        $view->printTitle();
+        $view->printTitle("StormApp");
     ?>
 </head>
     <body>

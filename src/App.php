@@ -6,13 +6,16 @@ use closure;
 use Exception;
 use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionHandler;
+use Stormmore\Framework\App\IConfiguration;
 use Stormmore\Framework\App\RequestHandler;
 use Stormmore\Framework\App\ResponseHandler;
-use Stormmore\Framework\Authentication\IdentityUser;
+use Stormmore\Framework\Authentication\AppUser;
 use Stormmore\Framework\Classes\SourceCode;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
+use Stormmore\Framework\Internationalization\Culture;
 use Stormmore\Framework\Internationalization\I18n;
+use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Mvc\ViewConfiguration;
 use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Request\Response;
@@ -26,18 +29,16 @@ class App
     private ClassLoader $classLoader;
     private Resolver $resolver;
     private AppConfiguration $configuration;
-    private static App|null $instance = null;
     private ViewConfiguration $viewConfiguration;
+    private static App|null $instance = null;
     private Response $response;
     private Request $request;
     private Router $router;
-    private closure|null $addI18nCallback = null;
-    private closure|null $addIdentityUserCallback = null;
-    private closure|null $addConfigurationCallback = null;
-    private closure|null $addViewConfiguration = null;
-    private closure|null $beforeRun = null;
-    private closure|null $onSuccess = null;
-    private closure|null $onFailure = null;
+    private array $configurations = [];
+    private closure|null $addAppUserClosure = null;
+    private closure|null $beforeRunClosure = null;
+    private closure|null $onSuccessClosure = null;
+    private closure|null $onFailureClosure = null;
 
     public static function create(string $projectDir = "", string $sourceDir = "", string $cacheDir = ""): App
     {
@@ -90,37 +91,27 @@ class App
 
     public function beforeRun(callable $callable): void
     {
-        $this->beforeRun = $this->resolver->resolveCallable($callable);
+        $this->beforeRunClosure = $this->resolver->resolveCallable($callable);
     }
 
     public function onSuccess(callable $callable): void
     {
-        $this->onSuccess = $this->resolver->resolveCallable($callable);
+        $this->onSuccessClosure = $this->resolver->resolveCallable($callable);
     }
 
     public function onFailure(callable $callable): void
     {
-        $this->onFailure = $this->resolver->resolveCallable($callable);
+        $this->onFailureClosure = $this->resolver->resolveCallable($callable);
     }
 
-    public function addConfiguration(callable $callable): void
+    public function addConfiguration(callable|string $callable): void
     {
-        $this->addConfigurationCallback = $this->resolver->resolveCallable($callable);
+        $this->configurations[] = $callable;
     }
 
-    public function addViewConfiguration(callable $callable): void
+    public function addAppUser(callable $callable): void
     {
-        $this->addViewConfiguration = $this->resolver->resolveCallable($callable);
-    }
-
-    public function addI18n(callable $callable): void
-    {
-        $this->addI18nCallback = $this->resolver->resolveCallable($callable);
-    }
-
-    public function addIdentityUser(callable $callable): void
-    {
-        $this->addIdentityUserCallback = $this->resolver->resolveCallable($callable);
+        $this->addAppUserClosure = $this->resolver->resolveCallable($callable);
     }
 
     public function addRoute(string $key, $value): void
@@ -140,7 +131,9 @@ class App
         $this->sourceCode = new SourceCode($this->configuration);
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
 
-        $this->container->register(new IdentityUser());
+        $this->container->register(new AppUser());
+        $this->container->register(new Culture());
+        $this->container->register(new Locale());
         $this->container->register(new I18n());
         $this->container->register($this->configuration);
         $this->container->register($this->viewConfiguration);
@@ -150,15 +143,15 @@ class App
 
     public function run(): void
     {
-        $exceptionHandler = new ExceptionHandler($this->configuration, $this->request, $this->onFailure);
+        $exceptionHandler = new ExceptionHandler($this->configuration, $this->request, $this->onFailureClosure);
         $requestHandler = new RequestHandler(
             $this->sourceCode,
             $this->configuration,
             $this->request,
             $this->container,
             $this->resolver,
-            $this->beforeRun,
-            $this->onSuccess);
+            $this->beforeRunClosure,
+            $this->onSuccessClosure);
         $responseHandler = new ResponseHandler();
 
         try {
@@ -168,9 +161,7 @@ class App
             $this->classLoader->register();
 
             $this->configureApp();
-            $this->configureView();
-            $this->configureI18n();
-            $this->configureIdentityUser();
+            $this->configureAppUser();
 
             $result = $requestHandler->handle($this->router);
             $responseHandler->handle($this->response, $result);
@@ -183,28 +174,27 @@ class App
 
     private function configureApp(): void
     {
-        run_callable($this->addConfigurationCallback);
-    }
-
-    private function configureView(): void
-    {
-        run_callable($this->addViewConfiguration);
-    }
-
-    private function configureIdentityUser(): void
-    {
-        if ($this->addIdentityUserCallback != null) {
-            $user = run_callable($this->addIdentityUserCallback);
-            $user != null or throw new Exception("AddIdentityUser has to return IdentityUser object. Returned NULL.");
-            $user instanceof IdentityUser or throw new Exception("AddIdentityUser returned value is not IdentityUser");
-
-            $this->container->registerAs($user, IdentityUser::class);
-            $this->container->register($user);
+        foreach ($this->configurations as $configuration) {
+            if (is_callable($configuration)) {
+                run_callable($configuration);
+            }
+            if (is_string($configuration)) {
+                $configuration = $this->resolver->resolveObject($configuration);
+                $configuration instanceof IConfiguration or throw new Exception("Configuration should be callable or class implementing IConfigure");
+                $configuration->configure();
+            }
         }
     }
 
-    private function configureI18n(): void
+    private function configureAppUser(): void
     {
-        run_callable($this->addI18nCallback);
+        if ($this->addAppUserClosure != null) {
+            $user = run_callable($this->addAppUserClosure);
+            $user != null or throw new Exception("AddAppUser has to return AppUser object. Returned NULL.");
+            $user instanceof AppUser or throw new Exception("AddAppUser returned value is not AppUser");
+
+            $this->container->registerAs($user, AppUser::class);
+            $this->container->register($user);
+        }
     }
 }

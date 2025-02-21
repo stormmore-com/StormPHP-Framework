@@ -11,7 +11,7 @@ use Stormmore\Framework\Authentication\Authenticate;
 use Stormmore\Framework\Authentication\AuthenticationException;
 use Stormmore\Framework\Authentication\Authorize;
 use Stormmore\Framework\Authentication\AuthorizedException;
-use Stormmore\Framework\Authentication\IdentityUser;
+use Stormmore\Framework\Authentication\AppUser;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Request\Request;
@@ -52,7 +52,7 @@ readonly class ControllerReflection
     {
         if (count($class->getAttributes(AjaxAuthenticate::class)) or
             count($method->getAttributes(AjaxAuthenticate::class))) {
-            $user = $this->di->resolve(IdentityUser::class);
+            $user = $this->di->resolve(AppUser::class);
             if (!$user->isAuthenticated()) {
                 throw new AjaxAuthenticationException("APP: authentication required", 401);
             }
@@ -83,7 +83,7 @@ readonly class ControllerReflection
     {
         if (count($class->getAttributes(Authenticate::class)) or
             count($method->getAttributes(Authenticate::class))) {
-            $user = $this->di->resolve(IdentityUser::class);
+            $user = $this->di->resolve(AppUser::class);
             if (!$user->isAuthenticated()) {
                 throw new AuthenticationException("APP: authentication required", 401);
             }
@@ -100,7 +100,7 @@ readonly class ControllerReflection
         $requiredClaims = array_merge($classClaims, $methodClaims);
 
         if ($classAttributes or $methodAttributes) {
-            $user = $this->di->resolve(IdentityUser::class);
+            $user = $this->di->resolve(AppUser::class);
             if (!$user->hasClaims($requiredClaims)) {
                 throw new AuthorizedException("APP: Claim required", 403);
             }

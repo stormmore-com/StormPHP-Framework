@@ -12,6 +12,6 @@ class HomepageController
     #[Route("/")]
     public function index(): View
     {
-        return view("@src/homepage_template.php", ['name' => 'John Doe']);
+        return view("@src/templates/homepage_template.php", ['name' => 'John Doe']);
     }
 }
