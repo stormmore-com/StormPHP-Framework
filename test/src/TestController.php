@@ -2,9 +2,9 @@
 
 namespace src;
 
-use Stormmore\Framework\Controller\Controller;
-use Stormmore\Framework\Controller\Route;
-use Stormmore\Framework\Template\View;
+use Stormmore\Framework\Mvc\Controller;
+use Stormmore\Framework\Mvc\Route;
+use Stormmore\Framework\Mvc\View;
 
 #[Controller]
 class TestController

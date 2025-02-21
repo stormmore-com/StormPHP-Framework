@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Controller;
+namespace Stormmore\Framework\Mvc;
 
 use Exception;
 use ReflectionClass;

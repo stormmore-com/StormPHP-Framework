@@ -2,9 +2,9 @@
 
 namespace Stormmore\Framework\App;
 
+use Stormmore\Framework\Mvc\View;
 use Stormmore\Framework\Request\Redirect;
 use Stormmore\Framework\Request\Response;
-use Stormmore\Framework\Template\View;
 
 class ResponseHandler
 {

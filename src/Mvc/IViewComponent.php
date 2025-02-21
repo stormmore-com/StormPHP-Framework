@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Template;
+namespace Stormmore\Framework\Mvc;
 
 interface IViewComponent
 {

@@ -1,8 +1,8 @@
 <?php
 
 use Stormmore\Framework\App;
-use Stormmore\Framework\Template\IViewComponent;
-use Stormmore\Framework\Template\View;
+use Stormmore\Framework\Mvc\IViewComponent;
+use Stormmore\Framework\Mvc\View;
 
 function v_helper(string $filename): void
 {

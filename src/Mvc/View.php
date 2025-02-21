@@ -1,9 +1,9 @@
 <?php
 
-namespace Stormmore\Framework\Template;
+namespace Stormmore\Framework\Mvc;
 
-use Stormmore\Framework\App;
 use Exception;
+use Stormmore\Framework\App;
 use Throwable;
 
 class View

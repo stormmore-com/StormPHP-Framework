@@ -2,22 +2,22 @@
 
 namespace Stormmore\Framework;
 
+use closure;
+use Exception;
 use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionHandler;
 use Stormmore\Framework\App\RequestHandler;
 use Stormmore\Framework\App\ResponseHandler;
 use Stormmore\Framework\Authentication\IdentityUser;
 use Stormmore\Framework\Classes\SourceCode;
-use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\DependencyInjection\Container;
+use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\I18n;
+use Stormmore\Framework\Mvc\ViewConfiguration;
 use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Request\Response;
 use Stormmore\Framework\Route\Router;
-use Stormmore\Framework\Template\ViewConfiguration;
 use Throwable;
-use Exception;
-use closure;
 
 class App
 {
