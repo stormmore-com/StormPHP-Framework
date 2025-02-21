@@ -4,7 +4,6 @@ use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
 use Stormmore\Framework\Mvc\View;
 use Stormmore\Framework\AppConfiguration;
-use \Stormmore\Framework\Internationalization\Locale;
 
 #[Controller]
 readonly class StatusController

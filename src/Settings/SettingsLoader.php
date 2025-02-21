@@ -11,7 +11,7 @@ class SettingsLoader
     /**
      * @throws UnknownPathAliasException
      */
-    public static function LoadIfExist(string|object $object, $filePath): ?object
+    public function LoadIfExist(string|object $object, $filePath): ?object
     {
         if (file_exists(resolve_path_alias($filePath))) {
             return self::load($object, $filePath);
@@ -23,7 +23,7 @@ class SettingsLoader
     /**
      * @throws UnknownPathAliasException
      */
-    public static function load(string|object $object, $filePath): object
+    public function load(string|object $object, $filePath): object
     {
         $filePath = resolve_path_alias($filePath);
         is_file($filePath) or throw new Exception("SettingsLoader: File $filePath doesn't exist");
@@ -39,7 +39,7 @@ class SettingsLoader
         return $object;
     }
 
-    private static function map($source, $destination): void
+    private function map($source, $destination): void
     {
         if ($source == null) return;
 

@@ -290,6 +290,19 @@ class Request
         return $this->acceptedLanguages;
     }
 
+    public function getFirstAcceptedLanguage(array $supportedLocales): Locale|null
+    {
+        $acceptedLanguages = $this->getAcceptedLanguages();
+        foreach ($acceptedLanguages as $acceptedLanguage) {
+            foreach($supportedLocales as $supportedLocale) {
+                if ($acceptedLanguage->equals($supportedLocale)) {
+                    return $supportedLocale;
+                }
+            }
+        }
+        return null;
+    }
+
     public function getCookie($name, $defaultValue = null): mixed
     {
         return Cookies::has($name) ? Cookies::get($name) : $defaultValue;
