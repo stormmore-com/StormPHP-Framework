@@ -4,65 +4,6 @@ use Stormmore\Framework\App;
 use Stormmore\Framework\Mvc\IViewComponent;
 use Stormmore\Framework\Mvc\View;
 
-function v_helper(string $filename): void
-{
-    import($filename);
-}
-
-function v_include(string $filename, array|object $data = []): void
-{
-    print_view($filename, $data);
-}
-
-function v_title(string $title): void
-{
-    View::addTitle($title);
-}
-
-function print_title(string $defaultTitle): void
-{
-    $title = View::getTitle();
-    if (empty($title)) {
-        $title = $defaultTitle;
-    }
-    echo "<title>$title</title>\n";
-}
-
-function print_scripts(): void
-{
-    foreach(View::getJsScripts() as $js) {
-        echo "<script type=\"text/javascript\" src=\"$js\"></script>\n";
-    }
-
-    foreach(View::getCssScripts() as $css) {
-        echo "<link href=\"$css\" rel=\"stylesheet\">\n";
-    }
-}
-
-function v_include_js(string|array $url): void
-{
-    if (is_array($url)) {
-        foreach ($url as $jsUrl) {
-            View::addJsScript($jsUrl);
-        }
-    }
-    else {
-        View::addJsScript($url);
-    }
-}
-
-function v_include_css(string|array $url): void
-{
-    if (is_array($url)) {
-        foreach ($url as $cssUrl) {
-            View::addCssScript($cssUrl);
-        }
-    }
-    else {
-        View::addCssScript($url);
-    }
-}
-
 function view(string $templateFileName, array|object $data = []): View
 {
     if (!str_ends_with($templateFileName, '.php')) {

@@ -7,11 +7,11 @@ use Stormmore\Framework\Mvc\Route;
 use Stormmore\Framework\Mvc\View;
 
 #[Controller]
-class TestController
+class HomepageController
 {
-    #[Route("/test")]
+    #[Route("/")]
     public function index(): View
     {
-        return view("@src/test_template.php");
+        return view("@src/homepage_template.php", ['name' => 'John Doe']);
     }
 }

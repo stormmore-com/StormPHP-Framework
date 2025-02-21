@@ -5,27 +5,23 @@ namespace Stormmore\Framework\Mvc;
 use Exception;
 use Stormmore\Framework\App;
 use Throwable;
+use stdClass;
 
-class View
+class View extends stdClass
 {
-    private static array $layoutVariables = [];
+    private string|null $layoutFileName = null;
+    private string|null $htmlMetaTitle = null;
+    private array $htmlMetaJsScripts = [];
+    private array $htmlMetaCssScripts = [];
 
-    private array $bag = [];
 
     public function __construct(
-        private readonly string       $fileName,
-        private readonly array|object $data = [])
+        private readonly string $fileName,
+        array|object            $data = [])
     {
-    }
-
-    public function __get($key)
-    {
-        return array_key_exists($key, $this->bag) ? $this->bag[$key] : null;
-    }
-
-    public function __set(string $name, $value): void
-    {
-        $this->bag[$name] = $value;
+        foreach($data as $key => $value) {
+            $this->{$key} = $value;
+        }
     }
 
     /**
@@ -35,7 +31,7 @@ class View
     {
         $app = App::getInstance();
         $conf = $app->getViewConfiguration();
-        foreach($conf->getHelpers() as $helper ) {
+        foreach ($conf->getHelpers() as $helper) {
             if (!str_ends_with($helper, '.php')) {
                 $helper .= '.php';
             }
@@ -45,57 +41,84 @@ class View
         $templateFilePath = resolve_path_alias($this->fileName);
         file_exists($templateFilePath) or throw new Exception("VIEW: $templateFilePath doesn't exist ");
 
-        $data = $this->data;
-        if (is_object($data)) {
-            $data = get_object_vars($this->data);
-        }
-        if (is_array($data)) {
-            foreach ($data as $name => $value) {
-                $this->bag[$name] = $value;
-            }
-        }
-
-        extract($this->bag, EXTR_OVERWRITE, 'wddx');
-
-        try
-        {
-            ob_start();
-            require $templateFilePath;
-            return ob_get_clean();
-        }
-        catch (Throwable $t) {
+        try {
+            return $this->getTemplateContent($templateFilePath);
+        } catch (Throwable $t) {
             ob_end_clean();
             throw $t;
         }
     }
 
-    public static function getJsScripts(): array
+    private function getTemplateContent(string $templateFileName): string
     {
-        return array_key_value(self::$layoutVariables, 'js_scripts', []);
+        ob_start();
+        $view = $this;
+        require $templateFileName;
+        $content =  ob_get_clean();
+        if ($this->layoutFileName) {
+            $layoutView = new View($this->layoutFileName);
+            $layoutView->content = $content;
+            $layoutView->htmlMetaCssScripts = $this->htmlMetaCssScripts;
+            $layoutView->htmlMetaJsScripts = $this->htmlMetaJsScripts;
+            $layoutView->htmlMetaTitle = $this->htmlMetaTitle;
+            return $layoutView->toHtml();
+        }
+        return $content;
     }
 
-    public static function addJsScript(string $script): void
+    public function setLayout(string $filename): void
     {
-        self::$layoutVariables['js_scripts'][] = $script;
+        $this->layoutFileName  = $filename;
     }
 
-    public static function getCssScripts(): array
+    public function setTitle(string $title): void
     {
-        return array_key_value(self::$layoutVariables, 'css_scripts', []);
+        $this->htmlMetaTitle = $title;
     }
 
-    public static function addCssScript(string $script): void
+    public function addCssScript(string|array $url): void
     {
-        self::$layoutVariables['css_scripts'][] = $script;
+        if (is_string($url)) {
+            $this->htmlMetaCssScripts[] = $url;
+        } else {
+            $urls = $url;
+            foreach ($urls as $url) {
+                $this->htmlMetaCssScripts[] = $url;
+            }
+        }
     }
 
-    public static function addTitle(string $title): void
+    public function addJsScript(string|array $url): void
     {
-        self::$layoutVariables['title'] = $title;
+        if (is_string($url)) {
+            $this->htmlMetaJsScripts[] = $url;
+        } else {
+            $urls = $url;
+            foreach ($urls as $url) {
+                $this->htmlMetaJsScripts[] = $url;
+            }
+        }
     }
 
-    public static function getTitle(): string
+    public function printJs(): void
     {
-        return array_key_value(self::$layoutVariables, 'title', "");
+        foreach($this->htmlMetaJsScripts as $js) {
+            echo "<script type=\"text/javascript\" src=\"$js\"></script>\n";
+        }
+    }
+
+    public function printCss(): void
+    {
+        foreach($this->htmlMetaCssScripts as $css) {
+            echo "<link href=\"$css\" rel=\"stylesheet\">\n";
+        }
+    }
+
+    public function printTitle(string $title = ""): void
+    {
+        if ($this->htmlMetaTitle) {
+            $title = $this->htmlMetaTitle;
+        }
+        echo "<title>$title</title>\n";
     }
 }
