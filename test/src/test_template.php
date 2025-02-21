@@ -1,2 +1,1 @@
-hi hi hello
- <?php
+<h1>Working MVC model</h1>
