@@ -4,7 +4,7 @@
         "psr-4": {
             "Stormmore\\Framework\\": "src"
         },
-        "files": ["src/framework_helpers.php", "src/view_helpers.php"]
+        "files": ["src/framework_helpers.php", "src/view_helpers.php", "src/html_helpers.php", "src/format_helpers.php"]
     },
     "authors": [
         {
