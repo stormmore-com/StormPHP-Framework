@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "Stormmore\\Framework\\": "src"
-        }
+        },
+        "files": ["src/framework_helpers.php", "src/view_helpers.php"]
     },
     "authors": [
         {

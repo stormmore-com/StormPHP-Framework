@@ -19,8 +19,6 @@ use Throwable;
 use Exception;
 use closure;
 
-require 'functions.php';
-
 class App
 {
     private Container $container;
