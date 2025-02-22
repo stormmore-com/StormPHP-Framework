@@ -1,7 +1,5 @@
 <?php
 
-use Stormmore\Framework\Template\Html;
-
 function html_label(string $for, string $text, string $className = ""): string
 {
     return "<label for=\"$for\" class=\"$className\">$text</label>";
@@ -61,7 +59,7 @@ function html_select($name, $values, $selected = null, $class = null, $required 
     return $html;
 }
 
-function html_options($options, $selected = null): string
+function html_options($options, $selected = null): void
 {
     $html = "";
     foreach ($options as $value => $name) {
@@ -72,7 +70,7 @@ function html_options($options, $selected = null): string
         $html .= "value=\"$value\" ";
         $html .= "$attr>$name</option>";
     }
-    return $html;
+    echo $html;
 }
 
 function html_error($valid, $message, string $class = "form-error"): string

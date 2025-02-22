@@ -1,12 +1,12 @@
 <?php
 
-namespace Stormmore\Framework\Settings;
+namespace Stormmore\Framework\Configuration;
 
 use Exception;
 use ReflectionClass;
 use Stormmore\Framework\UnknownPathAliasException;
 
-class SettingsLoader
+class JsonConfigurationLoader
 {
     /**
      * @throws UnknownPathAliasException

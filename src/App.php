@@ -31,6 +31,7 @@ class App
     private AppConfiguration $configuration;
     private ViewConfiguration $viewConfiguration;
     private static App|null $instance = null;
+    private I18n $i18n;
     private Response $response;
     private Request $request;
     private Router $router;
@@ -84,6 +85,11 @@ class App
         return $this->container;
     }
 
+    public function getI18n(): I18n
+    {
+        return $this->i18n;
+    }
+
     public function getRequest(): Request
     {
         return $this->request;
@@ -124,6 +130,7 @@ class App
         $this->container = new Container();
         $this->resolver = new Resolver($this->container);
         $this->router = new Router();
+        $this->i18n = new I18n();
         $this->response = new Response();
         $this->request = new Request($this->resolver);
         $this->configuration = $configuration;
@@ -132,9 +139,7 @@ class App
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
 
         $this->container->register(new AppUser());
-        $this->container->register(new Culture());
-        $this->container->register(new Locale());
-        $this->container->register(new I18n());
+        $this->container->register($this->i18n);
         $this->container->register($this->configuration);
         $this->container->register($this->viewConfiguration);
         $this->container->register($this->response);

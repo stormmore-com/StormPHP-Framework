@@ -16,7 +16,7 @@ class Locale implements JsonSerializable
         if (str_contains($this->tag, '-')) {
             list($langCode, $countryCode) = explode('-', $this->tag);
             $this->languageCode = $langCode;
-            $this->countryCode = $countryCode;
+            $this->countryCode = strtoupper($countryCode);
         } else {
             $this->languageCode = $this->tag;
             $this->countryCode = $this->tag . '-' . strtoupper($this->tag);

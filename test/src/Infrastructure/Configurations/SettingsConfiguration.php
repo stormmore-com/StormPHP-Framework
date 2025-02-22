@@ -2,14 +2,14 @@
 
 namespace Infrastructure\Configurations;
 
-use Infrastructure\Settings;
+use Infrastructure\Settings\Settings;
 use Stormmore\Framework\App\IConfiguration;
 use Stormmore\Framework\DependencyInjection\Container;
-use Stormmore\Framework\Settings\SettingsLoader;
+use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 
 class SettingsConfiguration implements IConfiguration
 {
-    public function __construct(private Container $container, private SettingsLoader $settingsLoader)
+    public function __construct(private Container $container, private JsonConfigurationLoader $settingsLoader)
     {
     }
 

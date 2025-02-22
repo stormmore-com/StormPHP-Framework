@@ -269,7 +269,7 @@ class Request
     /**
      * @return Locale[]
      */
-    public function getAcceptedLanguages(): array
+    public function getAcceptedLocales(): array
     {
         if ($this->acceptedLanguages) {
             return $this->acceptedLanguages;
@@ -290,9 +290,9 @@ class Request
         return $this->acceptedLanguages;
     }
 
-    public function getFirstAcceptedLanguage(array $supportedLocales): Locale|null
+    public function getFirstAcceptedLocale(array $supportedLocales): Locale|null
     {
-        $acceptedLanguages = $this->getAcceptedLanguages();
+        $acceptedLanguages = $this->getAcceptedLocales();
         foreach ($acceptedLanguages as $acceptedLanguage) {
             foreach($supportedLocales as $supportedLocale) {
                 if ($acceptedLanguage->equals($supportedLocale)) {

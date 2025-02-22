@@ -1,10 +1,10 @@
 <?php
 
-namespace Infrastructure;
+namespace Infrastructure\Settings;
 
 use Stormmore\Framework\Internationalization\Locale;
 
-class Settings
+class I18n
 {
     public bool $isMultiLanguage;
     public Locale $defaultLocale;
@@ -24,5 +24,15 @@ class Settings
         foreach($locales as $locale) {
             $this->locales[] = new Locale($locale);
         }
+    }
+
+    public function isSupportedLocale(string $locale): bool
+    {
+        foreach($this->locales as $supported) {
+            if ($supported->tag === $locale->tag) {
+                return true;
+            }
+        }
+        return false;
     }
 }

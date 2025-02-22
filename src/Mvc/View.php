@@ -6,6 +6,7 @@ use Exception;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Authentication\AppUser;
 use Stormmore\Framework\Internationalization\Culture;
+use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Request\Request;
 use Throwable;
@@ -13,6 +14,10 @@ use stdClass;
 
 class View extends stdClass
 {
+    public I18n $i18n;
+    public Request $request;
+    public AppUser $appUser;
+
     private string|null $layoutFileName = null;
     private string|null $htmlMetaTitle = null;
     private array $htmlMetaJsScripts = [];
@@ -25,7 +30,10 @@ class View extends stdClass
         foreach ($data as $key => $value) {
             $this->{$key} = $value;
         }
-        $container = App::getInstance()->getContainer();
+
+        $this->i18n = App::getInstance()->getContainer()->resolve(I18n::class);
+        $this->request = App::getInstance()->getContainer()->resolve(Request::class);
+        $this->appUser = App::getInstance()->getContainer()->resolve(AppUser::class);
     }
 
     /**
@@ -68,23 +76,6 @@ class View extends stdClass
             return $layoutView->toHtml();
         }
         return $content;
-    }
-
-    public function getRequest(): Request
-    {
-        return App::getInstance()->getContainer()->resolve(Request::class);
-    }
-    public function getCulture(): Culture
-    {
-        return App::getInstance()->getContainer()->resolve(Culture::class);
-    }
-    public function getLocale(): Locale
-    {
-        return App::getInstance()->getContainer()->resolve(Locale::class);
-    }
-    public function getAppUser(): AppUser
-    {
-        return App::getInstance()->getContainer()->resolve(AppUser::class);
     }
 
     public function setLayout(string $filename): void

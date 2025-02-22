@@ -1,9 +1,10 @@
 <?php /**
  * TODO
- *  - zmiana jezyka
+ *  - miana jezyka poprzez cookie
+ *  - sprawdzic czy działa zmiana jezyka i dalej kultura i  tłumaczenia
  *
- *  - zmiana jezyka,kultiry,tlumaczenia
  *  - panel informacyjny (user, locale, culture, sample translation)
+ *  - aliasy
  *  - autentykacja
  *  - autoryzacja
  *  - przekierowania autentykacja/autoryzacja

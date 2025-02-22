@@ -1,5 +1,7 @@
 {
-  "isMultiLanguage": true,
-  "defaultLocale": "en-US",
-  "locales": ["en-US", "en-GB", "fr-FR", "de-DE", "pl-PL"]
+  "i18n": {
+    "isMultiLanguage": true,
+    "defaultLocale": "en-US",
+    "locales": ["en-US", "en-GB", "fr-FR", "de-DE", "pl-PL"]
+  }
 }
