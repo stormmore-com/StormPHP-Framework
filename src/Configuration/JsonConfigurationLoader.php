@@ -13,11 +13,16 @@ class JsonConfigurationLoader
      */
     public function LoadIfExist(string|object $object, $filePath): ?object
     {
-        if (file_exists(resolve_path_alias($filePath))) {
+        if ($this->exist($filePath)) {
             return self::load($object, $filePath);
         }
 
         return null;
+    }
+
+    public function exist(string $filepath): bool
+    {
+        return file_exists(resolve_path_alias($filepath));
     }
 
     /**

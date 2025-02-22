@@ -3,7 +3,7 @@
 namespace Infrastructure\Configurations;
 
 use Infrastructure\Settings\Settings;
-use Stormmore\Framework\App\IConfiguration;
+use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\Internationalization\Culture;
 use Stormmore\Framework\Internationalization\I18n;
@@ -41,10 +41,10 @@ readonly class LocaleConfiguration implements IConfiguration
     {
         $tagFilename = "@/i18n/{$locale->tag}.json";
         $languageFilename = "@/i18n/{$locale->languageCode}.json";
-        if (file_exist_alias($tagFilename)) {
+        if ($this->jsonConfigurationLoader->exist($tagFilename)) {
             $this->i18n->loadJsonTranslations($tagFilename);
         }
-        else if (file_exist_alias($languageFilename)) {
+        else if ($this->jsonConfigurationLoader->exist($languageFilename)) {
             $this->i18n->loadJsonTranslations($languageFilename);
         }
     }
@@ -55,10 +55,10 @@ readonly class LocaleConfiguration implements IConfiguration
         $tagFilename = "@/i18n/culture/{$locale->tag}.json";
         $languageFilename = "@/i18n/culture/{$locale->languageCode}.json";
 
-        if (file_exist_alias($tagFilename)) {
+        if ($this->jsonConfigurationLoader->exist($tagFilename)) {
             $this->jsonConfigurationLoader->load($culture, $tagFilename);
         }
-        else if (file_exist_alias($languageFilename)) {
+        else if ($this->jsonConfigurationLoader->exist($languageFilename)) {
             $this->jsonConfigurationLoader->load($culture, $languageFilename);
         }
         return $culture;

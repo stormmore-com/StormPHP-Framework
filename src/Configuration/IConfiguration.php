@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\App;
+namespace Stormmore\Framework\Configuration;
 
 interface IConfiguration
 {

@@ -14,12 +14,6 @@ function run_callable(callable|null $callable): mixed
     return $callable();
 }
 
-function file_exist_alias(string  $path): bool
-{
-    $path = resolve_path_alias($path);
-    return file_exists($path);
-}
-
 function resolve_path_alias(string $templatePath): string
 {
     $configuration = App::getInstance()->getAppConfiguration();
