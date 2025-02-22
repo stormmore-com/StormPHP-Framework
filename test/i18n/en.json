@@ -1,3 +1,5 @@
 {
-
+  "status.title": "App configuration",
+  "status.app_name": "App name",
+  "status.app_url": "URL"
 }

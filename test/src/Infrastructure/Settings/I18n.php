@@ -35,4 +35,14 @@ class I18n
         }
         return false;
     }
+
+    public function localeExists(string $locale): bool
+    {
+        foreach($this->locales as $supported) {
+            if ($supported->tag === $locale) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -52,8 +52,8 @@ class Request
             $this->baseUri = $this->basePath;
         }
 
-        $this->getParameters = $_GET;
-        $this->postParameters = $_POST;
+        $this->getParameters = $this->castToTypes($_GET);
+        $this->postParameters = $this->castToTypes($_POST);
         $this->parameters = array_merge($_GET, $_POST);
 
         $this->method = $_SERVER['REQUEST_METHOD'];
@@ -64,8 +64,6 @@ class Request
         }
 
         $this->files = $this->parseFiles();
-        $this->parameters = $this->sanitize($this->parameters);
-        $this->parameters = array_merge($this->parameters);
 
         unset($_GET);
         unset($_POST);
@@ -361,21 +359,22 @@ class Request
         return $this->requestValidator->validate($rules);
     }
 
-    private function sanitize(array $parameters): array
+    private function castToTypes(array $values): array
     {
-        foreach ($parameters as $key => $value) {
-            if (is_array($value)) {
-                $parameters[$key] = $this->sanitize($value);
-            } else if (is_numeric($value)) {
-                $parameters[$key] = $value * 1;
-            } else if ($value == 'true' || $value == 'false') {
-                $parameters[$key] = ($value === 'true');
+        $typed = [];
+        foreach($values as $key => $value) {
+            if (is_numeric($value)) {
+                $value = $value * 1;
+            } else if (strtolower($value) === 'true' || strtolower($value) === 'false') {
+                $value = ($value == 'true');
             }
-            else if(is_string($value)) {
-                $parameters[$key] = htmlspecialchars($value);
-            }
+            $typed[$key] = $value;
         }
+        return $typed;
+    }
 
-        return $parameters;
+    private function sanitize(string $value): mixed
+    {
+        return htmlspecialchars($value);
     }
 }

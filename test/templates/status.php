@@ -10,6 +10,14 @@ $view->setLayout('@/templates/includes/layout.php');
 ?>
 <table>
     <tr>
+        <td><?php echo _('status.app_name') ?></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><?php echo _('status.app_url') ?></td>
+        <td></td>
+    </tr>
+    <tr>
         <td><?php echo _('status.environment') ?>:</td>
         <td><?php echo $configuration->environment ?></td>
     </tr>
