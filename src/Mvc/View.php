@@ -24,13 +24,9 @@ class View extends stdClass
     private array $htmlMetaCssScripts = [];
 
     public function __construct(
-        private readonly string    $fileName,
-        array|object               $data = [])
+        private readonly string $fileName,
+        private array  $data = [])
     {
-        foreach ($data as $key => $value) {
-            $this->{$key} = $value;
-        }
-
         $this->i18n = App::getInstance()->getContainer()->resolve(I18n::class);
         $this->request = App::getInstance()->getContainer()->resolve(Request::class);
         $this->appUser = App::getInstance()->getContainer()->resolve(AppUser::class);
@@ -65,6 +61,7 @@ class View extends stdClass
     {
         ob_start();
         $view = $this;
+        extract($this->data, EXTR_OVERWRITE, 'wddx');
         require $templateFileName;
         $content = ob_get_clean();
         if ($this->layoutFileName) {
