@@ -6,7 +6,7 @@
  */
 
 $view->setTitle(_('status.title'));
-$view->setLayout('@/templates/includes/layout.php');
+$view->setLayout('@src/Templates/includes/layout.php');
 ?>
 <table>
     <tr>

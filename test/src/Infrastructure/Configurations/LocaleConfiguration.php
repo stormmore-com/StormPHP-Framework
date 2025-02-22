@@ -45,8 +45,8 @@ readonly class LocaleConfiguration implements IConfiguration
 
     private function loadTranslations(Locale $locale): void
     {
-        $tagFilename = "@/i18n/{$locale->tag}.json";
-        $languageFilename = "@/i18n/{$locale->languageCode}.json";
+        $tagFilename = "@/src/i18n/{$locale->tag}.json";
+        $languageFilename = "@/src/i18n/{$locale->languageCode}.json";
         if ($this->jsonConfigurationLoader->exist($tagFilename)) {
             $this->i18n->loadJsonTranslations($tagFilename);
         }
@@ -58,8 +58,8 @@ readonly class LocaleConfiguration implements IConfiguration
     private function getCulture(Locale $locale): Culture
     {
         $culture = new Culture();
-        $tagFilename = "@/i18n/culture/{$locale->tag}.json";
-        $languageFilename = "@/i18n/culture/{$locale->languageCode}.json";
+        $tagFilename = "@/src/i18n/culture/{$locale->tag}.json";
+        $languageFilename = "@/src/i18n/culture/{$locale->languageCode}.json";
 
         if ($this->jsonConfigurationLoader->exist($tagFilename)) {
             $this->jsonConfigurationLoader->load($culture, $tagFilename);
