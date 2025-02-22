@@ -1,14 +1,11 @@
 <?php /**
  * TODO
- *  - miana jezyka poprzez cookie
- *  - sprawdzic czy działa zmiana jezyka i dalej kultura i  tłumaczenia
- *
- *  - panel informacyjny (user, locale, culture, sample translation)
+ *  - dokonczyc konfiguracje apliakcji (url, nazwa, tlumaczenia)
  *  - aliasy
  *  - autentykacja
  *  - autoryzacja
  *  - przekierowania autentykacja/autoryzacja
  *  - strony błedów
+ *  - walidacja (ładowanie walidatorów frameworka po nazwie moze byc problematyczne w tej konfiguracji)
  *  - docker i baza ale to inny projekt juz
- *  - walidacja
  */
