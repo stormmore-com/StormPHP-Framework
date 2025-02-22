@@ -21,7 +21,7 @@ readonly class StatusController
             $locales[$locale->tag] = $locale->tag;
         }
         return view("@/templates/status", [
-            'env' => $this->configuration->environment,
+            'configuration' => $this->configuration,
             'locales' => $locales
         ]);
     }
