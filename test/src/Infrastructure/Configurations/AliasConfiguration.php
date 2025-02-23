@@ -15,7 +15,7 @@ readonly class AliasConfiguration implements IConfiguration
     public function configure(): void
     {
         $this->appConfiguration->addAliases([
-            '@templates' => "@/src/templates/"
+            '@templates' => "@/src/templates"
         ]);
     }
 }
