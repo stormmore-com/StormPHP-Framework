@@ -7,7 +7,7 @@ use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\DependencyInjection\Container;
 
-class SettingsConfiguration implements IConfiguration
+readonly class SettingsConfiguration implements IConfiguration
 {
     public function __construct(private Container $container, private JsonConfigurationLoader $jsonConfigurationLoader)
     {
