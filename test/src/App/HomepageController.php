@@ -12,4 +12,10 @@ readonly class HomepageController
     {
         return view("@templates/homepage");
     }
+
+    #[Route("/url-made-only-to-throw-excception-but-it-exist")]
+    public function exceptionEndpoint()
+    {
+        throw new Exception("Plain exception without meaningful message. Day as always.");
+    }
 }
