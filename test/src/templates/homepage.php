@@ -13,7 +13,8 @@ $view->setLayout("@/src/templates/includes/layout.php");
 
 <p>Made for demonstration purposes. If you want to build your own app use <a href="https://github.com/stormmore-com/php-storm-framework-startup">official template on GitHub</a></p>
 
-<a href="/configuration">Configuration</a>
+<p><a href="/configuration">Configuration</a></p>
+<p><a href="/not-existing-url">404</a></p>
 
 <p><a href="/sigin">Sign in</a></p>
 
