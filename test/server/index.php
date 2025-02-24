@@ -3,6 +3,7 @@
 require '../../vendor/autoload.php';
 
 use Infrastructure\Configurations\AliasConfiguration;
+use Infrastructure\Configurations\AppUserConfiguration;
 use Infrastructure\Configurations\ErrorConfiguration;
 use Stormmore\Framework\App;
 use Infrastructure\Configurations\LocaleConfiguration;
@@ -14,6 +15,7 @@ $app->addConfiguration(AliasConfiguration::class);
 $app->addConfiguration(SettingsConfiguration::class);
 $app->addConfiguration(LocaleConfiguration::class);
 $app->addConfiguration(ErrorConfiguration::class);
+$app->addConfiguration(AppUserConfiguration::class);
 
 $app->addRoute('/hello', function() {
     return "hello world";

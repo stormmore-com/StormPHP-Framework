@@ -11,11 +11,6 @@ class Redirect
 
     public function __construct(string $url)
     {
-        $baseUrl = App::getInstance()->getAppConfiguration()->baseUrl;
-        if (str_starts_with($url, "http")) {
-            $this->location = $url;
-        } else if ($baseUrl != null and str_starts_with($baseUrl, 'http')) {
-            $this->location = $baseUrl . $url;
-        }
+        $this->location = $url;
     }
 }

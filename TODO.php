@@ -1,8 +1,10 @@
 <?php /**
  * TODO
+ *  - uzytkownika dodac do kontenera poprzez obiekt konfiguracji
  *  - autentykacja
  *  - autoryzacja
  *  - przekierowania autentykacja/autoryzacja
+ *
  *  - formularze
  *  - informacja zwrotna blad/sukces
  *  - walidacja (ładowanie walidatorów frameworka po nazwie moze byc problematyczne w tej konfiguracji)

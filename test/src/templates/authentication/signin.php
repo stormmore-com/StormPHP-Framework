@@ -3,7 +3,6 @@
 
 $view->setLayout('@templates/includes/layout.php');
 ?>
-<a href="/">Homepage</a>
 <h2>Sign in</h2>
 <div style="border:solid 1px; padding:10px">
     <form action="/signin" method="post">

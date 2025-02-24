@@ -20,6 +20,7 @@ class ResponseHandler
         } else if (is_string($result) || is_numeric($result)) {
             $response->body = $result;
         }
+
         if ($response->location) {
             header("Location: $response->location");
             die;

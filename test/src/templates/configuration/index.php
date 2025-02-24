@@ -8,7 +8,6 @@
 $view->setTitle(_('status.title'));
 $view->setLayout('@templates/includes/layout.php');
 ?>
-<a href="/"><?php echo _('homepage') ?></a>
 <h1>Application configuration</h1>
 <table>
     <tr>

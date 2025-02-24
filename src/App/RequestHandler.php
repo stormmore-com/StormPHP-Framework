@@ -41,6 +41,22 @@ readonly class RequestHandler
         return $result;
     }
 
+    private function run(ExecutionRoute $route): mixed
+    {
+        $endpoint = $route->endpoint;
+        if ($endpoint->isCallable()) {
+            $callable = $this->diResolver->resolveCallable($endpoint->getCallable());
+            return run_callable($callable);
+        }
+        if ($endpoint->isController()) {
+            $controllerReflection = new ControllerReflection($this->request, $this->di, $this->diResolver, $endpoint->getControllerActionList());
+            $controllerReflection->validate();
+            return $controllerReflection->invoke();
+        }
+
+        return null;
+    }
+
     private function find(Router $router): ?ExecutionRoute
     {
         $route = $router->find($this->request);
@@ -68,21 +84,5 @@ readonly class RequestHandler
             return false;
         }
         return true;
-    }
-
-    private function run(ExecutionRoute $route): mixed
-    {
-        $endpoint = $route->endpoint;
-        if ($endpoint->isCallable()) {
-            $callable = $this->diResolver->resolveCallable($endpoint->getCallable());
-            return run_callable($callable);
-        }
-        if ($endpoint->isController()) {
-            $controllerReflection = new ControllerReflection($this->request, $this->di, $this->diResolver, $endpoint->getControllerActionList());
-            $controllerReflection->validate();
-            return $controllerReflection->invoke();
-        }
-
-        return null;
     }
 }

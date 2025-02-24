@@ -34,7 +34,6 @@ class App
     private Request $request;
     private Router $router;
     private array $configurations = [];
-    private closure|null $addAppUserClosure = null;
     private closure|null $beforeRunClosure = null;
     private closure|null $onSuccessClosure = null;
     private closure|null $onFailureClosure = null;
@@ -113,11 +112,6 @@ class App
         $this->configurations[] = $callable;
     }
 
-    public function addAppUser(callable $callable): void
-    {
-        $this->addAppUserClosure = $this->resolver->resolveCallable($callable);
-    }
-
     public function addRoute(string $key, $value): void
     {
         $this->router->addRoute($key, $value);
@@ -164,7 +158,6 @@ class App
             $this->classLoader->register();
 
             $this->configureApp();
-            $this->configureAppUser();
 
             $result = $requestHandler->handle($this->router);
             $responseHandler->handle($this->response, $result);
@@ -186,18 +179,6 @@ class App
                 $configuration instanceof IConfiguration or throw new Exception("Configuration should be callable or class implementing IConfigure");
                 $configuration->configure();
             }
-        }
-    }
-
-    private function configureAppUser(): void
-    {
-        if ($this->addAppUserClosure != null) {
-            $user = run_callable($this->addAppUserClosure);
-            $user != null or throw new Exception("AddAppUser has to return AppUser object. Returned NULL.");
-            $user instanceof AppUser or throw new Exception("AddAppUser returned value is not AppUser");
-
-            $this->container->registerAs($user, AppUser::class);
-            $this->container->register($user);
         }
     }
 }
