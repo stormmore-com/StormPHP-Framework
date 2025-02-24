@@ -18,6 +18,11 @@ class Response
         Cookies::set($name, $value);
     }
 
+    public function deleteCookie($name): void
+    {
+        Cookies::delete($name);
+    }
+
     public function setRedirectMessage(string $name, string $message = ''): void
     {
         RedirectMessage::add($name, _($message));

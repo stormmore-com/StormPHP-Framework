@@ -21,4 +21,9 @@ readonly class SessionStorage
         $json = json_encode($session);
         $this->response->setCookie('session', $json);
     }
+
+    public function delete(): void
+    {
+        $this->response->deleteCookie('session', null);
+    }
 }

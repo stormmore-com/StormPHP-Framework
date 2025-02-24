@@ -16,13 +16,20 @@ readonly class AuthenticationController
     }
 
     #[Route("/signin")]
-    public function signIn(): View|Redirect
+    public function signin(): View|Redirect
     {
         if ($this->request->isPost()) {
             $username = $this->request->getParameter('username');
-            $this->authenticationService->authenticate($username);
+            $this->authenticationService->signin($username);
             return redirect();
         }
         return view("@templates/authentication/signin");
+    }
+
+    #[Route('/signout')]
+    public function signout(): Redirect
+    {
+        $this->authenticationService->signout();
+        return redirect();
     }
 }

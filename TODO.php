@@ -1,6 +1,7 @@
 <?php /**
  * TODO
  *  - uzytkownika dodac do kontenera poprzez obiekt konfiguracji
+ *  - zrefaktoryzowac cookie do obiektu nie statycznego
  *  - autentykacja
  *  - autoryzacja
  *  - przekierowania autentykacja/autoryzacja

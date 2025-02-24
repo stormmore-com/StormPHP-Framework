@@ -4,14 +4,19 @@ namespace Authentication;
 
 use Infrastructure\SessionStorage;
 
-class AuthenticationService
+readonly class AuthenticationService
 {
     public function __construct(private SessionStorage $storage)
     {
     }
 
-    public function authenticate(string $username): void
+    public function signin(string $username): void
     {
         $this->storage->save($username);
+    }
+
+    public function signout(): void
+    {
+        $this->storage->delete();
     }
 }
