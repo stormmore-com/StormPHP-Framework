@@ -12,12 +12,13 @@ readonly class SessionStorage
     {
     }
 
-    public function save(string $username): void
+    public function save(string $username, array $privileges): void
     {
         $now = new DateTime();
         $session = new stdClass();
         $session->username = $username;
         $session->createdAt = $now->format("Y-m-d H:i:s");
+        $session->privileges = $privileges;
         $json = json_encode($session);
         $this->response->setCookie('session', $json);
     }

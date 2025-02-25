@@ -363,18 +363,30 @@ class Request
     {
         $typed = [];
         foreach($values as $key => $value) {
-            if (is_numeric($value)) {
-                $value = $value * 1;
-            } else if (strtolower($value) === 'true' || strtolower($value) === 'false') {
-                $value = ($value == 'true');
+            if (is_array($value)) {
+                $typed[$key] = $this->castToTypes($value);
+            } else {
+                if (is_numeric($value)) {
+                    $value = $value * 1;
+                } else if (strtolower($value) === 'true' || strtolower($value) === 'false') {
+                    $value = ($value == 'true');
+                }
+                $typed[$key] = $value;
             }
-            $typed[$key] = $value;
         }
         return $typed;
     }
 
-    private function sanitize(string $value): mixed
+    private function sanitize(string|array $value): mixed
     {
-        return htmlspecialchars($value);
+        if (is_array($value)) {
+            $values = $value;
+            foreach ($values as $key => $value) {
+                $values[$key] = htmlspecialchars($value);
+            }
+            return $values;
+        } else {
+            return htmlspecialchars($value);
+        }
     }
 }

@@ -19,8 +19,9 @@ readonly class AuthenticationController
     public function signin(): View|Redirect
     {
         if ($this->request->isPost()) {
+            $privileges = $this->request->getParameter('privileges', []);
             $username = $this->request->getParameter('username');
-            $this->authenticationService->signin($username);
+            $this->authenticationService->signin($username, $privileges);
             return redirect();
         }
         return view("@templates/authentication/signin");

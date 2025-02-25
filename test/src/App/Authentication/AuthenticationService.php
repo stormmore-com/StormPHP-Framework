@@ -10,9 +10,9 @@ readonly class AuthenticationService
     {
     }
 
-    public function signin(string $username): void
+    public function signin(string $username, array $privileges): void
     {
-        $this->storage->save($username);
+        $this->storage->save($username, $privileges);
     }
 
     public function signout(): void

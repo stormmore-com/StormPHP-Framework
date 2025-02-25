@@ -101,8 +101,8 @@ readonly class ControllerReflection
 
         if ($classAttributes or $methodAttributes) {
             $user = $this->di->resolve(AppUser::class);
-            if (!$user->hasClaims($requiredClaims)) {
-                throw new AuthorizedException("APP: Claim required", 403);
+            if (!$user->hasPrivileges($requiredClaims)) {
+                throw new AuthorizedException("APP: Privilege required", 403);
             }
         }
     }

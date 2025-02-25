@@ -11,6 +11,10 @@ $view->setLayout('@templates/includes/layout.php');
         </p>
         <input type="text" name="username">
         <button><?php echo _('signin.post') ?></button>
+        <p>
+            <input id="admin" type="checkbox" name="privileges[]" value="administrator" />
+            <label for="admin">Administrator</label>
+        </p>
     </form>
 </div>
 

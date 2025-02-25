@@ -7,11 +7,3 @@ use Exception;
 class AjaxAuthenticationException extends Exception
 {
 }
-
-class AuthenticationException extends Exception
-{
-}
-
-class AuthorizedException extends Exception
-{
-}
