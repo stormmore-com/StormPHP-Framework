@@ -15,6 +15,7 @@ use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mvc\ViewConfiguration;
+use Stormmore\Framework\Request\Cookies;
 use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Request\Response;
 use Stormmore\Framework\Route\Router;
@@ -119,16 +120,17 @@ class App
 
     private function __construct(AppConfiguration $configuration)
     {
+        $cookies = new Cookies();
         $this->container = new Container();
         $this->resolver = new Resolver($this->container);
         $this->router = new Router();
         $this->i18n = new I18n();
-        $this->response = new Response();
-        $this->request = new Request($this->resolver);
         $this->configuration = $configuration;
         $this->viewConfiguration = new ViewConfiguration();
         $this->sourceCode = new SourceCode($this->configuration);
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
+        $this->response = new Response($cookies);
+        $this->request = new Request($cookies, $this->resolver);
 
         $this->container->register(new AppUser());
         $this->container->register($this->i18n);

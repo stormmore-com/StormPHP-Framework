@@ -4,25 +4,35 @@ namespace Stormmore\Framework\Request;
 
 class Cookies
 {
-    static function get(string $name): string
+    private array $cookies = [];
+
+    public function __construct()
     {
-        return $_COOKIE[$name];
+        foreach($_COOKIE as $name => $value)
+        {
+            $this->cookies[$name] = new Cookie($name, $value);
+        }
     }
 
-    static function has(string $name): bool
+    function get(string $name): Cookie
     {
-        return array_key_exists($name, $_COOKIE);
+        return $this->cookies[$name];
     }
 
-    static function set(string $name, string $value, int $expires = 0): void
+    function has(string $name): bool
     {
-        $_COOKIE[$name] = $value;
-        setcookie($name, $value, $expires, '/');
+        return array_key_exists($name, $this->cookies);
     }
 
-    static function delete(string $name): void
+    function set(Cookie $cookie): void
     {
-        unset($_COOKIE[$name]);
+        $this->cookies[$cookie->getName()] = $cookie->getValue();
+        setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpires(), $cookie->getPath());
+    }
+
+    function delete(string $name): void
+    {
+        unset($this->cookies[$name]);
         setcookie($name, '', -1, '/');
     }
 }

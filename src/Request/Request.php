@@ -34,7 +34,7 @@ class Request
     public string $method;
     public object $body;
 
-    function __construct(Resolver $codeResolver)
+    function __construct(public Cookies $cookies, Resolver $codeResolver)
     {
         $this->requestValidator = new RequestValidator($this, $codeResolver);
 
@@ -299,16 +299,6 @@ class Request
             }
         }
         return null;
-    }
-
-    public function getCookie($name, $defaultValue = null): mixed
-    {
-        return Cookies::has($name) ? Cookies::get($name) : $defaultValue;
-    }
-
-    public function hasCookie($name): bool
-    {
-        return Cookies::has($name);
     }
 
     function toView($data = null): array

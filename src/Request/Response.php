@@ -13,14 +13,8 @@ class Response
      */
     public array $headers = [];
 
-    public function setCookie($name, $value): void
+    public function __construct(public Cookies $cookies)
     {
-        Cookies::set($name, $value);
-    }
-
-    public function deleteCookie($name): void
-    {
-        Cookies::delete($name);
     }
 
     public function setRedirectMessage(string $name, string $message = ''): void

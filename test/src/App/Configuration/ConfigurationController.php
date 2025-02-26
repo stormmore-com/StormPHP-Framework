@@ -7,6 +7,7 @@ use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
 use Stormmore\Framework\Mvc\View;
+use Stormmore\Framework\Request\Cookie;
 use Stormmore\Framework\Request\Redirect;
 use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Request\Response;
@@ -39,7 +40,7 @@ readonly class ConfigurationController
     {
         $tag = $this->request->getParameter('tag', '');
         if ($this->settings->i18n->localeExists($tag)) {
-            $this->response->setCookie('locale', $tag);
+            $this->response->cookies->set(new Cookie('locale', $tag));
         }
         return back();
     }

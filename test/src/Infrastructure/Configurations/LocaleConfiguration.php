@@ -32,8 +32,8 @@ readonly class LocaleConfiguration implements IConfiguration
 
     private function getAcceptedLocale(): Locale
     {
-        if ($this->request->hasCookie('locale')) {
-            $tag = $this->request->getCookie('locale');
+        if ($this->request->cookies->has('locale')) {
+            $tag = $this->request->cookies->get('locale')->getValue();
             if ($this->settings->i18n->localeExists($tag)) {
                 return new Locale($tag);
             }
