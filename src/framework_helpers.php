@@ -3,7 +3,6 @@
 use Random\Randomizer;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Request\Redirect;
-use Stormmore\Framework\Request\RedirectMessage;
 use Stormmore\Framework\Internationalization\I18n;
 
 function run_callable(callable|null $callable): mixed
@@ -199,26 +198,7 @@ function back(string $url = "/"): Redirect
     return redirect($url);
 }
 
-function redirect(string $url = "/", string $messageName = "", string $messageContent = ''): Redirect
+function redirect(string $url = "/"): Redirect
 {
-    if (!empty($messageName)) {
-        RedirectMessage::add($messageName, $messageContent);
-    }
-
     return new Redirect($url);
-}
-
-function isset_redirect_message($name): bool
-{
-    return RedirectMessage::isset($name);
-}
-
-function has_redirect_message($name): bool
-{
-    return RedirectMessage::has($name);
-}
-
-function get_redirect_message(string $name): string
-{
-    return RedirectMessage::get($name);
 }

@@ -6,6 +6,7 @@ use Exception;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Authentication\AppUser;
 use Stormmore\Framework\Internationalization\I18n;
+use Stormmore\Framework\Request\RedirectMessage;
 use Stormmore\Framework\Request\Request;
 use Throwable;
 use stdClass;

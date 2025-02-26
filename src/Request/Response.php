@@ -13,13 +13,11 @@ class Response
      */
     public array $headers = [];
 
+    public RedirectMessage $messages;
+
     public function __construct(public Cookies $cookies)
     {
-    }
-
-    public function setRedirectMessage(string $name, string $message = ''): void
-    {
-        RedirectMessage::add($name, _($message));
+        $this->messages = new RedirectMessage($cookies);
     }
 
     public function addHeader(string $name, string $value): void

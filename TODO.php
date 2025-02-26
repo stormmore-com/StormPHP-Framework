@@ -1,7 +1,7 @@
 <?php /**
  * TODO
  *  - formularze
- *  - informacja zwrotna blad/sukces (flash messages/redirect messages refaktor i test)
+ *  - pokolorowac komunikaty błedu - success/failure
  *  - walidacja (ładowanie walidatorów frameworka po nazwie moze byc problematyczne w tej konfiguracji)
  *
  *  - tlumaczenia iterałów

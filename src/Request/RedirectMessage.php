@@ -4,36 +4,40 @@ namespace Stormmore\Framework\Request;
 
 class RedirectMessage
 {
-    private static string $name = 'redirect-msg-';
+    private string $prefix = 'redirect-msg-';
 
-    public static function isset($name): bool
+    public function __construct(private Cookies $cookies)
     {
-        $cookieName = self::$name . $name;
-        if (Cookies::has($cookieName)) {
-            Cookies::delete($cookieName);
+    }
+
+    public function isset($name): bool
+    {
+        $cookieName = $this->prefix . $name;
+        if ($this->cookies->has($cookieName)) {
+            $this->cookies->delete($cookieName);
             return true;
         }
 
         return false;
     }
 
-    public static function add(string $name, string $message = ''): void
+    public function has($name): bool
     {
-        Cookies::set(self::$name . $name, $message);
+        return $this->cookies->has($this->prefix . $name);
     }
 
-    public static function has($name): bool
+    public function add(string $name, string $message = '1'): void
     {
-        return Cookies::has(self::$name . $name);
+        $this->cookies->set(new Cookie($this->prefix . $name, $message));
     }
 
-    public static function get($name): string
+    public function get($name): string
     {
         $message = null;
-        $cookieName = self::$name . $name;
-        if (Cookies::has($cookieName)) {
-            $message = Cookies::get($cookieName);
-            Cookies::delete($cookieName);
+        $cookieName = $this->prefix . $name;
+        if ($this->cookies->has($cookieName)) {
+            $message = $this->cookies->get($cookieName);
+            $this->cookies->delete($cookieName);
         }
 
         return $message;

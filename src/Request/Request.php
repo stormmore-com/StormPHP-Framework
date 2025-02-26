@@ -34,8 +34,11 @@ class Request
     public string $method;
     public object $body;
 
+    public RedirectMessage $messages;
+
     function __construct(public Cookies $cookies, Resolver $codeResolver)
     {
+        $this->messages = new RedirectMessage($cookies);
         $this->requestValidator = new RequestValidator($this, $codeResolver);
 
         $this->query = array_key_exists('QUERY_STRING', $_SERVER) ? $_SERVER['QUERY_STRING'] : "";
