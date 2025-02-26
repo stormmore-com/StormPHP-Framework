@@ -15,7 +15,7 @@ readonly class AppUserConfiguration implements IConfiguration
     public function configure(): void
     {
         if ($this->request->cookies->has('session')) {
-            $session = json_decode($this->request->cookies->get('session')->getValue());
+            $session = json_decode($this->request->cookies->get('session'));
             $this->appUser->authenticate();
             $this->appUser->name = $session->username;
             $this->appUser->setPrivileges($session->privileges);

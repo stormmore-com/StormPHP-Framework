@@ -14,9 +14,9 @@ class Cookies
         }
     }
 
-    function get(string $name): Cookie
+    function get(string $name): string
     {
-        return $this->cookies[$name];
+        return $this->cookies[$name]->getValue();
     }
 
     function has(string $name): bool
