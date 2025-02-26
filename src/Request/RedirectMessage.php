@@ -1,6 +1,7 @@
 <?php
 
 namespace Stormmore\Framework\Request;
+
 class RedirectMessage
 {
     private static string $name = 'redirect-msg-';
