@@ -1,0 +1,7 @@
+services:
+  web:
+    build: "docker/php"
+    volumes:
+      - "./:/var/php/"
+    ports:
+      - "90:80"

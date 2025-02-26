@@ -7,5 +7,5 @@
  *
  *  - tlumaczenia iterałów
  *  - refaktoryzacja tego co nastanie po tych testach i zmianach
- *  - docker i baza ale to inny projekt juz
+ *  -
  */

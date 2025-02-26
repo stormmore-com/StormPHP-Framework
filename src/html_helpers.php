@@ -25,7 +25,7 @@ function html_link(string $name, string $href, array $attributes = []): string
     return $html;
 }
 
-function html_password(string $name, string|null $value = "", string $class = null): string
+function html_password(string $name, string|null $value = "", string|null $class = null): string
 {
     $html = "<input type=\"password\" id=\"$name\" name=\"$name\" value=\"$value\" ";
     $html .= html_attr('class', $class);
@@ -33,7 +33,7 @@ function html_password(string $name, string|null $value = "", string $class = nu
     return $html;
 }
 
-function html_checkbox($name, bool $checked = null): string
+function html_checkbox($name, bool|null $checked = null): string
 {
     $html = "<input type=\"checkbox\" name=\"$name\" value=\"false\" checked style=\"display: none\" /> \n";
     $html .= "<input type=\"checkbox\" name=\"$name\" id=\"$name\" value=\"true\" ";

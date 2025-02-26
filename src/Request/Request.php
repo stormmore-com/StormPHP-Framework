@@ -327,14 +327,14 @@ class Request
         return $this->parameters;
     }
 
-    public function toObject(array $map = null): object
+    public function toObject(array|null $map = null): object
     {
         $obj = new stdClass();
         $this->assign($obj, $map);
         return $obj;
     }
 
-    public function assign(object $obj, array $map = null): void
+    public function assign(object $obj, array|null $map = null): void
     {
         $reflection = new ObjectReflector($obj);
         if ($map == null) {

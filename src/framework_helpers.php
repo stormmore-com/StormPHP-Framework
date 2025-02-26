@@ -117,7 +117,7 @@ function none_empty_explode($delimiter, $string, $limit = PHP_INT_MAX): array
     return explode($delimiter, $string, $limit);
 }
 
-function di(string $key = null): mixed
+function di(string|null $key = null): mixed
 {
     $container = App::getInstance()->getContainer();
     if ($key == null)
