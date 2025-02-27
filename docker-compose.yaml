@@ -1,7 +1,15 @@
 services:
   web:
-    build: "docker/php"
+    build:
+     context: ./
+     dockerfile: "test/docker/php/Dockerfile"
+    ports:
+      - "90:80"
+  web_dev:
+    build:
+      context: ./
+      dockerfile: "test/docker/php/Dockerfile_dev"
     volumes:
       - "./:/var/php/"
     ports:
-      - "90:80"
+      - "91:80"

@@ -1,42 +1,43 @@
 <?php
 
 namespace Stormmore\Framework\Form;
+use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Validation\ValidationResult;
 
 class Form
 {
     public Request $request;
     public array|object|null $model;
-    public array $rules;
+    public array $validators;
     public ?ValidationResult $validationResult = null;
 
-    function __construct($request, object $model = null)
+    function __construct(Request $request, object|null $model = null)
     {
         $this->request = $request;
         $this->model = $model;
     }
 
-    function addRules(array $rules): void
+    public function addValidators(array $validators): void
     {
-        $this->rules = $rules;
+        $this->validators = $validators;
     }
 
-    function removeRule(string $field, string $name): void
+    public function removeValidator(string $field, string $name): void
     {
-        if (array_key_exists($field, $this->rules) and array_key_exists($name, $this->rules[$field])) {
-            unset($this->rules[$field][$name]);
+        if (array_key_exists($field, $this->validators) and array_key_exists($name, $this->validators[$field])) {
+            unset($this->validators[$field][$name]);
         }
-        if (array_key_exists($field, $this->rules) and ($key = array_search($name, $this->rules[$field])) !== false) {
-            unset($this->rules[$field][$key]);
+        if (array_key_exists($field, $this->validators) and ($key = array_search($name, $this->validators[$field])) !== false) {
+            unset($this->validators[$field][$key]);
         }
     }
 
-    function printError($name, string $message = null): void
+    function printError($name, string|null $message = null): void
     {
         if ($this->validationResult != null) {
             $field = $this->validationResult->__get($name);
             $message = empty($message) ? $field->message : $message;
-            echo html::error($field->valid, $message);
+            echo html_error($field->valid, $message);
         }
     }
 
@@ -66,7 +67,7 @@ class Form
 
     function validate(): ValidationResult
     {
-        $this->validationResult = $this->request->validate($this->rules);
+        $this->validationResult = $this->request->validate($this->validators);
         return $this->validationResult;
     }
 
