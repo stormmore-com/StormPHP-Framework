@@ -108,7 +108,11 @@ class App
         $this->onFailureClosure = $this->resolver->resolveCallable($callable);
     }
 
-    public function addConfiguration(callable|string $callable): void
+    /**
+     * @param callable|string $callable
+     * @return void
+     */
+    public function add(callable|string $callable): void
     {
         $this->configurations[] = $callable;
     }
