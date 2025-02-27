@@ -22,15 +22,20 @@ To learn more visit https://keycode13.com/php-storm-framework \
 \
 If you want to join project or share with ideas fell free to contact me. 
 
-## Projects using PHP Storm Framework
- keycode13
+### keycode13.com
+
+Framework designed to build it. 
 
 ## Quick start
 
 You can use `ready to develop` template with basic functionality. Download it here.
 
 ### Simplest application
-
+Install by typing
+```
+composer require stormmore/framework
+```
+index.php
 ```php
 require '../vendor/autoload.php';
 
