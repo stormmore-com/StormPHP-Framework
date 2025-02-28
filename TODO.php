@@ -3,10 +3,14 @@
  *  - formularze
  *  - walidacja (ładowanie walidatorów frameworka po nazwie moze byc problematyczne w tej konfiguracji)
  *
- *  middleware
- *  - pierwszy to oblsuga blędów a ostatni to mvc
+ *   obsluga command-handle cqrs
+ *   obsluga eventów
  *
- *  system middleware przy czym run dodaje na koniec
+ *  skanowaie atrybutów z namespacami przy czytaniu tokenów trzeba uwzględnic namespace
+ *  skanowanie klasy w atrybucie
+ *
+ *
+ *   obsługa meilów
  *
  *  - tlumaczenia iterałów
  *  - refaktoryzacja tego co nastanie po tych testach i zmianach

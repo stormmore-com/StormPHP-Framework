@@ -3,78 +3,84 @@
 namespace Stormmore\Framework\App;
 
 use closure;
-use Exception;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Authentication\AjaxAuthenticationException;
 use Stormmore\Framework\Authentication\AuthenticationException;
 use Stormmore\Framework\Authentication\AuthorizedException;
 use Stormmore\Framework\Request\Request;
+use Stormmore\Framework\Request\Response;
 use Throwable;
 
-
-readonly class ExceptionHandler
+readonly class ExceptionMiddleware implements IMiddleware
 {
     public function __construct(
         private AppConfiguration $configuration,
         private Request          $request,
-        private closure|null     $failCallback
-    )
+        private Response         $response)
     {
     }
-
-    #[NoReturn]
-    public function handle(Throwable $throwable): void
+    public function run(closure $next): void
     {
-        ob_clean();
         try {
-            run_callable($this->failCallback);
-        } catch (Exception $innerException) {
-            $prev = new Exception($innerException->getMessage(), $innerException->getCode(), $throwable);
-            $throwable = new Exception("OnFailure callback failed", 5, $prev);
+            $next();
         }
+        catch(Throwable $throwable) {
+            $this->handle($throwable);
+        }
+    }
 
+    private function handle(Throwable $throwable): void
+    {
         $errors = $this->configuration->errors;
 
         if ($throwable instanceof AjaxAuthenticationException) {
-            http_response_code(401);
-            die;
+            $this->response->code = 401;
+            return;
         }
         if ($throwable instanceof AuthenticationException and array_key_exists('unauthenticated', $errors)) {
             $redirectFrom = $this->request->encodeRequestUri();
             $redirect = $errors['unauthenticated'];
             $location = $redirect->location . '?from=' . $redirectFrom;
-            header("Location: $location");
-            die;
+            $this->response->location = $location;
+            return;
         }
         if ($throwable instanceof AuthorizedException and array_key_exists('unauthorized', $errors)) {
             $redirect = $errors['unauthorized'];
-            header("Location: {$redirect->location}");
-            die;
+            $this->response->location = $redirect->location;
+            return;
         }
 
         $code = (!is_int($throwable->getCode()) or $throwable->getCode() == 0) ? 500 : $throwable->getCode();
-        http_response_code($code);
+        $this->response->code = $code;
 
         if (array_key_exists($code, $errors) and is_string($errors[$code])) {
-            include_once resolve_path_alias($errors[$code]);
+            $this->response->body = $this->getErrorPageContent(resolve_path_alias($errors[$code]), $throwable);
         } else if (array_key_exists('default', $errors)) {
-            include_once resolve_path_alias($errors['default']);
+            $this->response->body = $this->getErrorPageContent(resolve_path_alias($errors['default']), $throwable);
         } else {
             $this->printException($throwable);
         }
     }
 
+    private function getErrorPageContent(string $path, Throwable $throwable): string
+    {
+        ob_start();
+        include_once resolve_path_alias($path);
+        return ob_get_clean();
+    }
+
     private function printException(Throwable $throwable): void
     {
+        $this->response->body = "";
         if ($this->configuration->isDevelopment()) {
-            echo "<h2>{$throwable->getMessage()}</h2>";
-            echo "<pre>";
+            $this->response->body .= "<h2>{$throwable->getMessage()}</h2>";
+            $this->response->body .= "<pre>";
             foreach ($throwable->getTrace() as $k => $trace) {
-                echo "#$k " . $trace['file'] . ':' . $trace['line'] . '</br>';
+                $this->response->body .= "#$k " . $trace['file'] . ':' . $trace['line'] . '</br>';
             }
-            echo "</pre>";
+            $this->response->body .= "</pre>";
         } else {
-            echo "
+            $this->response->body .= "
                   <h1>Ooooops. Something went wrong</h1>
                   <p>Something is broken.</p>
                 ";

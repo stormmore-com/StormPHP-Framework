@@ -3,11 +3,11 @@
 require  __DIR__ . '/../../vendor/autoload.php';
 
 use Stormmore\Framework\App;
-use Infrastructure\Configurations\AliasConfiguration;
-use Infrastructure\Configurations\AppUserConfiguration;
-use Infrastructure\Configurations\ErrorConfiguration;
-use Infrastructure\Configurations\LocaleConfiguration;
-use Infrastructure\Configurations\SettingsConfiguration;
+use Infrastructure\Middleware\AliasConfiguration;
+use Infrastructure\Middleware\AppUserConfiguration;
+use Infrastructure\Middleware\ErrorConfiguration;
+use Infrastructure\Middleware\LocaleConfiguration;
+use Infrastructure\Middleware\SettingsConfiguration;
 
 $app = App::create(projectDir: "../", sourceDir: "../src", cacheDir: "../.cache");
 $app->addRoute('/hello', function() {

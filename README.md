@@ -4,19 +4,22 @@ Made with love without unnecessary complexity.
 
 - Easy to learn (simplest app have literally 4 lines)
 - Small footprint (100Kb, no dependencies)
+- Blazing fast
 - Built-in dependency injection container
+- Built-in middleware support
+- **Built-in CQS (command query separation)**
+- Built-in event dispatcher 
 - Built-in multilanguage support
 - Built-in authentication and authorization system
 - Built-in class autoloader with scanning source code (detect automatically controllers)
 - Built-in path alias system ('@templates/homepage.php' refers to /your/project/dir/templates/homepage.php)
-- Built-in mature view system using pure PHP
-- Views can controller content of layout (adding css/jss scripts or changing title)
+- Built-in mature view system using pure PHP, views can control content of layout (adding css/jss scripts or changing title)
 - Support forms 
 - Support error customization
 - Support middleware (put your code to pipeline before and after request is handled)
 - Support Docker out of the box
-- Works with StormQueries
 - Support PHP8 and greater
+- Works with StormQueries
 
 To learn more visit https://keycode13.com/php-storm-framework \
 \

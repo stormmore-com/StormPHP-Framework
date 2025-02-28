@@ -5,12 +5,12 @@ namespace Stormmore\Framework;
 use closure;
 use Exception;
 use Stormmore\Framework\App\ClassLoader;
-use Stormmore\Framework\App\ExceptionHandler;
-use Stormmore\Framework\App\RequestHandler;
-use Stormmore\Framework\App\ResponseHandler;
+use Stormmore\Framework\App\ExceptionMiddleware;
+use Stormmore\Framework\App\IMiddleware;
+use Stormmore\Framework\App\MvcMiddleware;
+use Stormmore\Framework\App\ResponseMiddleware;
 use Stormmore\Framework\Authentication\AppUser;
 use Stormmore\Framework\Classes\SourceCode;
-use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\I18n;
@@ -19,7 +19,6 @@ use Stormmore\Framework\Request\Cookies;
 use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Request\Response;
 use Stormmore\Framework\Route\Router;
-use Throwable;
 
 class App
 {
@@ -34,15 +33,10 @@ class App
     private Response $response;
     private Request $request;
     private Router $router;
-    private array $configurations = [];
-    private closure|null $beforeRunClosure = null;
-    private closure|null $onSuccessClosure = null;
-    private closure|null $onFailureClosure = null;
+    private array $middlewareClassNames = [];
 
     public static function create(string $projectDir = "", string $sourceDir = "", string $cacheDir = ""): App
     {
-        ob_start();
-
         $appConfiguration = new AppConfiguration();
         $appConfiguration->setSourceDirectory($sourceDir);
         $appConfiguration->setCacheDirectory($cacheDir);
@@ -93,28 +87,13 @@ class App
         return $this->request;
     }
 
-    public function beforeRun(callable $callable): void
-    {
-        $this->beforeRunClosure = $this->resolver->resolveCallable($callable);
-    }
-
-    public function onSuccess(callable $callable): void
-    {
-        $this->onSuccessClosure = $this->resolver->resolveCallable($callable);
-    }
-
-    public function onFailure(callable $callable): void
-    {
-        $this->onFailureClosure = $this->resolver->resolveCallable($callable);
-    }
-
     /**
-     * @param callable|string $callable
+     * @param string $callable
      * @return void
      */
-    public function add(callable|string $callable): void
+    public function add(string $middlewareClassName): void
     {
-        $this->configurations[] = $callable;
+        $this->middlewareClassNames[] = $middlewareClassName;
     }
 
     public function addRoute(string $key, $value): void
@@ -125,17 +104,19 @@ class App
     private function __construct(AppConfiguration $configuration)
     {
         $cookies = new Cookies();
+
         $this->container = new Container();
         $this->resolver = new Resolver($this->container);
         $this->router = new Router();
         $this->i18n = new I18n();
         $this->configuration = $configuration;
-        $this->viewConfiguration = new ViewConfiguration();
         $this->sourceCode = new SourceCode($this->configuration);
+        $this->viewConfiguration = new ViewConfiguration();
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
         $this->response = new Response($cookies);
         $this->request = new Request($cookies, $this->resolver);
 
+        $this->container->register($this->sourceCode);
         $this->container->register(new AppUser());
         $this->container->register($this->i18n);
         $this->container->register($this->configuration);
@@ -146,45 +127,31 @@ class App
 
     public function run(): void
     {
-        $exceptionHandler = new ExceptionHandler($this->configuration, $this->request, $this->onFailureClosure);
-        $requestHandler = new RequestHandler(
-            $this->sourceCode,
-            $this->configuration,
-            $this->request,
-            $this->container,
-            $this->resolver,
-            $this->beforeRunClosure,
-            $this->onSuccessClosure);
-        $responseHandler = new ResponseHandler();
+        $this->sourceCode->loadCache();
+        $routes = $this->sourceCode->routes;
+        $this->router->addRoutes($routes);
+        $this->classLoader->register();
 
-        try {
-            $this->sourceCode->loadCache();
-            $this->router->addRoutes($this->sourceCode->routes);
-
-            $this->classLoader->register();
-
-            $this->configureApp();
-
-            $result = $requestHandler->handle($this->router);
-            $responseHandler->handle($this->response, $result);
-
-            ob_flush();
-        } catch (Throwable $e) {
-            $exceptionHandler->handle($e);
-        }
+        $this->runMiddleware();
     }
 
-    private function configureApp(): void
+    private function runMiddleware(): void
     {
-        foreach ($this->configurations as $configuration) {
-            if (is_callable($configuration)) {
-                run_callable($configuration);
-            }
-            if (is_string($configuration)) {
-                $configuration = $this->resolver->resolveObject($configuration);
-                $configuration instanceof IConfiguration or throw new Exception("Configuration should be callable or class implementing IConfigure");
-                $configuration->configure();
-            }
+        $this->middlewareClassNames = [ResponseMiddleware::class, ExceptionMiddleware::class, ...$this->middlewareClassNames, MvcMiddleware::class];
+
+        $first = $this->getMiddleware(0);
+        $first();
+    }
+
+    private function getMiddleware(int $i): closure
+    {
+        if ($i >= count($this->middlewareClassNames)) {
+            return function() { };
         }
+        return function() use ($i) {
+            $middleware = $this->resolver->resolveObject($this->middlewareClassNames[$i]);
+            $middleware instanceof IMiddleware or throw new Exception("Middleware should be callable or class implementing IConfigure");
+            $middleware->run($this->getMiddleware($i + 1));
+        };
     }
 }

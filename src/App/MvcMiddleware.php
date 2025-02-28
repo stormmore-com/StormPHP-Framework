@@ -9,39 +9,38 @@ use Stormmore\Framework\Classes\SourceCode;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Mvc\ControllerReflection;
+use Stormmore\Framework\Mvc\View;
+use Stormmore\Framework\Request\Redirect;
 use Stormmore\Framework\Request\Request;
+use Stormmore\Framework\Request\Response;
 use Stormmore\Framework\Route\ExecutionRoute;
 use Stormmore\Framework\Route\Router;
 
-readonly class RequestHandler
+readonly class MvcMiddleware implements IMiddleware
 {
+
     public function __construct(
         private SourceCode       $appCode,
         private AppConfiguration $configuration,
         private Request          $request,
+        private Response         $response,
         private Container        $di,
-        private Resolver         $diResolver,
-        private closure|null     $beforeRunCallback,
-        private closure|null     $afterRunCallback)
+        private Router           $router,
+        private Resolver         $diResolver)
     {
     }
 
-    public function handle(Router $routes): mixed
+    public function run(closure $next): void
     {
-        $route = $this->find($routes);
+        $route = $this->find();
         $route or throw new Exception("APP: route for [{$this->request->uri}] doesn't exist", 404);
         $this->request->addRouteParameters($route->parameters);
 
-        $result = run_callable($this->beforeRunCallback);
-        if ($result == null) {
-            $result = $this->run($route);
-        }
-        run_callable($this->afterRunCallback);
-
-        return $result;
+        $result = $this->handle($route);
+        $this->handleResult($result);
     }
 
-    private function run(ExecutionRoute $route): mixed
+    private function handle(ExecutionRoute $route): mixed
     {
         $endpoint = $route->endpoint;
         if ($endpoint->isCallable()) {
@@ -57,14 +56,28 @@ readonly class RequestHandler
         return null;
     }
 
-    private function find(Router $router): ?ExecutionRoute
+    private function handleResult(mixed $result): void
     {
-        $route = $router->find($this->request);
+        if ($result instanceof View) {
+            $this->response->body = $result->toHtml();
+        } else if ($result instanceof Redirect) {
+            $this->response->location = $result->location;
+        } else if (is_object($result) or is_array($result)) {
+            $this->response->addHeader("Content-Type", "application/json; charset=utf-8");
+            $this->response->body = json_encode($result);
+        } else if (is_string($result) || is_numeric($result)) {
+            $this->response->body = $result;
+        }
+    }
+
+    private function find(): ?ExecutionRoute
+    {
+        $route = $this->router->find($this->request);
         if (!$this->exist($route) and $this->configuration->isDevelopment()) {
             $this->appCode->scanFiles();
             $this->appCode->scanRoutes();
-            $router->addRoutes($this->appCode->routes);
-            $route = $router->find($this->request);
+            $this->router->addRoutes($this->appCode->routes);
+            $route = $this->router->find($this->request);
             if ($this->exist($route)) {
                 $this->appCode->writeClassCache();
                 $this->appCode->writeRouteCache();

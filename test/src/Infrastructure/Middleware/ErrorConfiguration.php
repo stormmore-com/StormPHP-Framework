@@ -1,27 +1,30 @@
 <?php
 
-namespace Infrastructure\Configurations;
+namespace Infrastructure\Middleware;
 
+use closure;
+use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\AppConfiguration;
-use Stormmore\Framework\Configuration\IConfiguration;
 
-readonly class ErrorConfiguration implements IConfiguration
+readonly class ErrorConfiguration implements IMiddleware
 {
     public function __construct(private AppConfiguration $configuration)
     {
     }
-    public function configure(): void
+    public function run(closure $next): void
     {
         $this->configuration->addErrors([
             404 => '@templates/errors/404.php',
             'unauthenticated' => redirect('/signin'),
             'unauthorized' => redirect('/signin'),
-            'default' => '@templates/errors/500.php'
+            //'default' => '@templates/errors/500.php'
         ]);
         if ($this->configuration->isDevelopment()) {
             $this->configuration->addErrors([
-                'default' => '@templates/errors/500_dev.php'
+            //    'default' => '@templates/errors/500_dev.php'
             ]);
         }
+
+        $next();
     }
 }

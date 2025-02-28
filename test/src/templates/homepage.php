@@ -23,7 +23,7 @@ $view->setLayout("@/src/templates/includes/layout.php");
 <p>
     <a href="/signin">Sign in</a>
     | <a href="/profile">Profile (requires authentication)</a>
-    | <a href="/admin">Administrator (requires 'administrator' privilege)</a>
+    | <a href="/administrator">Administrator (requires 'administrator' privilege)</a>
 </p>
 <p><a href="/form">Form</a></p>
 <p><a href="/redirect-with-success">Redirect with success</a> | <a href="/redirect-with-failure">Redirect with failture</a></p>

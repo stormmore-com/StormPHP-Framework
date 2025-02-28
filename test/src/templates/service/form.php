@@ -6,3 +6,5 @@
 
 $view->setLayout('@templates/includes/layout.php');
 ?>
+
+FORM
