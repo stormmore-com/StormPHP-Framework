@@ -6,7 +6,7 @@ use closure;
 use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\AppConfiguration;
 
-readonly class AliasConfiguration implements IMiddleware
+readonly class AliasMiddleware implements IMiddleware
 {
     public function __construct(private AppConfiguration $appConfiguration)
     {

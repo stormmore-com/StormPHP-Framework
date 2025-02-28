@@ -8,7 +8,7 @@ use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\DependencyInjection\Container;
 
-readonly class SettingsConfiguration implements IMiddleware
+readonly class SettingsMiddleware implements IMiddleware
 {
     public function __construct(private Container $container, private JsonConfigurationLoader $jsonConfigurationLoader)
     {

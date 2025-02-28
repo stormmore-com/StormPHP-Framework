@@ -11,7 +11,7 @@ use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Request\Request;
 
-readonly class LocaleConfiguration implements IMiddleware
+readonly class LocaleMiddleware implements IMiddleware
 {
     public function __construct(private Request $request,
                                 private Settings $settings,
