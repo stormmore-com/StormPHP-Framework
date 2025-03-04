@@ -6,6 +6,7 @@ use Stormmore\Framework\AppConfiguration;
 
 class SourceCode
 {
+    private CommandHandlerScanner $commandHandlerScanner;
     private ClassScanner $classScanner;
     private ClassCacheStorage $classCache;
     private RouteScanner $routeScanner;
@@ -21,12 +22,14 @@ class SourceCode
         $this->routeCache = new ClassCacheStorage($this->configuration, "routes");
         $this->classScanner = new ClassScanner($this->configuration->sourceDirectory);
         $this->routeScanner = new RouteScanner();
+        $this->commandHandlerScanner = new CommandHandlerScanner();
     }
 
     public function loadCache(): void
     {
         $this->loadClasses();
         $this->loadRoutes();
+        $this->loadCommandHandlers();
     }
 
     public function findFileByFullyQualifiedClassName(string $className): bool|string
@@ -91,5 +94,10 @@ class SourceCode
         }
 
         $this->routes = $this->routeCache->load();
+    }
+
+    private function loadCommandHandlers(): void
+    {
+        $this->commandHandlerScanner->scan($this->classes);
     }
 }

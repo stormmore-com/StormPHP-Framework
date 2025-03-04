@@ -4,6 +4,7 @@ namespace Stormmore\Framework\Classes;
 
 use PhpToken;
 use Exception;
+use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
 
 class ClassScanner
 {
@@ -21,22 +22,11 @@ class ClassScanner
     {
         $classes = [];
         foreach ($this->getPhpFiles() as $phpFilePath) {
-            $namespace = "";
-            $allTokens = PhpToken::tokenize(file_get_contents($phpFilePath));
-            foreach ($allTokens as $i => $token) {
-                if ($token->text == 'namespace') {
-                    $namespace = $allTokens[$i + 2]->text;
-                }
-                if ($token->text == 'class') {
-                    $class = $allTokens[$i + 2]->text;
-                    if (!empty($namespace)) {
-                        $class = $namespace . '\\' . $class;
-                    }
-                    $classes[$class] = $phpFilePath;
-                }
+            $fileClasses = PhpClassFileParser::parse($phpFilePath);
+            foreach($fileClasses as $class) {
+                $classes[$class->getFullyQualifiedName()] = $phpFilePath;
             }
         }
-
         return $classes;
     }
 

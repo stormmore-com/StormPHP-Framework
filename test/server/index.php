@@ -2,12 +2,12 @@
 
 require  __DIR__ . '/../../vendor/autoload.php';
 
-use Stormmore\Framework\App;
 use Infrastructure\Middleware\AliasMiddleware;
 use Infrastructure\Middleware\AppUserMiddleware;
 use Infrastructure\Middleware\ErrorMiddleware;
 use Infrastructure\Middleware\LocaleMiddleware;
-use Infrastructure\Middleware\SettingsMiddleware;
+use Infrastructure\Settings\SettingsMiddleware;
+use Stormmore\Framework\App;
 
 $app = App::create(projectDir: "../", sourceDir: "../src", cacheDir: "../.cache");
 $app->addRoute('/hello', function() {

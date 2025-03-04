@@ -1,9 +1,8 @@
 <?php
 
-namespace Infrastructure\Middleware;
+namespace Infrastructure\Settings;
 
 use closure;
-use Infrastructure\Settings\Settings;
 use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\DependencyInjection\Container;
@@ -22,3 +21,6 @@ readonly class SettingsMiddleware implements IMiddleware
         $next();
     }
 }
+
+
+

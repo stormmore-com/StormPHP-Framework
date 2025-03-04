@@ -8,7 +8,7 @@ use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
 use Stormmore\Framework\Mvc\View;
 
-#[Controller]
+#[Controller()]
 class UserController
 {
     #[Authenticate]
