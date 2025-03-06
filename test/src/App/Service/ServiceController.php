@@ -5,6 +5,7 @@ namespace Configuration;
 use Exception;
 use Infrastructure\Settings\Settings;
 use Stormmore\Framework\AppConfiguration;
+use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
 use Stormmore\Framework\Mvc\View;
@@ -20,8 +21,16 @@ readonly class ServiceController
                                 private Settings $settings,
                                 private Request $request,
                                 private Response $response,
-                                private BasicForm $basicForm)
+                                private BasicForm $basicForm,
+                                private Gate $gate)
     {
+    }
+
+    #[Route("/cmd-test")]
+    public function run(): View
+    {
+        $this->gate->handle(new AddUserCommand());
+        return view("@/src/templates/service/cqs");
     }
 
     #[Route("/configuration")]

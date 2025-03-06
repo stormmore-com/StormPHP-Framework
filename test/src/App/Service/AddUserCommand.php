@@ -1,7 +1,7 @@
 <?php
 
-namespace CqsTest;
+namespace Configuration;
+
 class AddUserCommand
 {
-
 }

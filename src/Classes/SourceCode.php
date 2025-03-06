@@ -8,18 +8,21 @@ class SourceCode
 {
     private CommandHandlerScanner $commandHandlerScanner;
     private ClassScanner $classScanner;
-    private ClassCacheStorage $classCache;
     private RouteScanner $routeScanner;
+    private ClassCacheStorage $classCache;
     private ClassCacheStorage $routeCache;
+    private ClassCacheStorage $commandHandlerCache;
 
     public array $classes;
     public array $routes;
+    public array $commands;
 
     public function __construct(
         private readonly AppConfiguration $configuration)
     {
         $this->classCache = new ClassCacheStorage($this->configuration, 'classes');
         $this->routeCache = new ClassCacheStorage($this->configuration, "routes");
+        $this->commandHandlerCache = new ClassCacheStorage($this->configuration, "command-handlers");
         $this->classScanner = new ClassScanner($this->configuration->sourceDirectory);
         $this->routeScanner = new RouteScanner();
         $this->commandHandlerScanner = new CommandHandlerScanner();
@@ -43,7 +46,6 @@ class SourceCode
         if (file_exists($classFileName)) {
             return $classFileName;
         }
-
         return false;
     }
 
@@ -77,6 +79,11 @@ class SourceCode
         $this->routeCache->save($this->routes);
     }
 
+    public function getCommandHandlers(): array
+    {
+        return $this->commands;
+    }
+
     private function loadClasses(): void
     {
         if (!$this->classCache->exist()) {
@@ -98,6 +105,10 @@ class SourceCode
 
     private function loadCommandHandlers(): void
     {
-        $this->commandHandlerScanner->scan($this->classes);
+        if (!$this->commandHandlerCache->exist()) {
+            $handlers = $this->commandHandlerScanner->scan($this->classes);
+            $this->commandHandlerCache->save($handlers);
+        }
+        $this->commands = $this->commandHandlerCache->load();
     }
 }
