@@ -7,11 +7,11 @@ use Stormmore\Framework\Classes\Token;
 
 class PhpClassParser
 {
-    public static function parse(ArrayIterator $it, string $namespace, PhpAttributes $attributes): PhpClass
+    public static function parse(ArrayIterator $it, string $namespace, array $uses, PhpAttributes $attributes): PhpClass
     {
         $it->next();
         $name = $it->current()->text;
-        $class = new PhpClass($namespace, $name, $attributes);
+        $class = new PhpClass($namespace, $uses,  $name, $attributes);
 
         $buffer = new PhpTokenBuffer(3);
         $attributes = [];

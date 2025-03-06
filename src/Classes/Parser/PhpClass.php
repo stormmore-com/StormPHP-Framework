@@ -9,7 +9,13 @@ class PhpClass
      */
     public array $functions = [];
 
-    public function __construct(public string $namespace, public string $name, public PhpAttributes $attributes)
+    /**
+     * @param string $namespace
+     * @param PhpUse[] $uses
+     * @param string $name
+     * @param PhpAttributes $attributes
+     */
+    public function __construct(public string $namespace, public array $uses, public string $name, public PhpAttributes $attributes)
     {
     }
 
@@ -19,6 +25,11 @@ class PhpClass
             return $this->namespace . '\\' . $this->name;
         }
         return $this->name;
+    }
+
+    public function getAttribute(string $name): PhpAttribute
+    {
+        return $this->attributes->getAttribute($name);
     }
 
     public function hasAttribute(string $className): bool

@@ -14,14 +14,18 @@ class PhpClassFileParser
     public static function parse(string $filePath): array
     {
         $tokens = PhpToken::tokenize(file_get_contents($filePath));
-        $tokens = array_filter($tokens, function ($token) { return $token->getTokenName() !== 'T_WHITESPACE'; });
+        $tokens = array_values(array_filter($tokens, function ($token) { return $token->getTokenName() !== 'T_WHITESPACE'; }));
         $it = new ArrayIterator($tokens);
 
         $attributes = [];
+        $uses = [];
         $classes = [];
         $namespace = '';
         while($it->valid()) {
             $token = $it->current();
+            if ($token->text == 'use') {
+                $uses[] = PhpUserParser::parse($it);
+            }
             if ($token->text == 'namespace') {
                 $namespace = NamespaceParser::parse($it);
             }
@@ -29,7 +33,7 @@ class PhpClassFileParser
                 $attributes[] = AttributeParser::parse($it);
             }
             if ($token->text == 'class') {
-                $class = PhpClassParser::parse($it, $namespace, new PhpAttributes($attributes));
+                $class = PhpClassParser::parse($it, $namespace, $uses, new PhpAttributes($attributes));
                 $classes[] = $class;
                 $attributes = [];
             }

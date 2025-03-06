@@ -11,7 +11,7 @@ class PhpAttributes extends ArrayObject
         parent::__construct($this->attributes);
     }
 
-    public function hasAttribute(string $className): bool
+    public function getAttribute(string $className): null|PhpAttribute
     {
         $items =  explode("\\", $className);
         $name = end($items);
@@ -21,9 +21,14 @@ class PhpAttributes extends ArrayObject
         ];
         foreach($this->attributes as $attribute) {
             if (in_array($attribute->name, $search)) {
-                return true;
+                return $attribute;
             }
         }
-        return false;
+        return null;
+    }
+
+    public function hasAttribute(string $className): bool
+    {
+        return $this->getAttribute($className) !== null;
     }
 }

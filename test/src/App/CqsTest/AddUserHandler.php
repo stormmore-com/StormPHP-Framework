@@ -2,14 +2,11 @@
 
 namespace CqsTest;
 
+use Configuration\BasicForm;
 use Stormmore\Framework\Cqs\CommandHandler;
+use Configuration\ServiceController as KurdeJpg;
 
-#[CommandHandler("test")]
+#[CommandHandler(AddUserCommand::class)]
 class AddUserHandler
-{
-}
-
-#[CommandHandler("test")]
-class AddProductCommandHandler
 {
 }
