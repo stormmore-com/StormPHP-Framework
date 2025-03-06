@@ -2,6 +2,7 @@
 
 namespace Authentication;
 
+use Stormmore\Framework\Authentication\Authenticate;
 use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
 use Stormmore\Framework\Mvc\View;

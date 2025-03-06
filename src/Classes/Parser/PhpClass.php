@@ -4,9 +4,14 @@ namespace Stormmore\Framework\Classes\Parser;
 
 class PhpClass
 {
-    public string $namespace;
-    public string $name;
-    public array $attributes = [];
+    /**
+     * @var PhpClassMethod[]
+     */
+    public array $functions = [];
+
+    public function __construct(public string $namespace, public string $name, public PhpAttributes $attributes)
+    {
+    }
 
     public function getFullyQualifiedName(): string
     {
@@ -14,5 +19,10 @@ class PhpClass
             return $this->namespace . '\\' . $this->name;
         }
         return $this->name;
+    }
+
+    public function hasAttribute(string $className): bool
+    {
+        return $this->attributes->hasAttribute($className);
     }
 }

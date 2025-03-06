@@ -9,7 +9,6 @@ class NamespaceParser
     public static function parse(ArrayIterator $it): string
     {
         $it->next();
-        $it->next();
         return $it->current()->text;
     }
 }

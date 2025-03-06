@@ -117,6 +117,7 @@ class App
         $this->request = new Request($cookies, $this->resolver);
 
         $this->container->register($this->sourceCode);
+        $this->container->register($this->router);
         $this->container->register(new AppUser());
         $this->container->register($this->i18n);
         $this->container->register($this->configuration);

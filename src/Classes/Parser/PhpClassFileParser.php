@@ -7,9 +7,14 @@ use PhpToken;
 
 class PhpClassFileParser
 {
+    /**
+     * @param string $filePath
+     * @return  PhpClass[]
+     */
     public static function parse(string $filePath): array
     {
         $tokens = PhpToken::tokenize(file_get_contents($filePath));
+        $tokens = array_filter($tokens, function ($token) { return $token->getTokenName() !== 'T_WHITESPACE'; });
         $it = new ArrayIterator($tokens);
 
         $attributes = [];
@@ -24,9 +29,7 @@ class PhpClassFileParser
                 $attributes[] = AttributeParser::parse($it);
             }
             if ($token->text == 'class') {
-                $class = PhpClassParser::parse($it);
-                $class->attributes = $attributes;
-                $class->namespace = $namespace;
+                $class = PhpClassParser::parse($it, $namespace, new PhpAttributes($attributes));
                 $classes[] = $class;
                 $attributes = [];
             }
