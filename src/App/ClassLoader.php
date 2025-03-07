@@ -8,7 +8,7 @@ use Stormmore\Framework\Classes\SourceCode;
 readonly class ClassLoader
 {
     public function __construct(
-        private SourceCode       $appCode,
+        private SourceCode       $sourceCode,
         private AppConfiguration $configuration)
     {
     }
@@ -22,12 +22,12 @@ readonly class ClassLoader
 
     public function includeFileByFullyQualifiedClassName(string $className): void
     {
-        $filePath = $this->appCode->findFileByFullyQualifiedClassName($className);
+        $filePath = $this->sourceCode->findFileByFullyQualifiedClassName($className);
         if (!$filePath and $this->configuration->isDevelopment()) {
-            $this->appCode->scanFiles();
-            $filePath = $this->appCode->findFileByFullyQualifiedClassName($className);
+            $this->sourceCode->scan();
+            $filePath = $this->sourceCode->findFileByFullyQualifiedClassName($className);
             if ($filePath) {
-                $this->appCode->writeClassCache();
+                $this->sourceCode->writeCache();
             }
         }
         if ($filePath) {
@@ -40,17 +40,17 @@ readonly class ClassLoader
         if (class_exists($className)) {
             return $className;
         }
-        $fullyQualifiedComponentName = $this->appCode->findFullyQualifiedName($className);
-        $file = $this->appCode->findFileByFullyQualifiedClassName($fullyQualifiedComponentName);
+        $fullyQualifiedComponentName = $this->sourceCode->findFullyQualifiedName($className);
+        $file = $this->sourceCode->findFileByFullyQualifiedClassName($fullyQualifiedComponentName);
         if ($file) {
             require_once $file;
         }
         if (!$file or !class_exists($fullyQualifiedComponentName) and $this->configuration->isDevelopment()) {
-            $this->appCode->scanFiles();
-            $fullyQualifiedComponentName = $this->appCode->findFullyQualifiedName($className);
-            $file = $this->appCode->findFileByFullyQualifiedClassName($fullyQualifiedComponentName);
+            $this->sourceCode->scan();
+            $fullyQualifiedComponentName = $this->sourceCode->findFullyQualifiedName($className);
+            $file = $this->sourceCode->findFileByFullyQualifiedClassName($fullyQualifiedComponentName);
             if ($file and class_exists($fullyQualifiedComponentName)) {
-                $this->appCode->writeClassCache();
+                $this->sourceCode->writeCache();
                 require_once $file;
             }
         }

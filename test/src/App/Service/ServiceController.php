@@ -29,7 +29,7 @@ readonly class ServiceController
     #[Route("/cqs-test")]
     public function run(): View
     {
-        $this->gate->handle(new AddUserCommand());
+        $this->gate->handle(new ExampleCommand());
         return view("@/src/templates/service/cqs");
     }
 

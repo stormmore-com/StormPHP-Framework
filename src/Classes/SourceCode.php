@@ -6,23 +6,18 @@ use Stormmore\Framework\AppConfiguration;
 
 class SourceCode
 {
+    private array $classes;
+    private array $routes;
+    private array $commands;
     private CommandHandlerScanner $commandHandlerScanner;
     private ClassScanner $classScanner;
     private RouteScanner $routeScanner;
-    private ClassCacheStorage $classCache;
-    private ClassCacheStorage $routeCache;
-    private ClassCacheStorage $commandHandlerCache;
-
-    public array $classes;
-    public array $routes;
-    public array $commands;
+    private ClassCacheStorage $cache;
 
     public function __construct(
         private readonly AppConfiguration $configuration)
     {
-        $this->classCache = new ClassCacheStorage($this->configuration, 'classes');
-        $this->routeCache = new ClassCacheStorage($this->configuration, "routes");
-        $this->commandHandlerCache = new ClassCacheStorage($this->configuration, "command-handlers");
+        $this->cache = new ClassCacheStorage($this->configuration, 'classes');
         $this->classScanner = new ClassScanner($this->configuration->sourceDirectory);
         $this->routeScanner = new RouteScanner();
         $this->commandHandlerScanner = new CommandHandlerScanner();
@@ -30,9 +25,31 @@ class SourceCode
 
     public function loadCache(): void
     {
-        $this->loadClasses();
-        $this->loadRoutes();
-        $this->loadCommandHandlers();
+        if (!$this->cache->exist()) {
+            $this->scan();
+            $this->writeCache();
+        } else {
+            $cache = $this->cache->load();
+            $this->classes = $cache['classes'];
+            $this->routes = $cache['routes'];
+            $this->commands = $cache['commands'];
+        }
+    }
+
+    public function scan(): void
+    {
+        $this->classes = $this->classScanner->scan();
+        $this->routes = $this->routeScanner->scan($this->classes);
+        $this->commands = $this->commandHandlerScanner->scan($this->classes);
+    }
+
+    public function writeCache(): void
+    {
+        $this->cache->save([
+            'classes' => $this->classes,
+            'routes' => $this->routes,
+            'commands' => $this->commands,
+        ]);
     }
 
     public function findFileByFullyQualifiedClassName(string $className): bool|string
@@ -59,56 +76,13 @@ class SourceCode
         return false;
     }
 
-    public function scanRoutes(): void
+    public function getRoutes(): array
     {
-        $this->routes = $this->routeScanner->scan($this->classes);
-    }
-
-    public function scanFiles(): void
-    {
-        $this->classes = $this->classScanner->scan();
-    }
-
-    public function writeClassCache(): void
-    {
-        $this->classCache->save($this->classes);
-    }
-
-    public function writeRouteCache(): void
-    {
-        $this->routeCache->save($this->routes);
+        return $this->routes;
     }
 
     public function getCommandHandlers(): array
     {
         return $this->commands;
-    }
-
-    private function loadClasses(): void
-    {
-        if (!$this->classCache->exist()) {
-            $classes = $this->classScanner->scan();
-            $this->classCache->save($classes);
-        }
-        $this->classes = $this->classCache->load();
-    }
-
-    private function loadRoutes(): void
-    {
-        if (!$this->routeCache->exist()) {
-            $routes = $this->routeScanner->scan($this->classes);
-            $this->routeCache->save($routes);
-        }
-
-        $this->routes = $this->routeCache->load();
-    }
-
-    private function loadCommandHandlers(): void
-    {
-        if (!$this->commandHandlerCache->exist()) {
-            $handlers = $this->commandHandlerScanner->scan($this->classes);
-            $this->commandHandlerCache->save($handlers);
-        }
-        $this->commands = $this->commandHandlerCache->load();
     }
 }

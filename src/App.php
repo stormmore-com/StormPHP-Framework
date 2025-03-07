@@ -105,12 +105,12 @@ class App
     {
         $cookies = new Cookies();
 
+        $this->configuration = $configuration;
         $this->container = new Container();
         $this->resolver = new Resolver($this->container);
-        $this->router = new Router();
-        $this->i18n = new I18n();
-        $this->configuration = $configuration;
         $this->sourceCode = new SourceCode($this->configuration);
+        $this->router = new Router($this->sourceCode);
+        $this->i18n = new I18n();
         $this->viewConfiguration = new ViewConfiguration();
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
         $this->response = new Response($cookies);
@@ -129,8 +129,6 @@ class App
     public function run(): void
     {
         $this->sourceCode->loadCache();
-        $routes = $this->sourceCode->routes;
-        $this->router->addRoutes($routes);
         $this->classLoader->register();
 
         $this->runMiddleware();

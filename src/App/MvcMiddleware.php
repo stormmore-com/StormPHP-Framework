@@ -20,7 +20,7 @@ readonly class MvcMiddleware implements IMiddleware
 {
 
     public function __construct(
-        private SourceCode       $appCode,
+        private SourceCode       $sourceCode,
         private AppConfiguration $configuration,
         private Request          $request,
         private Response         $response,
@@ -74,13 +74,10 @@ readonly class MvcMiddleware implements IMiddleware
     {
         $route = $this->router->find($this->request);
         if (!$this->exist($route) and $this->configuration->isDevelopment()) {
-            $this->appCode->scanFiles();
-            $this->appCode->scanRoutes();
-            $this->router->addRoutes($this->appCode->routes);
+            $this->sourceCode->scan();
             $route = $this->router->find($this->request);
             if ($this->exist($route)) {
-                $this->appCode->writeClassCache();
-                $this->appCode->writeRouteCache();
+                $this->sourceCode->writeCache();
                 return $route;
             }
 

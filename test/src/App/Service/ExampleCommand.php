@@ -2,6 +2,6 @@
 
 namespace Configuration;
 
-class AddUserCommand
+class ExampleCommand
 {
 }
