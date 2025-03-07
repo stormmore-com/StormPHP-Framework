@@ -26,7 +26,7 @@ readonly class ServiceController
     {
     }
 
-    #[Route("/cmd-test")]
+    #[Route("/cqs-test")]
     public function run(): View
     {
         $this->gate->handle(new AddUserCommand());

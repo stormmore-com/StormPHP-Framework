@@ -4,10 +4,12 @@
  *  - walidacja (ładowanie walidatorów frameworka po nazwie moze byc problematyczne w tej konfiguracji)
  *
  *   obsluga command-handle cqrs
+ *    - zmiana nazwy handlera
+ *    -  globalny namespace
  *   obsluga eventów
  *
- *  skanowaie atrybutów z namespacami przy czytaniu tokenów trzeba uwzględnic namespace
- *  skanowanie klasy w atrybucie
+ * logowanie (wiele poziomów)
+ * rsponse cache
  *
  *
  *   obsługa meilów

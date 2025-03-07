@@ -32,7 +32,9 @@ class CommandHandlerScanner
                     return $use->fullyQualifiedName;
                 }
             }
-            return $class->namespace . "\\" . $className;
+            if ($class->namespace) {
+                return $class->namespace . "\\" . $className;
+            }
         }
         return $className;
     }
