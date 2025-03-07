@@ -3,10 +3,9 @@
  *  - formularze
  *  - walidacja (ładowanie walidatorów frameworka po nazwie moze byc problematyczne w tej konfiguracji)
  *
- *   obsluga command-handle cqrs
- *    - zmiana nazwy handlera
- *    -  globalny namespace
  *   obsluga eventów
+ *    - jak jest w namepsace event i jak w globalu
+ *    - zmiana nazwy handler
  *
  * logowanie (wiele poziomów)
  * rsponse cache
