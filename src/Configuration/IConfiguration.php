@@ -4,5 +4,5 @@ namespace Stormmore\Framework\Configuration;
 
 interface IConfiguration
 {
-    public function configure():void;
+    public function configure();
 }

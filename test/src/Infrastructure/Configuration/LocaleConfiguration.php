@@ -1,17 +1,16 @@
 <?php
 
-namespace Infrastructure\Middleware;
+namespace Infrastructure\Configuration;
 
-use closure;
 use Infrastructure\Settings\Settings;
-use Stormmore\Framework\App\IMiddleware;
+use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\Internationalization\Culture;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Request\Request;
 
-readonly class LocaleMiddleware implements IMiddleware
+readonly class LocaleConfigure implements IConfiguration
 {
     public function __construct(private Request $request,
                                 private Settings $settings,
@@ -20,7 +19,7 @@ readonly class LocaleMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next): void
+    public function configure(): void
     {
         $locale = $this->getAcceptedLocale();
         $culture = $this->getCulture($locale);
@@ -29,7 +28,6 @@ readonly class LocaleMiddleware implements IMiddleware
         $this->i18n->setCulture($culture);
 
         $this->loadTranslations($locale);
-        $next();
     }
 
     private function getAcceptedLocale(): Locale

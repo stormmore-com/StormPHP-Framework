@@ -2,22 +2,31 @@
 
 require  __DIR__ . '/../../vendor/autoload.php';
 
-use Infrastructure\Middleware\AliasMiddleware;
-use Infrastructure\Middleware\AppUserMiddleware;
-use Infrastructure\Middleware\ErrorMiddleware;
-use Infrastructure\Middleware\LocaleMiddleware;
-use Infrastructure\Settings\SettingsMiddleware;
+use Infrastructure\Configuration\LoggerConfiguration;
+use Infrastructure\Configuration\AliasConfiguration;
+use Infrastructure\Configuration\AppUserConfiguration;
+use Infrastructure\Configuration\ErrorConfiguration;
+use Infrastructure\Configuration\LocaleConfigure;
+use Infrastructure\Configuration\SettingsConfiguration;
+use Infrastructure\Middleware\TransactionMiddleware;
 use Stormmore\Framework\App;
 
-$app = App::create(projectDir: "../", sourceDir: "../src", cacheDir: "../.cache");
+$app = App::create(
+    projectDir: "../",
+    sourceDir: "../src",
+    cacheDir: "../.cache");
+
 $app->addRoute('/hello', function() {
     return "hello world";
 });
 
-$app->add(AliasMiddleware::class);
-$app->add(SettingsMiddleware::class);
-$app->add(LocaleMiddleware::class);
-$app->add(ErrorMiddleware::class);
-$app->add(AppUserMiddleware::class);
+$app->addConfiguration(LoggerConfiguration::class);
+$app->addConfiguration(AliasConfiguration::class);
+$app->addConfiguration(SettingsConfiguration::class);
+$app->addConfiguration(LocaleConfigure::class);
+$app->addConfiguration(ErrorConfiguration::class);
+$app->addConfiguration(AppUserConfiguration::class);
+
+$app->addMiddleware(TransactionMiddleware::class);
 
 $app->run();

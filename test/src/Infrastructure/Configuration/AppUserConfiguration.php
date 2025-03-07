@@ -1,27 +1,24 @@
 <?php
 
-namespace Infrastructure\Middleware;
+namespace Infrastructure\Configuration;
 
-use closure;
-use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Authentication\AppUser;
+use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\Request\Request;
 
-readonly class AppUserMiddleware implements IMiddleware
+readonly class AppUserConfiguration implements IConfiguration
 {
     public function __construct(private AppUser $appUser, private Request $request)
     {
     }
 
-    public function run(closure $next): void
+    public function configure(): void
     {
         if ($this->request->cookies->has('session')) {
             $session = json_decode($this->request->cookies->get('session'));
             $this->appUser->authenticate();
             $this->appUser->name = $session->username;
             $this->appUser->setPrivileges($session->privileges);
-        }
-
-        $next();
+        };
     }
 }

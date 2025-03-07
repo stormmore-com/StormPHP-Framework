@@ -7,6 +7,7 @@ use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Authentication\AjaxAuthenticationException;
 use Stormmore\Framework\Authentication\AuthenticationException;
 use Stormmore\Framework\Authentication\AuthorizedException;
+use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Request\Response;
 use Throwable;
@@ -15,18 +16,21 @@ readonly class ExceptionMiddleware implements IMiddleware
 {
     public function __construct(
         private AppConfiguration $configuration,
+        private ILogger          $logger,
         private Request          $request,
         private Response         $response)
     {
     }
+
     public function run(closure $next): void
     {
+        $this->logger->logI("Request started  `{$this->request->uri}`");
         try {
             $next();
-        }
-        catch(Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->handle($throwable);
         }
+        $this->logger->logI("Request finished `{$this->request->uri}` [{$this->response->code}]");
     }
 
     private function handle(Throwable $throwable): void

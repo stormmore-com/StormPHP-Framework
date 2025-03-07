@@ -1,17 +1,16 @@
 <?php
 
-namespace Infrastructure\Middleware;
+namespace Infrastructure\Configuration;
 
-use closure;
-use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\AppConfiguration;
+use Stormmore\Framework\Configuration\IConfiguration;
 
-readonly class ErrorMiddleware implements IMiddleware
+readonly class ErrorConfiguration implements IConfiguration
 {
     public function __construct(private AppConfiguration $configuration)
     {
     }
-    public function run(closure $next): void
+    public function configure(): void
     {
         $this->configuration->addErrors([
             404 => '@templates/errors/404.php',
@@ -24,7 +23,5 @@ readonly class ErrorMiddleware implements IMiddleware
                 'default' => '@templates/errors/500_dev.php'
             ]);
         }
-
-        $next();
     }
 }

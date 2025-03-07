@@ -46,7 +46,7 @@ class View extends stdClass
         }
 
         $templateFilePath = resolve_path_alias($this->fileName);
-        file_exists($templateFilePath) or throw new Exception("VIEW: $templateFilePath doesn't exist ");
+        file_exists($templateFilePath) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");
 
         try {
             return $this->getTemplateContent($templateFilePath);

@@ -2,6 +2,7 @@
 
 vendor/
 test/.cache
+test/.logs
 
 .DS_Store
 *.pem

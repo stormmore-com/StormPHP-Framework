@@ -8,8 +8,7 @@
  *    - zmiana nazwy handler przetestowac
  *    - strona ktora wyswietla odpalone eventy
  *
- * logowanie (wiele poziomów)
- * rsponse cache
+ * response cache
  *
  *
  *   obsługa meilów

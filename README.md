@@ -11,6 +11,7 @@ Made with love without unnecessary complexity.
 - Built-in event dispatcher 
 - Built-in multilanguage support
 - Built-in authentication and authorization system
+- Built-in logger
 - Built-in class autoloader with scanning source code (detect automatically controllers)
 - Built-in path alias system ('@templates/homepage.php' refers to /your/project/dir/templates/homepage.php)
 - Built-in mature view system using pure PHP, views can control content of layout (adding css/jss scripts or changing title)

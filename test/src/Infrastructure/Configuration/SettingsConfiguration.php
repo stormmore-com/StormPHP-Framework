@@ -1,24 +1,23 @@
 <?php
 
-namespace Infrastructure\Settings;
+namespace Infrastructure\Configuration;
 
-use closure;
-use Stormmore\Framework\App\IMiddleware;
+use Infrastructure\Settings\Settings;
+use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\DependencyInjection\Container;
 
-readonly class SettingsMiddleware implements IMiddleware
+readonly class SettingsConfiguration implements IConfiguration
 {
     public function __construct(private Container $container, private JsonConfigurationLoader $jsonConfigurationLoader)
     {
     }
 
-    public function run(closure $next): void
+    public function configure(): void
     {
         $settings = new Settings();
         $this->jsonConfigurationLoader->load($settings, '@/settings.json');
         $this->container->register($settings);
-        $next();
     }
 }
 

@@ -8,6 +8,7 @@ use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Classes\SourceCode;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
+use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Mvc\ControllerReflection;
 use Stormmore\Framework\Mvc\View;
 use Stormmore\Framework\Request\Redirect;

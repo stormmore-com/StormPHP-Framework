@@ -1,22 +1,20 @@
 <?php
 
-namespace Infrastructure\Middleware;
+namespace Infrastructure\Configuration;
 
-use closure;
-use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\AppConfiguration;
+use Stormmore\Framework\Configuration\IConfiguration;
 
-readonly class AliasMiddleware implements IMiddleware
+readonly class AliasConfiguration implements IConfiguration
 {
     public function __construct(private AppConfiguration $appConfiguration)
     {
     }
 
-    public function run(closure $next): void
+    public function configure(): void
     {
         $this->appConfiguration->addAliases([
             '@templates' => "@/src/templates"
         ]);
-        $next();
     }
 }
