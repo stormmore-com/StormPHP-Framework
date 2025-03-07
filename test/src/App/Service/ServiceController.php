@@ -2,6 +2,8 @@
 
 namespace Configuration;
 
+use Configuration\Commands\ExampleCommand;
+use Configuration\Commands\ServiceCommand;
 use Exception;
 use Infrastructure\Settings\Settings;
 use Stormmore\Framework\AppConfiguration;
@@ -30,7 +32,10 @@ readonly class ServiceController
     public function run(): View
     {
         $this->gate->handle(new ExampleCommand());
-        return view("@/src/templates/service/cqs");
+        $this->gate->handle(new ServiceCommand());
+        return view("@/src/templates/service/cqs",[
+            'history' => $this->gate->getGateHistory()
+        ]);
     }
 
     #[Route("/configuration")]

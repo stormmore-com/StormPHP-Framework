@@ -5,7 +5,8 @@
  *
  *   obsluga eventów
  *    - jak jest w namepsace event i jak w globalu
- *    - zmiana nazwy handler
+ *    - zmiana nazwy handler przetestowac
+ *    - strona ktora wyswietla odpalone eventy
  *
  * logowanie (wiele poziomów)
  * rsponse cache

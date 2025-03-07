@@ -7,8 +7,10 @@ use Stormmore\Framework\Classes\SourceCode;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Exception;
 
-readonly class Gate
+class Gate
 {
+    private array $history = [];
+
     public function __construct(private SourceCode $sourceCode, private AppConfiguration $configuration, private Resolver $resolver)
     {
     }
@@ -19,6 +21,12 @@ readonly class Gate
         $handler != null or throw new Exception("Gate: Handle for " . get_class($command) . " not found.");
         method_exists($handler, 'handle') or throw new Exception("Gate: handler " . get_class($handler) . " doest not implement handle function");
         $handler->handle($command);
+        $this->history[] = get_class($command);
+    }
+
+    public function getGateHistory(): array
+    {
+        return $this->history;
     }
 
     private function getCommandHandler(object $command): null|object
