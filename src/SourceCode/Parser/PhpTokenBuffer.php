@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Classes\Parser;
+namespace Stormmore\Framework\SourceCode\Parser;
 
 class PhpTokenBuffer
 {

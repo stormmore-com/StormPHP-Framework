@@ -5,7 +5,7 @@ namespace Stormmore\Framework\App;
 use closure;
 use Exception;
 use Stormmore\Framework\AppConfiguration;
-use Stormmore\Framework\Classes\SourceCode;
+use Stormmore\Framework\SourceCode\SourceCode;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Logger\ILogger;

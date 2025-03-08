@@ -1,9 +1,9 @@
 <?php
 
-namespace Stormmore\Framework\Classes\Parser;
+namespace Stormmore\Framework\SourceCode\Parser;
 
 use ArrayIterator;
-use Stormmore\Framework\Classes\Parser\Models\PhpUse;
+use Stormmore\Framework\SourceCode\Parser\Models\PhpUse;
 
 class PhpUserParser
 {

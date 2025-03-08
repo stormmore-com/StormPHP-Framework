@@ -3,7 +3,7 @@
 namespace Stormmore\Framework\App;
 
 use Stormmore\Framework\AppConfiguration;
-use Stormmore\Framework\Classes\SourceCode;
+use Stormmore\Framework\SourceCode\SourceCode;
 
 readonly class ClassLoader
 {

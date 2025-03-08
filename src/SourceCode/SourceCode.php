@@ -1,11 +1,11 @@
 <?php
 
-namespace Stormmore\Framework\Classes;
+namespace Stormmore\Framework\SourceCode;
 
 use Stormmore\Framework\AppConfiguration;
-use Stormmore\Framework\Classes\Scanners\ClassScanner;
-use Stormmore\Framework\Classes\Scanners\CommandHandlerScanner;
-use Stormmore\Framework\Classes\Scanners\RouteScanner;
+use Stormmore\Framework\SourceCode\Scanners\ClassScanner;
+use Stormmore\Framework\SourceCode\Scanners\CommandHandlerScanner;
+use Stormmore\Framework\SourceCode\Scanners\RouteScanner;
 
 class SourceCode
 {

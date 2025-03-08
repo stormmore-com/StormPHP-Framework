@@ -3,7 +3,7 @@
 namespace Stormmore\Framework\Cqs;
 
 use Stormmore\Framework\AppConfiguration;
-use Stormmore\Framework\Classes\SourceCode;
+use Stormmore\Framework\SourceCode\SourceCode;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Exception;
 

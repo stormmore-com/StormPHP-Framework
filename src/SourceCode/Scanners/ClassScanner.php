@@ -1,9 +1,9 @@
 <?php
 
-namespace Stormmore\Framework\Classes\Scanners;
+namespace Stormmore\Framework\SourceCode\Scanners;
 
 use Exception;
-use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
+use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 
 class ClassScanner
 {

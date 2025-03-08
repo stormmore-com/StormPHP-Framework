@@ -1,9 +1,9 @@
 <?php
 
-namespace Stormmore\Framework\Classes\Scanners;
+namespace Stormmore\Framework\SourceCode\Scanners;
 
-use Stormmore\Framework\Classes\Parser\Models\PhpClass;
-use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
+use Stormmore\Framework\SourceCode\Parser\Models\PhpClass;
+use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 use Stormmore\Framework\Cqs\CommandHandler;
 
 class CommandHandlerScanner

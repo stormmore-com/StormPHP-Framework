@@ -1,8 +1,8 @@
 <?php
 
-namespace Stormmore\Framework\Classes\Scanners;
+namespace Stormmore\Framework\SourceCode\Scanners;
 
-use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
+use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
 

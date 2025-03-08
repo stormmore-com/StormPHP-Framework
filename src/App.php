@@ -10,7 +10,7 @@ use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\App\MvcMiddleware;
 use Stormmore\Framework\App\ResponseMiddleware;
 use Stormmore\Framework\Authentication\AppUser;
-use Stormmore\Framework\Classes\SourceCode;
+use Stormmore\Framework\SourceCode\SourceCode;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\I18n;

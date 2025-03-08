@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Classes;
+namespace Stormmore\Framework\SourceCode;
 use Stormmore\Framework\AppConfiguration;
 
 class ClassCacheStorage

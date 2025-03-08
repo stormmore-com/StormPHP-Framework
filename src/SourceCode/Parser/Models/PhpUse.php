@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Classes\Parser\Models;
+namespace Stormmore\Framework\SourceCode\Parser\Models;
 
 class PhpUse
 {

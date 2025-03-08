@@ -1,9 +1,9 @@
 <?php
 
-namespace Stormmore\Framework\Classes\Parser;
+namespace Stormmore\Framework\SourceCode\Parser;
 
 use ArrayIterator;
-use Stormmore\Framework\Classes\Parser\Models\PhpAttribute;
+use Stormmore\Framework\SourceCode\Parser\Models\PhpAttribute;
 
 class AttributeParser
 {
