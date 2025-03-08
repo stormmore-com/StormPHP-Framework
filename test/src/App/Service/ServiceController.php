@@ -33,7 +33,7 @@ readonly class ServiceController
     {
         $this->gate->handle(new ExampleCommand());
         $this->gate->handle(new ServiceCommand());
-        return view("@/src/templates/service/cqs",[
+        return view("@templates/service/cqs",[
             'history' => $this->gate->getGateHistory()
         ]);
     }
@@ -45,7 +45,7 @@ readonly class ServiceController
         foreach ($this->settings->i18n->locales as $locale) {
             $locales[$locale->tag] = $locale->tag;
         }
-        return view("@/src/templates/service/index", [
+        return view("@templates/service/index", [
             'configuration' => $this->configuration,
             'locales' => $locales
         ]);

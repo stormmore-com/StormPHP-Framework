@@ -43,7 +43,7 @@ class AppConfiguration
     public function setSourceDirectory(string $sourceDirectory): void
     {
         if (empty($sourceDirectory)) {
-            $sourceDirectory = getcwd();
+            $sourceDirectory = $this->projectDirectory;
         }
         if (!file_exists($sourceDirectory)) {
             throw new Error("Source directory '$sourceDirectory' does not exist: ");

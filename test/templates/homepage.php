@@ -5,7 +5,7 @@
  */
 
 $view->setTitle("Storm App - Homepage");
-$view->setLayout("@/src/templates/includes/layout.php");
+$view->setLayout("@templates/includes/layout.php");
 ?>
 <h2>It works!</h2>
 

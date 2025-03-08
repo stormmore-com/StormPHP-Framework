@@ -41,7 +41,7 @@ class App
     private array $middlewares = [];
     private array $configurations = [];
 
-    public static function create(string $projectDir = "", string $sourceDir = "", string $cacheDir = ""): App
+    public static function create(string $projectDir, string $sourceDir = "", string $cacheDir = ""): App
     {
         $appConfiguration = new AppConfiguration();
         $appConfiguration->setProjectDirectory($projectDir);
