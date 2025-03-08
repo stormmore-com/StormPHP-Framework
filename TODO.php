@@ -10,7 +10,6 @@
  *
  * response cache
  *
- *
  *   obsługa meilów
  *
  *  - tlumaczenia iterałów

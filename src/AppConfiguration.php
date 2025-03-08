@@ -54,8 +54,9 @@ class AppConfiguration
     public function setCacheDirectory(string $cacheDirectory): void
     {
         if (empty($cacheDirectory)) {
-            $cacheDirectory = concatenate_paths(getcwd(), ".cache");
+            $cacheDirectory = $this->projectDirectory;
         }
+
         if (!is_dir($cacheDirectory)) {
             mkdir($cacheDirectory, 0777, true);
         }

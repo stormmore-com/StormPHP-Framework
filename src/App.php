@@ -44,9 +44,9 @@ class App
     public static function create(string $projectDir = "", string $sourceDir = "", string $cacheDir = ""): App
     {
         $appConfiguration = new AppConfiguration();
+        $appConfiguration->setProjectDirectory($projectDir);
         $appConfiguration->setSourceDirectory($sourceDir);
         $appConfiguration->setCacheDirectory($cacheDir);
-        $appConfiguration->setProjectDirectory($projectDir);
         $appConfiguration->aliases['@src'] = $appConfiguration->sourceDirectory;
 
         self::$instance = new App($appConfiguration);

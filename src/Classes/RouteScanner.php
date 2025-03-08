@@ -2,7 +2,6 @@
 
 namespace Stormmore\Framework\Classes;
 
-use PhpToken;
 use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
 use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
