@@ -2,15 +2,15 @@
 
 namespace Stormmore\Framework\SourceCode\Scanners;
 
-use Stormmore\Framework\Cqs\CommandHandler;
+use Stormmore\Framework\Events\EventHandler;
 
-class CommandHandlerScanner
+class EventHandlerScanner
 {
     private HandlerScanner $handlerScanner;
 
     public function __construct()
     {
-        $this->handlerScanner = new HandlerScanner(CommandHandler::class);
+        $this->handlerScanner = new HandlerScanner(EventHandler::class);
     }
 
     public function scan(array $classes): array

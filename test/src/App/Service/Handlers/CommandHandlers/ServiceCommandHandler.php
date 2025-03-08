@@ -1,6 +1,6 @@
 <?php
 
-namespace Configuration\Handlers;
+namespace Configuration\Handlers\CommandHandlers;
 
 use Configuration\Commands\ServiceCommand;
 use Stormmore\Framework\Cqs\CommandHandler;

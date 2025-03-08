@@ -5,14 +5,17 @@ namespace Stormmore\Framework\SourceCode;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\SourceCode\Scanners\ClassScanner;
 use Stormmore\Framework\SourceCode\Scanners\CommandHandlerScanner;
+use Stormmore\Framework\SourceCode\Scanners\EventHandlerScanner;
 use Stormmore\Framework\SourceCode\Scanners\RouteScanner;
 
 class SourceCode
 {
     private array $classes;
     private array $routes;
-    private array $commands;
+    private array $commandHandlers;
+    private array $eventHandlers;
     private CommandHandlerScanner $commandHandlerScanner;
+    private EventHandlerScanner $eventHandlerScanner;
     private ClassScanner $classScanner;
     private RouteScanner $routeScanner;
     private ClassCacheStorage $cache;
@@ -24,6 +27,7 @@ class SourceCode
         $this->classScanner = new ClassScanner($this->configuration->sourceDirectory);
         $this->routeScanner = new RouteScanner();
         $this->commandHandlerScanner = new CommandHandlerScanner();
+        $this->eventHandlerScanner = new EventHandlerScanner();
     }
 
     public function loadCache(): void
@@ -35,7 +39,8 @@ class SourceCode
             $cache = $this->cache->load();
             $this->classes = $cache['classes'];
             $this->routes = $cache['routes'];
-            $this->commands = $cache['commands'];
+            $this->commandHandlers = $cache['commands'];
+            $this->eventHandlers = $cache['handlers'];
         }
     }
 
@@ -43,7 +48,8 @@ class SourceCode
     {
         $this->classes = $this->classScanner->scan();
         $this->routes = $this->routeScanner->scan($this->classes);
-        $this->commands = $this->commandHandlerScanner->scan($this->classes);
+        $this->commandHandlers = $this->commandHandlerScanner->scan($this->classes);
+        $this->eventHandlers = $this->eventHandlerScanner->scan($this->classes);
     }
 
     public function writeCache(): void
@@ -51,7 +57,8 @@ class SourceCode
         $this->cache->save([
             'classes' => $this->classes,
             'routes' => $this->routes,
-            'commands' => $this->commands,
+            'commands' => $this->commandHandlers,
+            'handlers' => $this->eventHandlers,
         ]);
     }
 
@@ -86,6 +93,11 @@ class SourceCode
 
     public function getCommandHandlers(): array
     {
-        return $this->commands;
+        return $this->commandHandlers;
+    }
+
+    public function getEventHandlers(): array
+    {
+        return $this->eventHandlers;
     }
 }

@@ -4,10 +4,12 @@ namespace Configuration;
 
 use Configuration\Commands\ExampleCommand;
 use Configuration\Commands\ServiceCommand;
+use Configuration\Events\ServiceEvent;
 use Exception;
 use Infrastructure\Settings\Settings;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
+use Stormmore\Framework\Events\EventDispatcher;
 use Stormmore\Framework\Mvc\Controller;
 use Stormmore\Framework\Mvc\Route;
 use Stormmore\Framework\Mvc\View;
@@ -24,7 +26,8 @@ readonly class ServiceController
                                 private Request $request,
                                 private Response $response,
                                 private BasicForm $basicForm,
-                                private Gate $gate)
+                                private Gate $gate,
+                                private EventDispatcher $eventDispatcher)
     {
     }
 
@@ -34,7 +37,16 @@ readonly class ServiceController
         $this->gate->handle(new ExampleCommand());
         $this->gate->handle(new ServiceCommand());
         return view("@templates/service/cqs",[
-            'history' => $this->gate->getGateHistory()
+            'history' => $this->gate->getHistory()
+        ]);
+    }
+
+    #[Route("/events-test")]
+    public function events(): View
+    {
+        $this->eventDispatcher->handle(new ServiceEvent());
+        return view("@templates/service/events",[
+            'history' => $this->eventDispatcher->getHistory()
         ]);
     }
 

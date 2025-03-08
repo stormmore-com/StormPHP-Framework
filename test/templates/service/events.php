@@ -19,10 +19,12 @@ Enjoy small things.</br>
     </tr>
     </thead>
     <tbody>
-    <?php foreach($history as $item): ?>
-        <tr>
-            <td><?php echo $item ?></td>
-        </tr>
+    <?php foreach($history as $eventClassName => $handlers): ?>
+        <?php foreach($handlers as $handler): ?>
+            <tr>
+                <td><?php echo $handler ?></td>
+            </tr>
+        <?php endforeach; ?>
     <?php endforeach; ?>
     </tbody>
 </table>
