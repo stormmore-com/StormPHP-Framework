@@ -1,8 +1,7 @@
 <?php
 
-namespace Stormmore\Framework\Classes;
+namespace Stormmore\Framework\Classes\Scanners;
 
-use PhpToken;
 use Exception;
 use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
 

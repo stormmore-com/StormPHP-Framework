@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Classes;
+namespace Stormmore\Framework\Classes\Scanners;
 
 use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
 use Stormmore\Framework\Mvc\Controller;

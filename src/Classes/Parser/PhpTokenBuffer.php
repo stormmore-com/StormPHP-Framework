@@ -2,8 +2,6 @@
 
 namespace Stormmore\Framework\Classes\Parser;
 
-use PhpToken;
-
 class PhpTokenBuffer
 {
     private array $tokens = [];

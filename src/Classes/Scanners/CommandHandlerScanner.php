@@ -1,8 +1,8 @@
 <?php
 
-namespace Stormmore\Framework\Classes;
+namespace Stormmore\Framework\Classes\Scanners;
 
-use Stormmore\Framework\Classes\Parser\PhpClass;
+use Stormmore\Framework\Classes\Parser\Models\PhpClass;
 use Stormmore\Framework\Classes\Parser\PhpClassFileParser;
 use Stormmore\Framework\Cqs\CommandHandler;
 

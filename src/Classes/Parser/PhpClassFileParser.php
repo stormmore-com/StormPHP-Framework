@@ -4,6 +4,8 @@ namespace Stormmore\Framework\Classes\Parser;
 
 use ArrayIterator;
 use PhpToken;
+use Stormmore\Framework\Classes\Parser\Models\PhpAttributes;
+use Stormmore\Framework\Classes\Parser\Models\PhpClass;
 
 class PhpClassFileParser
 {

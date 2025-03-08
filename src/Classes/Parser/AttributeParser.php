@@ -3,6 +3,7 @@
 namespace Stormmore\Framework\Classes\Parser;
 
 use ArrayIterator;
+use Stormmore\Framework\Classes\Parser\Models\PhpAttribute;
 
 class AttributeParser
 {

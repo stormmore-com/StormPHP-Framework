@@ -3,6 +3,9 @@
 namespace Stormmore\Framework\Classes;
 
 use Stormmore\Framework\AppConfiguration;
+use Stormmore\Framework\Classes\Scanners\ClassScanner;
+use Stormmore\Framework\Classes\Scanners\CommandHandlerScanner;
+use Stormmore\Framework\Classes\Scanners\RouteScanner;
 
 class SourceCode
 {
