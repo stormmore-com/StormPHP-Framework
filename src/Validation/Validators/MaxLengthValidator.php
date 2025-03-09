@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Validation\Validator;
+namespace Stormmore\Framework\Validation\Validators;
 
 use Stormmore\Framework\Validation\IValidator;
 use Stormmore\Framework\Validation\ValidatorResult;

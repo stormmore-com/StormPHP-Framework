@@ -5,14 +5,6 @@ use Stormmore\Framework\App;
 use Stormmore\Framework\Request\Redirect;
 use Stormmore\Framework\Internationalization\I18n;
 
-function run_callable(callable|null $callable): mixed
-{
-    if ($callable == null) {
-        return null;
-    }
-    return $callable();
-}
-
 function resolve_path_alias(string $templatePath): string
 {
     $configuration = App::getInstance()->getAppConfiguration();

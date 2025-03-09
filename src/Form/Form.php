@@ -8,7 +8,7 @@ class Form
 {
     public Request $request;
     public array|object|null $model;
-    public array $validators;
+    public array $validators = [];
     public ?ValidationResult $validationResult = null;
 
     function __construct(Request $request, object|null $model = null)
@@ -73,7 +73,7 @@ class Form
 
     function isValid(): bool
     {
-        return $this->validationResult?->isValid();
+        return $this->validationResult?->isValid() === true;
     }
 
     function isInvalid(): bool

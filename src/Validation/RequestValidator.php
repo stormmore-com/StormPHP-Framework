@@ -10,46 +10,47 @@ use Stormmore\Framework\Request\Request;
 class RequestValidator
 {
     public Request $request;
-    public Resolver $codeAssembler;
+    public Resolver $resolver;
 
-    function __construct(Request $request, Resolver $codeAssembler)
+    function __construct(Request $request, Resolver $resolver)
     {
         $this->request = $request;
-        $this->codeAssembler = $codeAssembler;
+        $this->resolver = $resolver;
     }
 
-    function validate($rules): ValidationResult
+    function validate(array $validators): ValidationResult
     {
         $result = new ValidationResult();
-        foreach ($rules as $fieldName => $subrules) {
-            $value = $this->request->getParameter($fieldName);
-            foreach ($subrules as $subruleKey => $subruleValue) {
-                if (!is_int($subruleKey)) {
-                    $validatorKey = $subruleKey;
-                    $arguments = $subruleValue;
+        foreach ($validators as $fieldName => $set) {
+            if (is_array($set)) {
+                foreach ($set as $value) {
+                    if ($value instanceof IValidator) {
+                        $validator = $value;
+                    } else {
+                        $validator = $this->instantiateValidator($value);
+                    }
+                    $this->validateField($fieldName, $result, $validator);
                 }
-                if (is_int($subruleKey)) {
-                    $validatorKey = $subruleValue;
-                    $arguments = [];
-                }
-
-                if ($validatorKey instanceof IValidator) {
-                    $validator = $validatorKey;
-                } else {
-                    $validator = $this->instantiateValidator($validatorKey);
-                }
-                $validatorResult = $validator->validate($value, $fieldName, $this->request->parameters, $arguments);
-                if (!$validatorResult->valid) {
-                    $result->addError($fieldName, $validatorResult->message);
-                    break;
-                }
+            } else {
+                $this->validateField($fieldName, $result, $validator);
             }
+
         }
         return $result;
     }
 
-    private function instantiateValidator($validatorName): IValidator
+    private function validateField(string $fieldName, ValidationResult $result, IValidator $validator): void
     {
+        $value = $this->request->getParameter($fieldName);
+        $validatorResult = $validator->validate($value, $fieldName, $this->request->parameters, []);
+        if (!$validatorResult->valid) {
+            $result->addError($fieldName, $validatorResult->message);
+        }
+    }
+
+    private function instantiateValidator(string $validatorName): IValidator
+    {
+        //tablica buildInValidator
         if (!str_ends_with($validatorName, "Validator") and !str_contains($validatorName, "\\")) {
             $validatorName = $this->normalizeValidatorName($validatorName);
         }
@@ -60,7 +61,7 @@ class RequestValidator
             throw new Exception("Validator $fullyQualifiedValidatorName does not exist");
         }
 
-        $validator = $this->codeAssembler->resolveObject($fullyQualifiedValidatorName);
+        $validator = $this->resolver->resolveObject($fullyQualifiedValidatorName);
         if ($validator instanceof IValidator) {
             return $validator;
         }

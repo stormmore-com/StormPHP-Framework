@@ -19,11 +19,6 @@ class Router
         $this->routes[$key] = $value;
     }
 
-    public function addRoutes(array $routes): void
-    {
-        $this->routes = array_merge($this->routes, $routes);
-    }
-
     public function find(Request $request): ?ExecutionRoute
     {
         $requestUri = $request->requestUri;
@@ -48,7 +43,7 @@ class Router
 
     private function getAllRoutes(): array
     {
-        return [$this->routes, ...$this->sourceCode->getRoutes()];
+        return array_merge($this->routes, $this->sourceCode->getRoutes());
     }
 
     private function createEndpoint(closure|array $target): Endpoint

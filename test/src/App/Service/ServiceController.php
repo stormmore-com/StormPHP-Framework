@@ -96,7 +96,9 @@ readonly class ServiceController
     #[Route("/form")]
     public function form(): View
     {
-
+        if ($this->basicForm->isSubmittedSuccessfully()) {
+            echo "test";
+        }
         return view('@templates/service/form', [
             'form' => $this->basicForm
         ]);

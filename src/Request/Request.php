@@ -11,8 +11,6 @@ use Stormmore\Framework\Validation\ValidationResult;
 
 class Request
 {
-    private RequestValidator $requestValidator;
-
     public string $uri;
     public string $baseUri;
     /**
@@ -36,10 +34,9 @@ class Request
 
     public RedirectMessage $messages;
 
-    function __construct(public Cookies $cookies, Resolver $codeResolver)
+    function __construct(public Cookies $cookies)
     {
         $this->messages = new RedirectMessage($cookies);
-        $this->requestValidator = new RequestValidator($this, $codeResolver);
 
         $this->query = array_key_exists('QUERY_STRING', $_SERVER) ? $_SERVER['QUERY_STRING'] : "";
         $this->uri = strtok($_SERVER["REQUEST_URI"], '?');
@@ -306,8 +303,6 @@ class Request
 
     function toView($data = null): array
     {
-        $this->parameters['validation'] = $this->validationResult;
-
         if ($data != null) {
             if (is_object($data)) {
                 $data = (array)$data;
@@ -345,11 +340,6 @@ class Request
                 $reflection->set($destinationField, $this->getParameter($requestField));
             }
         }
-    }
-
-    public function validate($rules): ValidationResult
-    {
-        return $this->requestValidator->validate($rules);
     }
 
     private function castToTypes(array $values): array
