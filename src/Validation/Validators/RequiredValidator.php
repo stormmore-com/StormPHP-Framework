@@ -9,7 +9,7 @@ class RequiredValidator implements IValidator
 {
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
-        if (empty($value)) {
+        if ($value === null or $value === '') {
             $message = array_key_value($args, 'message', _('Field is required'));
             return new ValidatorResult(false, $message);
         }

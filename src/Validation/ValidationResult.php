@@ -20,7 +20,7 @@ class ValidationResult
 
     function __get($name)
     {
-        $field = new ValidationField();
+        $field = new FieldValidationResult();
         if (array_key_exists($name, $this->errors)) {
             $field->invalid = true;
             $field->valid = false;

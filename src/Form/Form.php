@@ -3,72 +3,55 @@
 namespace Stormmore\Framework\Form;
 use Stormmore\Framework\Request\Request;
 use Stormmore\Framework\Validation\ValidationResult;
+use Stormmore\Framework\Validation\Validator;
 
 class Form
 {
+    public Errors $errors;
+
     public Request $request;
-    public array|object|null $model;
-    public array $validators = [];
-    public ?ValidationResult $validationResult = null;
+    public null|array $model;
+    protected Validator $validator;
+    private null|ValidationResult $validationResult;
 
-    function __construct(Request $request, object|null $model = null)
+
+    function __construct(Request $request, Validator $validator)
     {
+        $this->validationResult = new ValidationResult();
+        $this->validator = $validator;
         $this->request = $request;
-        $this->model = $model;
-    }
-
-    public function addValidators(array $validators): void
-    {
-        $this->validators = $validators;
-    }
-
-    public function removeValidator(string $field, string $name): void
-    {
-        if (array_key_exists($field, $this->validators) and array_key_exists($name, $this->validators[$field])) {
-            unset($this->validators[$field][$name]);
-        }
-        if (array_key_exists($field, $this->validators) and ($key = array_search($name, $this->validators[$field])) !== false) {
-            unset($this->validators[$field][$key]);
-        }
-    }
-
-    function printError($name, string|null $message = null): void
-    {
-        if ($this->validationResult != null) {
-            $field = $this->validationResult->__get($name);
-            $message = empty($message) ? $field->message : $message;
-            echo html_error($field->valid, $message);
-        }
-    }
-
-    function hasError($name): ?bool
-    {
-        return $this->validationResult?->__get($name)->invalid;
-    }
-
-    function getError($name): ?string
-    {
-        return $this->validationResult?->__get($name)?->message;
-    }
-
-    function printIfError(string $name, string $present): void
-    {
-        if ($this->hasError($name))
-            echo $present;
-    }
-
-    function printIfElseError(string $name, string $present, string $notPresent): void
-    {
-        if ($this->hasError($name))
-            echo $present;
-        else
-            echo $notPresent;
+        $this->errors = new Errors();
     }
 
     function validate(): ValidationResult
     {
-        $this->validationResult = $this->request->validate($this->validators);
+        $this->validationResult = $this->validator->validate($this->request);
+        $this->errors->setErrors($this->validationResult);
         return $this->validationResult;
+    }
+
+    function setModel(array|object $model): void
+    {
+        if (is_object($model)) {
+            $model = get_object_vars($model);
+        }
+        $this->model = $model;
+    }
+
+    public function getValue(string $name): mixed
+    {
+        if ($this->request->has($name)) {
+            return $this->request->get($name);
+        }
+        if (array_key_exists($name, $this->model)) {
+            return $this->model[$name];
+        }
+        return null;
+    }
+
+    public function __get(string $name): mixed
+    {
+        return $this->getValue($name);
     }
 
     function isValid(): bool

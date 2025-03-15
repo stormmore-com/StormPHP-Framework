@@ -6,7 +6,7 @@ use stdClass;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Reflection\ObjectReflector;
-use Stormmore\Framework\Validation\RequestValidator;
+use Stormmore\Framework\Validation\Validator;
 use Stormmore\Framework\Validation\ValidationResult;
 
 class Request
@@ -163,6 +163,17 @@ class Request
         return array_key_exists($name, $this->getParameters);
     }
 
+    public function __get(string $name): mixed
+    {
+        if ($this->hasFile($name)) {
+            return $this->getFile($name);
+        }
+        if ($this->hasParameter($name)) {
+            return $this->getParameter($name);
+        }
+        return null;
+    }
+
     public function get(string ...$names): mixed
     {
         if (count($names) == 1) {
@@ -193,7 +204,8 @@ class Request
     {
         if ($this->hasParameter($name)) {
             $value = $this->parameters[$name];
-            return $this->sanitize($value);
+            $value = $this->sanitize($value);
+            return $this->cast($value);
         }
         return $defaultValue;
     }
@@ -371,5 +383,19 @@ class Request
         } else {
             return htmlspecialchars($value);
         }
+    }
+
+    private function cast(mixed $value): mixed
+    {
+        if (is_string($value)) {
+            $strValue = strtolower($value);
+            if ($strValue === 'true') {
+                return true;
+            }
+            if ($strValue === 'false') {
+                return false;
+            }
+        }
+        return $value;
     }
 }

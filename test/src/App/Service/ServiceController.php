@@ -7,6 +7,7 @@ use Configuration\Commands\ServiceCommand;
 use Configuration\Events\ServiceEvent;
 use Exception;
 use Infrastructure\Settings\Settings;
+use stdClass;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
@@ -96,11 +97,22 @@ readonly class ServiceController
     #[Route("/form")]
     public function form(): View
     {
-        if ($this->basicForm->isSubmittedSuccessfully()) {
-            echo "test";
+        $this->basicForm->setModel([
+            'required' => '',
+            'alpha' => 'abc1',
+            'alphaNum' => 'abc1!',
+            'radio' => '',
+            'min' => 7,
+            'max' => 11,
+            'num' => 'abc'
+        ]);
+        if ($this->request->isPost()) {
+            $this->basicForm->validate();
         }
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         return view('@templates/service/form', [
-            'form' => $this->basicForm
+            'form' => $this->basicForm,
+            'days' => array_combine($days, $days)
         ]);
     }
 }

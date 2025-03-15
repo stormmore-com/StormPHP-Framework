@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="/public/style.css" >
     <?php
         $view->printCss();
         $view->printJs();

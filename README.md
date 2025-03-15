@@ -14,8 +14,9 @@ Made with love without unnecessary complexity.
 - Built-in logger
 - Built-in class autoloader with scanning source code (detect automatically controllers)
 - Built-in path alias system ('@templates/homepage.php' refers to /your/project/dir/templates/homepage.php)
-- Built-in mature view system using pure PHP, views can control content of layout (adding css/jss scripts or changing title)
-- Support forms 
+- Built-in mature view system using pure PHP, views can control content of layout (adding css/jss scripts or changing title
+- Build-int validation
+- Build forms
 - Support error customization
 - Support middleware (put your code to pipeline before and after request is handled)
 - Support Docker out of the box

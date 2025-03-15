@@ -17,6 +17,8 @@ class View extends stdClass
     public Request $request;
     public AppUser $appUser;
 
+    public Html $html;
+
     private string|null $layoutFileName = null;
     private string|null $htmlMetaTitle = null;
     private array $htmlMetaJsScripts = [];
@@ -29,6 +31,7 @@ class View extends stdClass
         $this->i18n = App::getInstance()->getContainer()->resolve(I18n::class);
         $this->request = App::getInstance()->getContainer()->resolve(Request::class);
         $this->appUser = App::getInstance()->getContainer()->resolve(AppUser::class);
+        $this->html = new Html();
     }
 
     /**

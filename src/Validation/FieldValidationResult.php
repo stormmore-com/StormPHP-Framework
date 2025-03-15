@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Validation;
 
-class ValidationField
+class FieldValidationResult
 {
     public bool $valid = true;
     public bool $invalid = false;

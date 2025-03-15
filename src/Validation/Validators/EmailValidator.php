@@ -9,7 +9,7 @@ class EmailValidator implements IValidator
 {
     function validate(mixed $email, string $name, array $data, mixed $args): ValidatorResult
     {
-        if (!self::isValidEmail($email)) {
+        if ($email and !self::isValidEmail($email)) {
             return new ValidatorResult(false, _("It's not a valid email address"));
         }
         return new ValidatorResult();

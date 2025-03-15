@@ -122,7 +122,7 @@ class App
         $this->viewConfiguration = new ViewConfiguration();
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
         $this->response = new Response($cookies);
-        $this->request = new Request($cookies, $this->resolver);
+        $this->request = new Request($cookies);
 
         $this->logger = new Logger($loggerConfiguration);
 
