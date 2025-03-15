@@ -7,7 +7,6 @@ use Configuration\Commands\ServiceCommand;
 use Configuration\Events\ServiceEvent;
 use Exception;
 use Infrastructure\Settings\Settings;
-use stdClass;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
@@ -27,6 +26,7 @@ readonly class ServiceController
                                 private Request $request,
                                 private Response $response,
                                 private BasicForm $basicForm,
+                                private CustomMessagesForm $customMessagesForm,
                                 private Gate $gate,
                                 private EventDispatcher $eventDispatcher)
     {
@@ -112,6 +112,17 @@ readonly class ServiceController
         return view('@templates/service/form', [
             'form' => $this->basicForm,
             'days' => array_combine($days, $days)
+        ]);
+    }
+
+    #[Route('/form-custom-messages')]
+    public function formCustomMessages(): View
+    {
+        $this->customMessagesForm->setModel([
+            'alpha' => 'abc1'
+        ]);
+        return view('@templates/service/form-custom-messages', [
+            'form' => $this->customMessagesForm
         ]);
     }
 }

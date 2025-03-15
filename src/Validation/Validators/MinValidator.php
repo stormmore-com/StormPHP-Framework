@@ -5,7 +5,7 @@ namespace Stormmore\Framework\Validation\Validators;
 use Stormmore\Framework\Validation\IValidator;
 use Stormmore\Framework\Validation\ValidatorResult;
 
-class MinValidator implements IValidator
+readonly class MinValidator implements IValidator
 {
     public function __construct(private int $min)
     {
@@ -18,7 +18,7 @@ class MinValidator implements IValidator
             }
         } else if (is_string($value)) {
             if (mb_strlen($value) < $this->min) {
-                return new ValidatorResult(false, _("validation.max_string"));
+                return new ValidatorResult(false, _("validation.min_string"));
             }
         }
         return new ValidatorResult();

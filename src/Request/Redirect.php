@@ -2,8 +2,6 @@
 
 namespace Stormmore\Framework\Request;
 
-use Stormmore\Framework\App;
-
 class Redirect
 {
     public ?string $location = null;

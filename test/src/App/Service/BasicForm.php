@@ -12,8 +12,9 @@ class BasicForm extends Form
     {
         parent::__construct($request, $validator);
 
-        $this->validator->for('required')->required();
         $this->validator->for('alpha')->alpha();
+        $this->validator->for('alphaMin')->alpha()->min(2)->required();
+        $this->validator->for('alphaMax')->alpha()->max(5)->required();
         $this->validator->for('alphaNum')->alphaNumeric()->required();
         $this->validator->for('radio')->values(array('on', 'off'))->required();
         $this->validator->for('radioBool')->values(array(true, false))->required();
@@ -22,8 +23,8 @@ class BasicForm extends Form
         $this->validator->for('int')->int()->required();
         $this->validator->for('checkbox')->required();
         $this->validator->for('vegetables')->values(array('onion', 'carrot'))->required();
-        $this->validator->for('min')->min(8)->required();
-        $this->validator->for('max')->max(10)->required();
+        $this->validator->for('min')->int()->min(8)->required();
+        $this->validator->for('max')->int()->max(10)->required();
         $this->validator->for('num')->number()->required();
         $this->validator->for('regexp')->regexp('#^[A-Z][a-zA-Z0-9]*$#')->required();
         $this->validator->for('image')->image(types: [IMAGETYPE_JPEG]);

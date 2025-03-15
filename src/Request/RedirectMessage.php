@@ -6,7 +6,7 @@ class RedirectMessage
 {
     private string $prefix = 'redirect-msg-';
 
-    public function __construct(private Cookies $cookies)
+    public function __construct(private readonly Cookies $cookies)
     {
     }
 

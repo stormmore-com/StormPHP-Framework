@@ -10,7 +10,7 @@ class Form
     public Errors $errors;
 
     public Request $request;
-    public null|array $model;
+    public array $model;
     protected Validator $validator;
     private null|ValidationResult $validationResult;
 
@@ -21,6 +21,7 @@ class Form
         $this->validator = $validator;
         $this->request = $request;
         $this->errors = new Errors();
+        $this->model = array();
     }
 
     function validate(): ValidationResult
@@ -43,7 +44,7 @@ class Form
         if ($this->request->has($name)) {
             return $this->request->get($name);
         }
-        if (array_key_exists($name, $this->model)) {
+        if ($this->model and array_key_exists($name, $this->model)) {
             return $this->model[$name];
         }
         return null;

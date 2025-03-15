@@ -5,7 +5,6 @@
  *
  *  własne komunikaty błedu
  *
- *
  *  Refaktor Request
  *   - klasa Files
  *
