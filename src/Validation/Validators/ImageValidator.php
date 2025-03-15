@@ -16,14 +16,14 @@ readonly class ImageValidator implements IValidator
     {
         if ($file instanceof UploadedFile) {
             if (!$file->isUploaded() and ($file->error == 1 or $this->error == 2)) {
-                return new ValidatorResult(false, _("validation_storm.image.image_exceed_max_size"));
+                return new ValidatorResult(false, _("validation.image_max_size"));
             }
             else if (!$file->isUploaded()) {
-                return new ValidatorResult(false, _("validation_storm.image.file_not_upload"));
+                return new ValidatorResult(false, _("validation.image_not_uploaded"));
             }
             $type = exif_imagetype($file->path);
             if ($type === false || (!empty($this->allowed) and !in_array($type, $this->allowed))) {
-                return new ValidatorResult(false, _("validation.storm.image_not_supported"));
+                return new ValidatorResult(false, _("validation.image_format"));
             }
         }
         return new ValidatorResult();

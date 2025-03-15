@@ -89,6 +89,15 @@ class Field
         return $this;
     }
 
+    public function value(mixed $value): field
+    {
+        if (!is_array($value)) {
+            $value = array($value);
+        }
+        $this->validators[] = new ValuesValidator($value);
+        return $this;
+    }
+
     public function values(array $values): field
     {
         $this->validators[] = new ValuesValidator($values);

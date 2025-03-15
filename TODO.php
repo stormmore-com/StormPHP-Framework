@@ -2,9 +2,9 @@
  * TODO
  *
  * Formularze
- *  zapamietywanie wartosc pol
+ *
  *  własne komunikaty błedu
- *  komuikaty błedu ustandaryzowane
+ *
  *
  *  Refaktor Request
  *   - klasa Files

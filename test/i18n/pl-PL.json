@@ -10,5 +10,23 @@
   "status.date_time_format": "Formatowanie daty i czasu",
   "status.project_directory": "Katalog projektu",
   "status.source_directory": "Katalog źródeł",
-  "status.cache_directory": "Katalog pamięci podręcznej"
+  "status.cache_directory": "Katalog pamięci podręcznej",
+
+  "validation.alpha-numeric": "Allowed only alpha-numeric characters",
+  "validation.alpha": "Allowed only alphabetic characters",
+  "validation.invalid_value": "Invalid value",
+  "validation.required": "Field is required",
+  "validation.email": "Email is invalid",
+  "validation.numeric": "Invalid number",
+  "validation.integer": "Invalid integer",
+  "validation.float": "Invalid float",
+  "validation.max_string": "Lenght should be less",
+  "validation.max_number": "Value should be less",
+  "validation.min_string": "Lenght should be greater",
+  "validation.min_number": "Value should be greater",
+  "validation.image_max_size": "Image exceed max file size",
+  "validation.image_not_uploaded": "Image not uploaded correctly",
+  "validation.image_format": "Invalid image format",
+  "validation.file_extension": "Extension not supported",
+  "validation.file_size": "File exceed max size"
 }

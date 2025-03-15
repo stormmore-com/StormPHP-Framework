@@ -10,7 +10,7 @@ class IntValidator implements IValidator
     function validate(mixed $value, string $name, array $data, mixed $arg): ValidatorResult
     {
         if ($value and !preg_match('/^[0-9]+$/', $value)) {
-            return new ValidatorResult(false, _("Field is not integer"));
+            return new ValidatorResult(false, _("validation.integer"));
         }
         return new ValidatorResult();
     }

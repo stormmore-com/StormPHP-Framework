@@ -19,11 +19,11 @@ readonly class FileValidator implements IValidator
             if (!empty($this->extensions)) {
                 $extensions = pathinfo($value->name)['extension'];
                 if (!in_array($extensions, $this->extensions)) {
-                    return new ValidatorResult(false, "File extension not allowed");
+                    return new ValidatorResult(false, _('validation.file_extension'));
                 }
             }
             if ($this->size > 0 and $value->exceedSize($this->size)) {
-                return new ValidatorResult(false, "File exceed max. file size");
+                return new ValidatorResult(false, _('validation.file_size'));
             }
         }
         return new ValidatorResult();

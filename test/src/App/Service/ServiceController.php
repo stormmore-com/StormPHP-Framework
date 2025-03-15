@@ -98,7 +98,6 @@ readonly class ServiceController
     public function form(): View
     {
         $this->basicForm->setModel([
-            'required' => '',
             'alpha' => 'abc1',
             'alphaNum' => 'abc1!',
             'radio' => '',

@@ -16,11 +16,11 @@ class ValuesValidator implements IValidator
         if (is_array($value)) {
             $diff = array_diff($value, $this->values);
             if (count($diff)) {
-                return new ValidatorResult(false, _("Invalid " . implode(',', $diff) . " value"));
+                return new ValidatorResult(false, _("validation.invalid_value"));
             }
         }
         else if (!in_array($value, $this->values)) {
-            return new ValidatorResult(false, _("Invalid value `{$value}`"));
+            return new ValidatorResult(false, _("validation.invalid_value"));
         }
         return new ValidatorResult();
     }

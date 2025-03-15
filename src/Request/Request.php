@@ -313,20 +313,6 @@ class Request
         return null;
     }
 
-    function toView($data = null): array
-    {
-        if ($data != null) {
-            if (is_object($data)) {
-                $data = (array)$data;
-            }
-            if (is_array($data)) {
-                return array_merge($data, $this->parameters);
-            }
-        }
-
-        return $this->parameters;
-    }
-
     public function toObject(array|null $map = null): object
     {
         $obj = new stdClass();
