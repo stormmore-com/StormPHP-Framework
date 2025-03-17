@@ -7,7 +7,7 @@ use Stormmore\Framework\Validation\ValidatorResult;
 
 readonly class MaxValidator implements IValidator
 {
-    public function __construct(private int $max)
+    public function __construct(private int $max, private null|string $message = null)
     {
     }
 
@@ -15,12 +15,14 @@ readonly class MaxValidator implements IValidator
     {
         if (is_numeric($value)) {
             if ($value > $this->max) {
-                return new ValidatorResult(false, _("validation.max_number"));
+                $message = $this->message ?? _("validation.max_number");
+                return new ValidatorResult(false, $message);
             }
         }
         else if (is_string($value)) {
             if (mb_strlen($value) > $this->max) {
-                return new ValidatorResult(false, _("validation.max_string"));
+                $message = $this->message ?? _("validation.max_string");
+                return new ValidatorResult(false, $message);
             }
         }
         return new ValidatorResult();

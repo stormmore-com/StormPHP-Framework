@@ -5,12 +5,17 @@ namespace Stormmore\Framework\Validation\Validators;
 use Stormmore\Framework\Validation\IValidator;
 use Stormmore\Framework\Validation\ValidatorResult;
 
-class NumberValidator implements IValidator
+readonly class NumberValidator implements IValidator
 {
+    public function __construct(private null|string $message = null)
+    {
+    }
+
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
-        if (!is_numeric($value)) {
-            return new ValidatorResult(false, _("validation.numeric"));
+        $message = $this->message ?? _("validation.numeric");
+        if ($value and !is_numeric($value)) {
+            return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();
     }

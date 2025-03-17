@@ -7,10 +7,16 @@ use Stormmore\Framework\Validation\ValidatorResult;
 
 class AlphaNumValidator implements IValidator
 {
+
+    public function __construct(readonly private null|string $message = null)
+    {
+    }
+
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
-        if (!ctype_alnum($value)) {
-            return new ValidatorResult(false, _("validation.alpha-numeric"));
+        if ($value and !ctype_alnum($value)) {
+            $message = $this->message ?? _("validation.alpha-numeric");
+            return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();
     }

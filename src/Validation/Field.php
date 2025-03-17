@@ -25,27 +25,27 @@ class Field
         $this->validators = array();
     }
 
-    public function alpha(): Field
+    public function alpha(null|string $message = null): Field
     {
-        $this->validators[] = new AlphaValidator();
+        $this->validators[] = new AlphaValidator($message);
         return $this;
     }
 
-    public function alphaNumeric(): Field
+    public function alphaNumeric(null|string $message = null): Field
     {
-        $this->validators[] = new AlphaNumValidator();
+        $this->validators[] = new AlphaNumValidator($message);
         return $this;
     }
 
-    public function email(): Field
+    public function email(null|string $message = null): Field
     {
-        $this->validators[] = new EmailValidator();
+        $this->validators[] = new EmailValidator($message);
         return $this;
     }
 
-    public function float(): Field
+    public function float(null|string $message = null): Field
     {
-        $this->validators[] = new FloatValidator();
+        $this->validators[] = new FloatValidator($message);
         return $this;
     }
 
@@ -53,39 +53,39 @@ class Field
      * @param array $types list of accepted constants https://www.php.net/manual/en/function.exif-imagetype.php
      * @return $this
      */
-    public function image(array $types = []): Field
+    public function image(array $types = [], null|string $message = null): Field
     {
-        $this->validators[] = new ImageValidator($types);
+        $this->validators[] = new ImageValidator($types, $message);
         return $this;
     }
 
-    public function file(array $extensions = array(), int $size = 0): Field
+    public function file(array $extensions = array(), int $size = 0, null|string $message = null): Field
     {
-        $this->validators[] = new FileValidator($extensions, $size);
+        $this->validators[] = new FileValidator($extensions, $size, $message);
         return $this;
     }
 
-    public function int(): Field
+    public function int(null|string $message = null): Field
     {
-        $this->validators[] = new IntValidator();
+        $this->validators[] = new IntValidator($message);
         return $this;
     }
 
-    public function max(int $max): Field
+    public function max(int $max, null|string $message = null): Field
     {
-        $this->validators[] = new MaxValidator($max);
+        $this->validators[] = new MaxValidator($max, $message);
         return $this;
     }
 
-    public function min(int $min): Field
+    public function min(int $min, null|string $message = null): Field
     {
-        $this->validators[] = new MinValidator($min);
+        $this->validators[] = new MinValidator($min, $message);
         return $this;
     }
 
-    public function number(): Field
+    public function number(null|string $message = null): Field
     {
-        $this->validators[] = new NumberValidator();
+        $this->validators[] = new NumberValidator($message);
         return $this;
     }
 
@@ -98,21 +98,27 @@ class Field
         return $this;
     }
 
-    public function values(array $values): field
+    public function values(array $values, null|string $message = null): field
     {
-        $this->validators[] = new ValuesValidator($values);
+        $this->validators[] = new ValuesValidator($values, $message);
         return $this;
     }
 
-    public function regexp(string $regexp): Field
+    public function regexp(string $regexp, null|string $message = null): Field
     {
-        $this->validators[] = new RegexpValidator($regexp);
+        $this->validators[] = new RegexpValidator($regexp, $message);
         return $this;
     }
 
-    public function required(): Field
+    public function required(null|string $message = null): Field
     {
-        $this->validators[] = new RequiredValidator();
+        $this->validators[] = new RequiredValidator($message);
+        return $this;
+    }
+
+    public function validator(IValidator $validator): Field
+    {
+        $this->validators[] = $validator;
         return $this;
     }
 
@@ -121,6 +127,9 @@ class Field
         return $this->name;
     }
 
+    /**
+     * @return IValidator[]
+     */
     public function getValidators(): array
     {
         return $this->validators;

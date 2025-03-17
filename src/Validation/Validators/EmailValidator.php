@@ -7,10 +7,15 @@ use Stormmore\Framework\Validation\ValidatorResult;
 
 class EmailValidator implements IValidator
 {
-    function validate(mixed $email, string $name, array $data, mixed $args): ValidatorResult
+    public function __construct(private readonly null|string $message = null)
     {
-        if ($email and !self::isValidEmail($email)) {
-            return new ValidatorResult(false, _("validation.email"));
+    }
+
+    function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
+    {
+        if ($value and !self::isValidEmail($value)) {
+            $message = $this->message ?? _("validation.email");
+            return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();
     }

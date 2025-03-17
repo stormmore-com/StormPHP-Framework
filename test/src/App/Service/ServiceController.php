@@ -119,8 +119,19 @@ readonly class ServiceController
     public function formCustomMessages(): View
     {
         $this->customMessagesForm->setModel([
-            'alpha' => 'abc1'
+            'alpha' => 'abc1',
+            'alphaNum' => 'abc1!',
+            'regexp' => 'word',
+            'email' => 'mailwitherror.com',
+            'min' => 0,
+            'max' => 11,
+            'int' => 'int',
+            'float' => 'float',
+            'number' => 'number'
         ]);
+        if ($this->request->isPost()) {
+            $this->customMessagesForm->validate();
+        }
         return view('@templates/service/form-custom-messages', [
             'form' => $this->customMessagesForm
         ]);

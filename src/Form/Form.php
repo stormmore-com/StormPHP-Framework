@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Form;
 use Stormmore\Framework\Request\Request;
+use Stormmore\Framework\Validation\IValidator;
 use Stormmore\Framework\Validation\ValidationResult;
 use Stormmore\Framework\Validation\Validator;
 
@@ -15,10 +16,10 @@ class Form
     private null|ValidationResult $validationResult;
 
 
-    function __construct(Request $request, Validator $validator)
+    function __construct(Request $request)
     {
         $this->validationResult = new ValidationResult();
-        $this->validator = $validator;
+        $this->validator = new Validator();
         $this->request = $request;
         $this->errors = new Errors();
         $this->model = array();

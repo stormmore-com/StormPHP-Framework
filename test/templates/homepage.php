@@ -26,7 +26,7 @@ $view->setLayout("@templates/includes/layout.php");
     | <a href="/administrator">Administrator (requires 'administrator' privilege)</a>
     | <a href="/configuration">Configuration</a>
 </p>
-<p>Form: <a href="/form">Validators overview</a> <a href="/form-custom-messages">Custom validation messages</a></p>
+<p>Form: <a href="/form">Html field validators</a> <a href="/form-custom-messages">Custom messages</a></p>
 <p>CQS: <a href="/cqs-test">Run commands</a> </p>
 <p>Event sourcing: <a href="/events-test">Run events</a></p>
 <p>Redirects: <a href="/redirect-with-success">Redirect with success</a> | <a href="/redirect-with-failure">Redirect with failture</a></p>

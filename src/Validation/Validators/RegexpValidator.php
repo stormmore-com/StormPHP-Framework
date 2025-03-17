@@ -5,16 +5,17 @@ namespace Stormmore\Framework\Validation\Validators;
 use Stormmore\Framework\Validation\IValidator;
 use Stormmore\Framework\Validation\ValidatorResult;
 
-class RegexpValidator implements IValidator
+readonly class RegexpValidator implements IValidator
 {
-    public function __construct(private readonly string $regexp)
+    public function __construct(private string $regexp, private null|string $message = null)
     {
     }
 
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
-        if (!preg_match($this->regexp, $value)) {
-            return new ValidatorResult(false, _("validation.invalid_value"));
+        if ($value and !preg_match($this->regexp, $value)) {
+            $message = $this->message ?? _("validation.invalid_value");
+            return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();
     }

@@ -7,18 +7,21 @@ use Stormmore\Framework\Validation\ValidatorResult;
 
 readonly class MinValidator implements IValidator
 {
-    public function __construct(private int $min)
+    public function __construct(private int $min, private null|string $message = null)
     {
     }
+
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
-        if (is_numeric($value)) {
+        if ($value != '' and is_numeric($value)) {
             if ( $value < $this->min) {
-                return new ValidatorResult(false, _("validation.min_number"));
+                $message = $this->message ?? _("validation.min_number");
+                return new ValidatorResult(false, $message);
             }
-        } else if (is_string($value)) {
+        } else if ($value != '' and is_string($value)) {
             if (mb_strlen($value) < $this->min) {
-                return new ValidatorResult(false, _("validation.min_string"));
+                $message = $this->message ?? _("validation.min_string");
+                return new ValidatorResult(false, $message);
             }
         }
         return new ValidatorResult();

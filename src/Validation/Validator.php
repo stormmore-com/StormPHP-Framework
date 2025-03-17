@@ -12,7 +12,7 @@ class Validator
 {
     private array $fields;
 
-    function __construct(private Resolver $resolver)
+    function __construct()
     {
         $this->fields = array();
     }
@@ -36,9 +36,6 @@ class Validator
             $name = $field->getName();
             $value = $object->{$name};
             foreach ($field->getValidators() as $validator) {
-                if (!($validator instanceof IValidator)) {
-                    $validator = $this->instantiateValidator($validator);
-                }
                 $validatorResult = $validator->validate($value, $name, array(), []);
                 if (!$validatorResult->isValid) {
                     $result->addError($name, $validatorResult->message);
@@ -46,15 +43,5 @@ class Validator
             }
         }
         return $result;
-    }
-
-    private function instantiateValidator(string $validatorName): IValidator
-    {
-        $validator = $this->resolver->resolveObject($validatorName);
-        if ($validator instanceof IValidator) {
-            return $validator;
-        }
-
-        throw new Exception("Validator: $validatorName is not a valid validator");
     }
 }

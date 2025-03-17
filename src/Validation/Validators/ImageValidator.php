@@ -8,7 +8,7 @@ use Stormmore\Framework\Validation\ValidatorResult;
 
 readonly class ImageValidator implements IValidator
 {
-    public function __construct(private array $allowed = array())
+    public function __construct(private array $allowed = array(), private null|string $message = null)
     {
     }
 
@@ -16,14 +16,17 @@ readonly class ImageValidator implements IValidator
     {
         if ($file instanceof UploadedFile) {
             if (!$file->isUploaded() and ($file->error == 1 or $this->error == 2)) {
-                return new ValidatorResult(false, _("validation.image_max_size"));
+                $message = $this->message ?? _("validation.image_max_size");
+                return new ValidatorResult(false, $message);
             }
             else if (!$file->isUploaded()) {
-                return new ValidatorResult(false, _("validation.image_not_uploaded"));
+                $message = $this->message ?? _("validation.image_not_uploaded");
+                return new ValidatorResult(false, $message);
             }
             $type = exif_imagetype($file->path);
             if ($type === false || (!empty($this->allowed) and !in_array($type, $this->allowed))) {
-                return new ValidatorResult(false, _("validation.image_format"));
+                $message = $this->message ?? _("validation.image_format");
+                return new ValidatorResult(false, _($message));
             }
         }
         return new ValidatorResult();

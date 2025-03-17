@@ -8,9 +8,9 @@ use Stormmore\Framework\Validation\Validator;
 
 class BasicForm extends Form
 {
-    public function __construct(Request $request, Validator $validator)
+    public function __construct(Request $request)
     {
-        parent::__construct($request, $validator);
+        parent::__construct($request);
 
         $this->validator->for('alpha')->alpha();
         $this->validator->for('alphaMin')->alpha()->min(2)->required();
