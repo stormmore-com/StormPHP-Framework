@@ -111,7 +111,7 @@ readonly class ServiceController
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         return view('@templates/service/form', [
             'form' => $this->basicForm,
-            'days' => array_combine($days, $days)
+            'days' => $days
         ]);
     }
 

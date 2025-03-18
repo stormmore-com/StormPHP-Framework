@@ -5,6 +5,20 @@ use Stormmore\Framework\App;
 use Stormmore\Framework\Request\Redirect;
 use Stormmore\Framework\Internationalization\I18n;
 
+if (!function_exists('array_is_list')) {
+    function array_is_list(array $array): bool
+    {
+        $count = count($array);
+        for($i = 0; $i < $count; ++$i) {
+            if (!key_exists($i, $array)) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
 function resolve_path_alias(string $templatePath): string
 {
     $configuration = App::getInstance()->getAppConfiguration();

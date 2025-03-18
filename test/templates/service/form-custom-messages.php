@@ -79,7 +79,7 @@ $view->setLayout('@templates/includes/layout.php');
             <td>
                 <select id="option" name="values">
                     <option></option>
-                    <?php $view->html->options(['-1' => -1, '0' => 0, '1' => 1, '2' => 2], $form->values) ?>
+                    <?php $view->html->options([-1, 0, 1, 2], $form->values) ?>
                 </select>
                 * 1 and 2 are correct values
             </td>
