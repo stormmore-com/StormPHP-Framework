@@ -2,7 +2,6 @@
  * TODO
  *
  *  Refaktor Request
- *   - klasa Files
  *   - W akcjach zrobic przekazanie wartosci z reguesty by name
  *
  *   response cache

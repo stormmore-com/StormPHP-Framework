@@ -21,11 +21,7 @@ class Request
     public array $getParameters;
     public array $postParameters;
     public array $routeParameters;
-
-    /**
-     * @type UploadedFile[]
-     */
-    public array $files;
+    public Files $files;
     public string $method;
     public object $body;
 
@@ -33,6 +29,7 @@ class Request
 
     function __construct(public Cookies $cookies)
     {
+        $this->files = new Files();
         $this->messages = new RedirectMessage($cookies);
 
         $this->query = array_key_exists('QUERY_STRING', $_SERVER) ? $_SERVER['QUERY_STRING'] : "";
@@ -60,41 +57,10 @@ class Request
             $this->body = json_decode($data);
         }
 
-        $this->files = $this->parseFiles();
-
         unset($_GET);
         unset($_POST);
     }
 
-    private function parseFiles(): array
-    {
-        $files = array();
-        foreach ($_FILES as $formFieldName => $formFieldFiles) {
-            if (is_array($formFieldFiles['name'])) {
-                $size = count($formFieldFiles['name']);
-                $files[$formFieldName] = array();
-                for ($i = 0; $i < $size; $i++) {
-                    $files[$formFieldName][$i] = new UploadedFile(
-                        $formFieldName,
-                        $formFieldFiles['name'][$i],
-                        $formFieldFiles['tmp_name'][$i],
-                        $formFieldFiles['type'][$i],
-                        $formFieldFiles['error'][$i],
-                        $formFieldFiles['size'][$i]);
-                }
-            } else {
-                $files[$formFieldName] = new UploadedFile(
-                    $formFieldName,
-                    $formFieldFiles['name'],
-                    $formFieldFiles['tmp_name'],
-                    $formFieldFiles['type'],
-                    $formFieldFiles['error'],
-                    $formFieldFiles['size']);
-            }
-        }
-
-        return $files;
-    }
 
     public function getReferer(): ?string
     {
@@ -162,8 +128,8 @@ class Request
 
     public function __get(string $name): mixed
     {
-        if ($this->hasFile($name)) {
-            return $this->getFile($name);
+        if ($this->files->has($name)) {
+            return $this->files->get($name);
         }
         if ($this->hasParameter($name)) {
             return $this->getParameter($name);
@@ -229,47 +195,6 @@ class Request
         }
 
         return $defaultValue;
-    }
-
-    /**
-     * @param string $name
-     * @return UploadedFile|null
-     */
-    public function getFile(string $name): UploadedFile|null
-    {
-        foreach ($this->files as $file) {
-            if ($file->fieldName == $name) {
-                return $file;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $name
-     * @return UploadedFile[]
-     */
-    public function getFiles(string $name): array
-    {
-        $files = array();
-        foreach ($this->files as $file) {
-            if ($file->fieldName == $name) {
-                $files[] = $file;
-            }
-        }
-
-        return $files;
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     * Check whether request has uploaded valid file
-     */
-    public function hasFile(string $name): bool
-    {
-        return $this->getFile($name)?->isUploaded() ?? false;
     }
 
     /**
@@ -348,8 +273,10 @@ class Request
                 if ($strValue === 'true') {
                     $typed[$key] = true;
                 }
-                if ($strValue === 'false') {
+                else if ($strValue === 'false') {
                     $typed[$key] = false;
+                } else {
+                    $typed[$key] = $value;
                 }
             }
             else if (is_numeric($value)) {
