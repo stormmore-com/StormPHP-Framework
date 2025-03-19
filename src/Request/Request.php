@@ -3,11 +3,8 @@
 namespace Stormmore\Framework\Request;
 
 use stdClass;
-use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Reflection\ObjectReflector;
-use Stormmore\Framework\Validation\Validator;
-use Stormmore\Framework\Validation\ValidationResult;
 
 class Request
 {
@@ -52,9 +49,9 @@ class Request
             $this->baseUri = $this->basePath;
         }
 
-        $this->getParameters = $this->castToTypes($_GET);
-        $this->postParameters = $this->castToTypes($_POST);
-        $this->parameters = array_merge($_GET, $_POST);
+        $this->getParameters = $this->cast($_GET);
+        $this->postParameters = $this->cast($_POST);
+        $this->parameters = array_merge($this->getParameters, $this->postParameters);
 
         $this->method = $_SERVER['REQUEST_METHOD'];
 
@@ -187,6 +184,23 @@ class Request
         return $parameters;
     }
 
+    public function getParameter(string $name, $defaultValue = null): mixed
+    {
+        if ($this->hasParameter($name)) {
+            $value = $this->parameters[$name];
+            return $this->sanitize($value);
+        }
+        return $defaultValue;
+    }
+
+    public function getUnsanitizedParameter(string $name, $defaultValue = null): mixed
+    {
+        if ($this->hasParameter($name)) {
+            return $this->parameters[$name];
+        }
+        return $defaultValue;
+    }
+
     public function getUnsanitized(string ...$names): mixed
     {
         if (count($names) == 1) {
@@ -198,24 +212,6 @@ class Request
             $parameters[] = $this->getUnsanitizedParameter($name);
         }
         return $parameters;
-    }
-
-    public function getParameter(string $name, $defaultValue = null): mixed
-    {
-        if ($this->hasParameter($name)) {
-            $value = $this->parameters[$name];
-            $value = $this->sanitize($value);
-            return $this->cast($value);
-        }
-        return $defaultValue;
-    }
-
-    public function getUnsanitizedParameter(string $name, $defaultValue = null): mixed
-    {
-        if ($this->hasParameter($name)) {
-            return $this->parameters[$name];
-        }
-        return $defaultValue;
     }
 
     public function getUrlParameter(string $name, $defaultValue = null): mixed
@@ -340,19 +336,24 @@ class Request
         }
     }
 
-    private function castToTypes(array $values): array
+    private function cast(array $values): array
     {
         $typed = [];
         foreach($values as $key => $value) {
             if (is_array($value)) {
-                $typed[$key] = $this->castToTypes($value);
-            } else {
-                if (is_numeric($value)) {
-                    $value = $value * 1;
-                } else if (strtolower($value) === 'true' || strtolower($value) === 'false') {
-                    $value = ($value == 'true');
+                $typed[$key] = $this->cast($value);
+            }
+            else if (is_string($value)) {
+                $strValue = strtolower($value);
+                if ($strValue === 'true') {
+                    $typed[$key] = true;
                 }
-                $typed[$key] = $value;
+                if ($strValue === 'false') {
+                    $typed[$key] = false;
+                }
+            }
+            else if (is_numeric($value)) {
+                $typed[$key] = $value * 1;
             }
         }
         return $typed;
@@ -369,19 +370,5 @@ class Request
         } else {
             return htmlspecialchars($value);
         }
-    }
-
-    private function cast(mixed $value): mixed
-    {
-        if (is_string($value)) {
-            $strValue = strtolower($value);
-            if ($strValue === 'true') {
-                return true;
-            }
-            if ($strValue === 'false') {
-                return false;
-            }
-        }
-        return $value;
     }
 }
