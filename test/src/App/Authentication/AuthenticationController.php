@@ -2,12 +2,11 @@
 
 namespace Authentication;
 
-use Stormmore\Framework\Mvc\Controller;
-use Stormmore\Framework\Mvc\Route;
-use Stormmore\Framework\Mvc\View;
-use Stormmore\Framework\Request\Redirect;
-use Stormmore\Framework\Request\Request;
-
+use Stormmore\Framework\Mvc\Attributes\Controller;
+use Stormmore\Framework\Mvc\Attributes\Route;
+use Stormmore\Framework\Mvc\Request\Redirect;
+use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\View\View;
 
 #[Controller]
 readonly class AuthenticationController

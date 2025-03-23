@@ -65,7 +65,7 @@ class EventDispatcher
                 if (!class_exists($fullyQualifiedHandlerName)) {
                     return array();
                 }
-                $handlers[] = $this->resolver->resolveObject($fullyQualifiedHandlerName);
+                $handlers[] = $this->resolver->resolve($fullyQualifiedHandlerName);
             }
         }
         return $handlers;

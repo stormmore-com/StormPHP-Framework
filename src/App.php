@@ -7,22 +7,21 @@ use Exception;
 use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionMiddleware;
 use Stormmore\Framework\App\IMiddleware;
-use Stormmore\Framework\App\MvcMiddleware;
 use Stormmore\Framework\App\ResponseMiddleware;
-use Stormmore\Framework\Authentication\AppUser;
-use Stormmore\Framework\SourceCode\SourceCode;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Logger\Configuration;
 use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Logger\Logger;
-
-use Stormmore\Framework\Mvc\ViewConfiguration;
-use Stormmore\Framework\Request\Cookies;
-use Stormmore\Framework\Request\Request;
-use Stormmore\Framework\Request\Response;
-use Stormmore\Framework\Route\Router;
+use Stormmore\Framework\Mvc\Authentication\AppUser;
+use Stormmore\Framework\Mvc\MvcMiddleware;
+use Stormmore\Framework\Mvc\Request\Cookies;
+use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\Request\Response;
+use Stormmore\Framework\Mvc\Route\Router;
+use Stormmore\Framework\Mvc\View\ViewConfiguration;
+use Stormmore\Framework\SourceCode\SourceCode;
 
 class App
 {
@@ -123,7 +122,6 @@ class App
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
         $this->response = new Response($cookies);
         $this->request = new Request($cookies);
-
         $this->logger = new Logger($loggerConfiguration);
 
         $this->container->register($loggerConfiguration);
@@ -151,7 +149,7 @@ class App
     {
         $this->logger->logD("Added " . count($this->configurations) . " configuration(s)");
         foreach($this->configurations as $configurationClassName) {
-            $configuration = $this->resolver->resolveObject($configurationClassName);
+            $configuration = $this->resolver->resolve($configurationClassName);
             $configuration->configure();
         }
     }
@@ -171,7 +169,7 @@ class App
         }
         return function() use ($i) {
             $className = $this->middlewares[$i];
-            $middleware = $this->resolver->resolveObject($className);
+            $middleware = $this->resolver->resolve($className);
             $middleware instanceof IMiddleware or throw new Exception("Class `$className` does not implement IMiddleware interface");
             $middleware->run($this->getMiddleware($i + 1));
         };

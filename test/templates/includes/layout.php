@@ -1,4 +1,4 @@
-<?php /** @var Stormmore\Framework\Mvc\View $view */ ?>
+<?php /** @var \Stormmore\Framework\Mvc\View\View $view */ ?>
 <!DOCTYPE html>
 <html>
 <head>

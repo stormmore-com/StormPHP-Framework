@@ -2,8 +2,8 @@
 
 use Random\Randomizer;
 use Stormmore\Framework\App;
-use Stormmore\Framework\Request\Redirect;
 use Stormmore\Framework\Internationalization\I18n;
+use Stormmore\Framework\Mvc\Request\Redirect;
 
 if (!function_exists('array_is_list')) {
     function array_is_list(array $array): bool
@@ -17,7 +17,6 @@ if (!function_exists('array_is_list')) {
         return true;
     }
 }
-
 
 function resolve_path_alias(string $templatePath): string
 {

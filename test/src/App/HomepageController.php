@@ -1,8 +1,8 @@
 <?php
 
-use Stormmore\Framework\Mvc\Controller;
-use Stormmore\Framework\Mvc\Route;
-use Stormmore\Framework\Mvc\View;
+use Stormmore\Framework\Mvc\Attributes\Controller;
+use Stormmore\Framework\Mvc\Attributes\Route;
+use Stormmore\Framework\Mvc\View\View;
 
 #[Controller]
 readonly class HomepageController

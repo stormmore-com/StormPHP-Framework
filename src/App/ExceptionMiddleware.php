@@ -4,12 +4,12 @@ namespace Stormmore\Framework\App;
 
 use closure;
 use Stormmore\Framework\AppConfiguration;
-use Stormmore\Framework\Authentication\AjaxAuthenticationException;
-use Stormmore\Framework\Authentication\AuthenticationException;
-use Stormmore\Framework\Authentication\AuthorizedException;
 use Stormmore\Framework\Logger\ILogger;
-use Stormmore\Framework\Request\Request;
-use Stormmore\Framework\Request\Response;
+use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticationException;
+use Stormmore\Framework\Mvc\Authentication\AuthenticationException;
+use Stormmore\Framework\Mvc\Authentication\AuthorizedException;
+use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\Request\Response;
 use Throwable;
 
 readonly class ExceptionMiddleware implements IMiddleware

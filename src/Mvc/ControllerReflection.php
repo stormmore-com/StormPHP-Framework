@@ -3,116 +3,74 @@
 namespace Stormmore\Framework\Mvc;
 
 use Exception;
-use ReflectionClass;
-use ReflectionMethod;
-use Stormmore\Framework\Authentication\AjaxAuthenticate;
-use Stormmore\Framework\Authentication\AjaxAuthenticationException;
-use Stormmore\Framework\Authentication\Authenticate;
-use Stormmore\Framework\Authentication\AuthenticationException;
-use Stormmore\Framework\Authentication\Authorize;
-use Stormmore\Framework\Authentication\AuthorizedException;
-use Stormmore\Framework\Authentication\AppUser;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
-use Stormmore\Framework\Request\Request;
+use Stormmore\Framework\FluentReflection\Class\FluentClass;
+use Stormmore\Framework\FluentReflection\Class\FluentClassMethod;
+use Stormmore\Framework\Mvc\Attributes\Get;
+use Stormmore\Framework\Mvc\Attributes\Post;
+use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticate;
+use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticationException;
+use Stormmore\Framework\Mvc\Authentication\AppUser;
+use Stormmore\Framework\Mvc\Authentication\Authenticate;
+use Stormmore\Framework\Mvc\Authentication\AuthenticationException;
+use Stormmore\Framework\Mvc\Authentication\Authorize;
+use Stormmore\Framework\Mvc\Authentication\AuthorizedException;
+use Stormmore\Framework\Mvc\Request\Request;
 
 readonly class ControllerReflection
 {
-    private ReflectionClass $class;
-    private ReflectionMethod $method;
+    private FluentClass $fluentClass;
+    private FluentClassMethod $fluentMethod;
+    private ControllerActionArguments $actionArguments;
 
     public function __construct(private Request   $request,
                                 private Container $di,
-                                private Resolver  $diResolver,
+                                private Resolver  $resolver,
                                 private array     $endpoint)
     {
-        $this->class = new ReflectionClass($this->endpoint[0]);
-        $this->method = $this->class->getMethod($this->endpoint[1]);
+        $this->fluentClass = FluentClass::create($this->endpoint[0]);
+        $this->fluentMethod = $this->fluentClass->methods->getMethod($this->endpoint[1]);
+        $this->actionArguments = new ControllerActionArguments($this->fluentMethod->getParameters(), $this->request, $this->resolver);
     }
 
     public function validate(): void
     {
-        $this->validateAjaxAuthentication($this->class, $this->method);
-        $this->validateRequestType($this->class, $this->method);
-        $this->validateAuthentication($this->class, $this->method);
-        $this->validateClaims($this->class, $this->method);
+        $user = $this->di->resolve(AppUser::class);
+        if ($this->endpointHasAttribute(AjaxAuthenticate::class)) {
+            $user->isAuthenticated() or throw new AjaxAuthenticationException("APP: authentication required", 401);
+        }
+
+        if ($this->endpointHasAttribute(Post::class)) {
+            $this->request->isPost() or throw new Exception("POST required", 404);
+        }
+
+        if ($this->endpointHasAttribute(Get::class)) {
+            $this->request->isGet() or throw new Exception("GET required", 404);
+        }
+
+        if ($this->endpointHasAttribute(Authenticate::class)) {
+            $user->isAuthenticated() or throw new AuthenticationException("APP: authentication required", 401);
+        }
+
+        $classClaims = $this->fluentClass->getAttributes(Authorize::class)->select(function($x) {return $x->getInstance()->claims;});
+        $methodClaims = $this->fluentMethod->getAttributes(Authorize::class)->select(function($x) {return $x->getInstance()->claims;});
+        $requiredClaims = array_merge(...$classClaims, ...$methodClaims);
+        if (count($requiredClaims)) {
+            $user->hasPrivileges($requiredClaims) or throw new AuthorizedException("APP: Privilege required", 403);
+        }
+    }
+
+    private function endpointHasAttribute(string $name): bool
+    {
+        return $this->fluentClass->hasAttribute($name) or $this->fluentMethod->hasAttribute($name);
     }
 
     public function invoke(): mixed
     {
-        $obj = $this->diResolver->resolveObject($this->endpoint[0]);
-        $args = $this->diResolver->resolveReflectionMethod($this->method);
-        return $this->method->invokeArgs($obj, $args);
-    }
-
-    /**
-     * @throws AjaxAuthenticationException with code 401 if request is not authenticated
-     */
-    private function validateAjaxAuthentication(ReflectionClass $class, ReflectionMethod $method): void
-    {
-        if (count($class->getAttributes(AjaxAuthenticate::class)) or
-            count($method->getAttributes(AjaxAuthenticate::class))) {
-            $user = $this->di->resolve(AppUser::class);
-            if (!$user->isAuthenticated()) {
-                throw new AjaxAuthenticationException("APP: authentication required", 401);
-            }
-        }
-    }
-
-    /**
-     * @throws Exception with code 404 if request method is different then required.
-     */
-    private function validateRequestType(ReflectionClass $class, ReflectionMethod $method): void
-    {
-        if (count($class->getAttributes(Post::class)) or
-            count($method->getAttributes(Post::class))) {
-            if (!$this->request->isPost()) {
-                throw new Exception("POST required", 404);
-            }
-        }
-
-        if (count($class->getAttributes(Get::class)) or
-            count($method->getAttributes(Get::class))) {
-            if (!$this->request->isGet()) {
-                throw new Exception("GET required", 404);
-            }
-        }
-    }
-
-    private function validateAuthentication(ReflectionClass $class, ReflectionMethod $method): void
-    {
-        if (count($class->getAttributes(Authenticate::class)) or
-            count($method->getAttributes(Authenticate::class))) {
-            $user = $this->di->resolve(AppUser::class);
-            if (!$user->isAuthenticated()) {
-                throw new AuthenticationException("APP: authentication required", 401);
-            }
-        }
-    }
-
-    private function validateClaims(ReflectionClass $class, ReflectionMethod $method): void
-    {
-        $classAttributes = $class->getAttributes(Authorize::class);
-        $methodAttributes = $method->getAttributes(Authorize::class);
-        $classClaims = $this->getClaimsFromAttribute($classAttributes);
-        $methodClaims = $this->getClaimsFromAttribute($methodAttributes);
-
-        $requiredClaims = array_merge($classClaims, $methodClaims);
-
-        if ($classAttributes or $methodAttributes) {
-            $user = $this->di->resolve(AppUser::class);
-            if (!$user->hasPrivileges($requiredClaims)) {
-                throw new AuthorizedException("APP: Privilege required", 403);
-            }
-        }
-    }
-
-    private function getClaimsFromAttribute(array $attributes): array
-    {
-        if (count($attributes)) {
-            return $attributes[0]->newInstance()->claims;
-        }
-
-        return [];
+        $this->actionArguments->areValid() or throw new Exception("Invalid parameters `{$this->request->requestUri}`", 400);
+        $arguments = $this->actionArguments->getArguments();
+        $obj = $this->resolver->resolve($this->fluentClass);
+        return $this->fluentMethod->invoke($obj, $arguments);
     }
 }

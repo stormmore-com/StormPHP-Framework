@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Stormmore\Framework\Mvc\View $view
+ * @var \Stormmore\Framework\Mvc\View\View $view
  * @var Stormmore\Framework\Internationalization\Locale[] $locales
  * @var Stormmore\Framework\AppConfiguration $configuration
  */

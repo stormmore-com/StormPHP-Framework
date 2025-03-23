@@ -3,11 +3,10 @@
 namespace Stormmore\Framework\DependencyInjection;
 
 use Exception;
-use ReflectionFunction;
-use ReflectionMethod;
-use ReflectionException;
-use ReflectionParameter;
-use ReflectionClass;
+use Stormmore\Framework\FluentReflection\Class\FluentClass;
+use Stormmore\Framework\FluentReflection\Class\FluentClassParameter;
+use Stormmore\Framework\FluentReflection\Shared\FluentFunction;
+use Stormmore\Framework\FluentReflection\Shared\IFluentParameterized;
 
 readonly class Resolver
 {
@@ -15,97 +14,64 @@ readonly class Resolver
     {
     }
 
-    public function resolveCallable(callable|null $callable): callable|null
+    public function resolve(string|callable|FluentClass $toResolve): object|callable
+    {
+        if (is_callable($toResolve)) {
+            return $this->resolveCallable($toResolve);
+        }
+        if (is_string($toResolve)) {
+            $toResolve = FluentClass::create($toResolve);
+        }
+        $args = [];
+        if ($toResolve->hasConstructor()) {
+            $args = $this->resolveParameters($toResolve->getConstructor());
+        }
+        return $toResolve->createInstance($args);
+    }
+
+    private function resolveCallable(callable $callable): callable|null
     {
         return function () use ($callable) {
-            $reflection = new ReflectionFunction($callable);
-            $args = $this->resolveReflectionFunction($reflection);
-            return $reflection->invokeArgs($args);
+            $args = [];
+            $function = new FluentFunction($callable);
+            $args[] = $this->resolveParameters($function);
+            return $function->invoke($args);
         };
     }
 
-    public function resolveObject(string $className): object
-    {
-        $reflectionClass = new ReflectionClass($className);
-        $args = [];
-        $constructor = $reflectionClass->getConstructor();
-        if ($constructor) {
-            $args = $this->resolveReflectionMethod($constructor);
-        }
-        return $reflectionClass->newInstanceArgs($args);
-    }
-
-    /**
-     * @throws ResolverException
-     */
-    public function resolveReflectionMethod(ReflectionMethod $reflection): array
+    private function resolveParameters(IFluentParameterized $callable): array
     {
         $args = [];
-        try {
-            $parameters = $reflection->getParameters();
-            foreach ($parameters as $parameter) {
-                $arg = $this->resolveParameter($parameter);
-                $args[] = $arg;
-            }
-        } catch (Exception $e) {
-            $class = $reflection->getDeclaringClass()->getName();
-            $method = $reflection->getName();
-            $prmName = $parameter->getName();
-            $prmType = $parameter->getType();
-
-            $parameter = $prmName;
-            if ($prmType) {
-                $parameter = $prmType . ' $' . $prmName;
-            }
-            $method == "__construct" ? $method = 'Constructur' : $method = "Method [$method]";
-            $message = "Could not create [$class]. $method parameter [$parameter] can't be resolved.";
-            throw new ResolverException($message, 0, $e);
-        }
-
-        return $args;
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    public function resolveReflectionFunction(ReflectionFunction $reflection): array
-    {
-        $args = [];
-        $parameters = $reflection->getParameters();
-        foreach ($parameters as $parameter) {
-            $arg = $this->resolveParameter($parameter);
+        foreach ($callable->getParameters() as $parameter) {
+            $arg = $this->resolveFluentParameter($parameter);
             $args[] = $arg;
         }
         return $args;
     }
 
     /**
-     * @param ReflectionParameter $parameter
-     * @return mixed
-     * @throws ReflectionException
+     * @param FluentClassParameter $parameter
+     * @return object
      * @throws Exception
      */
-    private function resolveParameter(ReflectionParameter $parameter): object
+    private function resolveFluentParameter(FluentClassParameter $parameter): object
     {
         $names = [];
-        if ($parameter->hasType()) {
-            $typeName = $parameter->getType()->getName();
-            if ($typeName == Container::class) {
-                return $this->di;
-            }
-
-            if (!$this->di->isRegistered($typeName)) {
-                $reflection = new ReflectionClass($typeName);
-                $constructor = $reflection->getConstructor();
-                if ($constructor == null) {
-                    $this->di->register($reflection->newInstance());
-                } else {
-                    $args = $this->resolveReflectionMethod($constructor);
-                    $instance = $reflection->newInstanceArgs($args);
-                    $this->di->register($instance);
+        if ($parameter->type->isTyped()) {
+            foreach($parameter->type->names as $typeName) {
+                if ($typeName == Container::class) {
+                    return $this->di;
                 }
+                if (!$this->di->isRegistered($typeName)) {
+                    $args = [];
+                    $class = FluentClass::create($typeName);
+                    if ($class->hasConstructor()) {
+                        $args = $this->resolveParameters($class->getConstructor());
+                    }
+                    $this->di->register($class->createInstance($args));
+                }
+                return $this->di->resolve($typeName);
             }
-            return $this->di->resolve($typeName);
         }
 
         $names[] = $parameter->getName();
@@ -116,12 +82,6 @@ readonly class Resolver
             }
         }
 
-        $parameterName = '$' . $parameter->getName();
-        $functionName = $parameter->getDeclaringFunction()->getName();
-        $className = $parameter->getDeclaringClass()?->getName();
-        if ($className) {
-            $functionName = $className . $functionName;
-        }
-        throw new Exception("DI: Function [$functionName()] parameter [$parameterName] not found");
+        throw new Exception();
     }
 }

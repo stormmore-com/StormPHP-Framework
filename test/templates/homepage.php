@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Stormmore\Framework\Mvc\View $view
+ * @var \Stormmore\Framework\Mvc\View\View $view
  * @var string $name
  */
 
@@ -31,3 +31,4 @@ $view->setLayout("@templates/includes/layout.php");
 <p>Event sourcing: <a href="/events-test">Run events</a></p>
 <p>Redirects: <a href="/redirect-with-success">Redirect with success</a> | <a href="/redirect-with-failure">Redirect with failture</a></p>
 <p>Errors: <a href="/url-existing-only-in-imaginations">404</a> | <a href="/url-made-only-to-throw-exception-but-it-exist">500</a></p>
+<p>Params: <a href="/params">tests</a></p>

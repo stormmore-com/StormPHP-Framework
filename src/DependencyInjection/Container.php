@@ -20,8 +20,7 @@ class Container
 
     public function register(object $obj): void
     {
-        $reflection = new ReflectionClass($obj);
-        $name = $reflection->getName();
+        $name = get_class($obj);
         $this->container[$name] = $obj;
     }
 

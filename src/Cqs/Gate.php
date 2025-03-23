@@ -49,7 +49,7 @@ class Gate
     {
         foreach($this->sourceCode->getCommandHandlers() as $fullyQualifiedHandlerName => $commandQualifiedName) {
             if ($commandQualifiedName == get_class($command) and class_exists($fullyQualifiedHandlerName)) {
-                return $this->resolver->resolveObject($fullyQualifiedHandlerName);
+                return $this->resolver->resolve($fullyQualifiedHandlerName);
             }
         }
         return null;

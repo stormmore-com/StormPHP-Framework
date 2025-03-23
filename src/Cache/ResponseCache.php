@@ -2,6 +2,11 @@
 
 namespace Stormmore\Framework\Cache;
 
+use Stormmore\Framework\AppConfiguration;
+use Stormmore\Framework\Internationalization\I18n;
+use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\Request\Response;
+
 class ResponseCache
 {
     private bool $cacheRequest = false;

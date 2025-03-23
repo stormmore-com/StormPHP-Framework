@@ -3,7 +3,6 @@
 namespace Stormmore\Framework;
 
 use Error;
-use Stormmore\Framework\Authentication\AppUser;
 
 class AppConfiguration
 {

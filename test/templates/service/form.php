@@ -1,7 +1,7 @@
 <?php
 /**
  * @var array $days
- * @var Stormmore\Framework\Mvc\View $view
+ * @var \Stormmore\Framework\Mvc\View\View $view
  * @var \Configuration\BasicForm $form
  */
 

@@ -3,8 +3,7 @@
 namespace Configuration;
 
 use Stormmore\Framework\Form\Form;
-use Stormmore\Framework\Request\Request;
-use Stormmore\Framework\Validation\Validator;
+use Stormmore\Framework\Mvc\Request\Request;
 
 class BasicForm extends Form
 {

@@ -3,7 +3,7 @@
 namespace Configuration;
 
 use Stormmore\Framework\Form\Form;
-use Stormmore\Framework\Request\Request;
+use Stormmore\Framework\Mvc\Request\Request;
 
 class CustomMessagesForm extends Form
 {

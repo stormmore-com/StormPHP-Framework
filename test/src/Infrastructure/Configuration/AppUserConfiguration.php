@@ -2,9 +2,9 @@
 
 namespace Infrastructure\Configuration;
 
-use Stormmore\Framework\Authentication\AppUser;
 use Stormmore\Framework\Configuration\IConfiguration;
-use Stormmore\Framework\Request\Request;
+use Stormmore\Framework\Mvc\Authentication\AppUser;
+use Stormmore\Framework\Mvc\Request\Request;
 
 readonly class AppUserConfiguration implements IConfiguration
 {

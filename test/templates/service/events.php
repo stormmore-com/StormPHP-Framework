@@ -1,6 +1,6 @@
 <?php
 /**
- * @var Stormmore\Framework\Mvc\View $view
+ * @var \Stormmore\Framework\Mvc\View\View $view
  * @var string[] $history
  */
 

@@ -1,8 +1,8 @@
 <?php
 
 use Stormmore\Framework\App;
-use Stormmore\Framework\Mvc\IViewComponent;
-use Stormmore\Framework\Mvc\View;
+use Stormmore\Framework\Mvc\View\IViewComponent;
+use Stormmore\Framework\Mvc\View\View;
 
 function view(string $templateFileName, array|object $data = []): View
 {
@@ -26,7 +26,7 @@ function print_component(string $componentName): void
         throw new Exception("Component $fullyQualifiedComponentName does not exist");
     }
     $resolver = App::getInstance()->getResolver();
-    $component = $resolver->resolveObject($fullyQualifiedComponentName);
+    $component = $resolver->resolve($fullyQualifiedComponentName);
     if ($component instanceof IViewComponent) {
         echo $component->view()->toHtml();
     } else {

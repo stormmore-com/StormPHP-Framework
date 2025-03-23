@@ -10,13 +10,13 @@ use Infrastructure\Settings\Settings;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
-use Stormmore\Framework\Mvc\Controller;
-use Stormmore\Framework\Mvc\Route;
-use Stormmore\Framework\Mvc\View;
-use Stormmore\Framework\Request\Cookie;
-use Stormmore\Framework\Request\Redirect;
-use Stormmore\Framework\Request\Request;
-use Stormmore\Framework\Request\Response;
+use Stormmore\Framework\Mvc\Attributes\Controller;
+use Stormmore\Framework\Mvc\Attributes\Route;
+use Stormmore\Framework\Mvc\Request\Cookie;
+use Stormmore\Framework\Mvc\Request\Redirect;
+use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\Request\Response;
+use Stormmore\Framework\Mvc\View\View;
 
 #[Controller]
 readonly class ServiceController
@@ -25,8 +25,6 @@ readonly class ServiceController
                                 private Settings $settings,
                                 private Request $request,
                                 private Response $response,
-                                private BasicForm $basicForm,
-                                private CustomMessagesForm $customMessagesForm,
                                 private Gate $gate,
                                 private EventDispatcher $eventDispatcher)
     {
@@ -95,9 +93,9 @@ readonly class ServiceController
     }
 
     #[Route("/form")]
-    public function form(): View
+    public function form(BasicForm $form): View
     {
-        $this->basicForm->setModel([
+        $form->setModel([
             'alpha' => 'abc1',
             'alphaNum' => 'abc1!',
             'radio' => '',
@@ -106,19 +104,19 @@ readonly class ServiceController
             'num' => 'abc'
         ]);
         if ($this->request->isPost()) {
-            $this->basicForm->validate();
+            $form->validate();
         }
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         return view('@templates/service/form', [
-            'form' => $this->basicForm,
+            'form' => $form,
             'days' => $days
         ]);
     }
 
     #[Route('/form-custom-messages')]
-    public function formCustomMessages(): View
+    public function formCustomMessages(CustomMessagesForm $form): View
     {
-        $this->customMessagesForm->setModel([
+        $form->setModel([
             'alpha' => 'abc1',
             'alphaNum' => 'abc1!',
             'regexp' => 'word',
@@ -130,10 +128,10 @@ readonly class ServiceController
             'number' => 'number'
         ]);
         if ($this->request->isPost()) {
-            $this->customMessagesForm->validate();
+            $form->validate();
         }
         return view('@templates/service/form-custom-messages', [
-            'form' => $this->customMessagesForm
+            'form' => $form
         ]);
     }
 }

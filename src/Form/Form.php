@@ -1,8 +1,7 @@
 <?php
 
 namespace Stormmore\Framework\Form;
-use Stormmore\Framework\Request\Request;
-use Stormmore\Framework\Validation\IValidator;
+use Stormmore\Framework\Mvc\Request\Request;
 use Stormmore\Framework\Validation\ValidationResult;
 use Stormmore\Framework\Validation\Validator;
 

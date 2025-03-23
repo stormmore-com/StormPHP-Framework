@@ -2,9 +2,9 @@
 
 namespace Stormmore\Framework\SourceCode\Scanners;
 
+use Stormmore\Framework\Mvc\Attributes\Controller;
+use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
-use Stormmore\Framework\Mvc\Controller;
-use Stormmore\Framework\Mvc\Route;
 
 class RouteScanner
 {

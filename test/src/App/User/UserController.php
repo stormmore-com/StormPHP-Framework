@@ -2,11 +2,11 @@
 
 namespace User;
 
-use Stormmore\Framework\Authentication\Authenticate;
-use Stormmore\Framework\Authentication\Authorize;
-use Stormmore\Framework\Mvc\Controller;
-use Stormmore\Framework\Mvc\Route;
-use Stormmore\Framework\Mvc\View;
+use Stormmore\Framework\Mvc\Attributes\Controller;
+use Stormmore\Framework\Mvc\Attributes\Route;
+use Stormmore\Framework\Mvc\Authentication\Authenticate;
+use Stormmore\Framework\Mvc\Authentication\Authorize;
+use Stormmore\Framework\Mvc\View\View;
 
 #[Controller()]
 class UserController
