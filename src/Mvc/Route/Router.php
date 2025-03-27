@@ -3,7 +3,7 @@
 namespace Stormmore\Framework\Mvc\Route;
 
 use closure;
-use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request\Request;
 use Stormmore\Framework\SourceCode\SourceCode;
 
 class Router

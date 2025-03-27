@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Mvc\Request;
+namespace Stormmore\Framework\Mvc\IO\Request;
 
 class UploadedFile
 {

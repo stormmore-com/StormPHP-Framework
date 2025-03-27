@@ -1,21 +1,7 @@
 <?php /**
  * TODO
  *
- * dokonczyc tworze obj bindable (fluent object)
- *
- * Validator datetime
- *
- * Refaktor Request
- *  - creater dla cli i htttp
- *  - usunac typowanie requestów (to szalone jak sie zastanowic)
- *  - zrobic kolekcje osobna dla get/post i z takimi samymi interfejsami i dac ten interfesj do klasy request (getParameter, get(...))
- *  - dodac funckje getBool, getInt, getFloat, getDateTime
- * - to object tak by moze tylko uzywac fluent class
- *
- *
  *   response cache
- *
- *  Gate - TentativeType To moze pomoc. w iterable zmienilem typ z interfejsu i zero problemu
  *
  *   uruchamienia z cli
  *    urla (kontrolera)
@@ -54,7 +40,7 @@
  *   - zrobic te zapytania bez funkcji execute na najwyzszym poziomie
  *
  *
- *  refaktoro
+ *  refaktor
  *   -> przejrzec katalog i klasa po klasie
  *   -> strukture frameworka
  *   -> pousuwac te helpery

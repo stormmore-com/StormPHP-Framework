@@ -1,6 +1,8 @@
 <?php
 
-namespace Stormmore\Framework\Mvc\Request;
+namespace Stormmore\Framework\Mvc\IO;
+
+use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 
 class Response
 {

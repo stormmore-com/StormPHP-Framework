@@ -39,7 +39,7 @@ $view->setLayout('@templates/includes/layout.php');
         <td>
             <form action="/locale/change">
                 <select name="tag">
-                    <?php html_options($locales, $view->i18n->locale->tag) ?>
+                    <?php $view->html->options($locales, $view->i18n->locale->tag) ?>
                 </select>
                 <button><?php echo _('status.change_locale') ?></button>
             </form>

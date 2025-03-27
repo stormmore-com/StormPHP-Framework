@@ -3,7 +3,7 @@
 use Random\Randomizer;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Internationalization\I18n;
-use Stormmore\Framework\Mvc\Request\Redirect;
+use Stormmore\Framework\Mvc\IO\Redirect;
 
 if (!function_exists('array_is_list')) {
     function array_is_list(array $array): bool

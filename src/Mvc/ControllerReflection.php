@@ -9,14 +9,14 @@ use Stormmore\Framework\FluentReflection\Class\FluentClass;
 use Stormmore\Framework\FluentReflection\Class\FluentClassMethod;
 use Stormmore\Framework\Mvc\Attributes\Get;
 use Stormmore\Framework\Mvc\Attributes\Post;
-use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticate;
+use Stormmore\Framework\Mvc\Authentication\Ajax;
 use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
 use Stormmore\Framework\Mvc\Authentication\Authenticate;
 use Stormmore\Framework\Mvc\Authentication\AuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\Authorize;
 use Stormmore\Framework\Mvc\Authentication\AuthorizedException;
-use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request\Request;
 
 readonly class ControllerReflection
 {
@@ -37,7 +37,7 @@ readonly class ControllerReflection
     public function validate(): void
     {
         $user = $this->di->resolve(AppUser::class);
-        if ($this->endpointHasAttribute(AjaxAuthenticate::class)) {
+        if ($this->endpointHasAttribute(Ajax::class)) {
             $user->isAuthenticated() or throw new AjaxAuthenticationException("APP: authentication required", 401);
         }
 

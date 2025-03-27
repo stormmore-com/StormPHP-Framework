@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Mvc\Request;
+namespace Stormmore\Framework\Mvc\IO\Request;
 
 class Files
 {
@@ -83,5 +83,10 @@ class Files
         }
 
         return $files;
+    }
+
+    public function toArray(): array
+    {
+        return $this->files;
     }
 }

@@ -12,10 +12,10 @@ use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Route;
-use Stormmore\Framework\Mvc\Request\Cookie;
-use Stormmore\Framework\Mvc\Request\Redirect;
-use Stormmore\Framework\Mvc\Request\Request;
-use Stormmore\Framework\Mvc\Request\Response;
+use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Redirect;
+use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\View\View;
 
 #[Controller]
@@ -65,7 +65,7 @@ readonly class ServiceController
     #[Route("/locale/change")]
     public function changeLocale(): Redirect
     {
-        $tag = $this->request->getParameter('tag', '');
+        $tag = $this->request->getDefault('tag', '');
         if ($this->settings->i18n->localeExists($tag)) {
             $this->response->cookies->set(new Cookie('locale', $tag));
         }

@@ -4,8 +4,8 @@ namespace Infrastructure;
 
 use DateTime;
 use stdClass;
-use Stormmore\Framework\Mvc\Request\Cookie;
-use Stormmore\Framework\Mvc\Request\Response;
+use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Response;
 
 readonly class SessionStorage
 {

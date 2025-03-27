@@ -8,8 +8,8 @@ use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\AuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\AuthorizedException;
-use Stormmore\Framework\Mvc\Request\Request;
-use Stormmore\Framework\Mvc\Request\Response;
+use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Response;
 use Throwable;
 
 readonly class ExceptionMiddleware implements IMiddleware

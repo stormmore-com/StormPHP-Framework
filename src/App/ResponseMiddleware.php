@@ -3,7 +3,7 @@
 namespace Stormmore\Framework\App;
 
 use closure;
-use Stormmore\Framework\Mvc\Request\Response;
+use Stormmore\Framework\Mvc\IO\Response;
 
 readonly class ResponseMiddleware implements IMiddleware
 {

@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Validation\Validators;
 
-use Stormmore\Framework\Mvc\Request\UploadedFile;
+use Stormmore\Framework\Mvc\IO\Request\UploadedFile;
 use Stormmore\Framework\Validation\IValidator;
 use Stormmore\Framework\Validation\ValidatorResult;
 

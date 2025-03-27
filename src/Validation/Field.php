@@ -2,8 +2,11 @@
 
 namespace Stormmore\Framework\Validation;
 
+use DateTime;
 use Stormmore\Framework\Validation\Validators\AlphaNumValidator;
 use Stormmore\Framework\Validation\Validators\AlphaValidator;
+use Stormmore\Framework\Validation\Validators\DateTimeRangeValidator;
+use Stormmore\Framework\Validation\Validators\DateTimeValidator;
 use Stormmore\Framework\Validation\Validators\EmailValidator;
 use Stormmore\Framework\Validation\Validators\FileValidator;
 use Stormmore\Framework\Validation\Validators\FloatValidator;
@@ -68,6 +71,24 @@ class Field
     public function int(null|string $message = null): Field
     {
         $this->validators[] = new IntValidator($message);
+        return $this;
+    }
+
+    public function dateTime(null|string $message = null): Field
+    {
+        $this->validators[] = new DateTimeValidator(message: $message);
+        return $this;
+    }
+
+    public function after(DateTime $after, null|string $message = null): Field
+    {
+        $this->validators[] = new DateTimeRangeValidator(after: $after, message: $message);
+        return $this;
+    }
+
+    public function before(DateTime $before, null|string $message = null): Field
+    {
+        $this->validators[] = new DateTimeRangeValidator(before: $before, message: $message);
         return $this;
     }
 

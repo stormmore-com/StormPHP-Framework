@@ -8,7 +8,7 @@ use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\Internationalization\Culture;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Internationalization\Locale;
-use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request\Request;
 
 readonly class LocaleConfigure implements IConfiguration
 {

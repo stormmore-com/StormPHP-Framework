@@ -2,8 +2,9 @@
 
 namespace Configuration;
 
+use DateTime;
 use Stormmore\Framework\Form\Form;
-use Stormmore\Framework\Mvc\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request\Request;
 
 class CustomMessagesForm extends Form
 {
@@ -19,6 +20,14 @@ class CustomMessagesForm extends Form
         $this->validator->for('email')->email(message: "Email validator return error");
         $this->validator->for('min')->min(1, message: 'Min validator return error');
         $this->validator->for('max')->max(10, message: 'Max validator return error');
+        $this->validator->for('after')
+            ->dateTime("DateTime validator return error")
+            ->after(new DateTime('01-01-2010'), "After validator return error")
+            ->required();
+        $this->validator->for('before')
+            ->dateTime("DateTime validator return error")
+            ->before(new DateTime('01-01-2020'), "Before validator return error")
+            ->required();
         $this->validator->for('int')->int(message: "Integer validator returns error");
         $this->validator->for('float')->float(message: "Float validator return error");
         $this->validator->for('number')->number(message: "Number validator return error");

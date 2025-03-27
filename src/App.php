@@ -15,10 +15,11 @@ use Stormmore\Framework\Logger\Configuration;
 use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Logger\Logger;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
+use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
+use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request\RequestCreator;
+use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\MvcMiddleware;
-use Stormmore\Framework\Mvc\Request\Cookies;
-use Stormmore\Framework\Mvc\Request\Request;
-use Stormmore\Framework\Mvc\Request\Response;
 use Stormmore\Framework\Mvc\Route\Router;
 use Stormmore\Framework\Mvc\View\ViewConfiguration;
 use Stormmore\Framework\SourceCode\SourceCode;
@@ -121,7 +122,7 @@ class App
         $this->viewConfiguration = new ViewConfiguration();
         $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
         $this->response = new Response($cookies);
-        $this->request = new Request($cookies);
+        $this->request = RequestCreator::create();
         $this->logger = new Logger($loggerConfiguration);
 
         $this->container->register($loggerConfiguration);

@@ -135,6 +135,33 @@ $view->setLayout('@templates/includes/layout.php');
             </td>
         </tr>
 
+        <!-- after -->
+        <tr>
+            <td><label for="after">After: </label></td>
+            <td><input id="after" type="text" name="after" value="<?php echo $form->after ?>" /></td>
+            <td>after: 01-01-2010</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="error">
+                <?php if ($form->errors->after): ?>
+                    <div><?php echo $form->errors->after ?></div>
+                <?php endif ?>
+            </td>
+        </tr>
+        <!-- before -->
+        <tr>
+            <td><label for="before">Before:</label></td>
+            <td><input id="before" type="text" name="before" value="<?php echo $form->before ?>" /></td>
+            <td>before: 01-01-2020</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="error">
+                <?php if ($form->errors->before): ?>
+                    <div><?php echo $form->errors->before ?></div>
+                <?php endif ?>
+            </td>
+        </tr>
+
         <!-- Integer -->
         <tr>
             <td><label for="int">Integer:</label></td>
