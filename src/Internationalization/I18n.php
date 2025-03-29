@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Internationalization;
 
-use Exception;
+use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\UnknownPathAliasException;
 
 class I18n
@@ -10,11 +10,12 @@ class I18n
     public Locale $locale;
 
     public Culture $culture;
-    public array $translations = [];
+    public ?Configuration $translations;
 
 
     public function __construct()
     {
+        $this->translations = null;
         $this->locale = new Locale();
         $this->culture = new Culture();
     }
@@ -24,9 +25,30 @@ class I18n
         $this->locale = $locale;
     }
 
+    public function loadCulture(string $filepath): void
+    {
+        $configuration = Configuration::createFromFile($filepath);
+        $culture = new Culture();
+        $culture->currency = $configuration->get('culture.currency');
+        $culture->dateFormat = $configuration->get('culture.date-format');
+        $culture->dateTimeFormat = $configuration->get('culture.date-time-format');
+        $this->setCulture($culture);
+    }
+
     public function setCulture(Culture $culture): void
     {
         $this->culture = $culture;
+    }
+
+    public function loadTranslations(string $filepath): void
+    {
+        $configuration = Configuration::createFromFile($filepath);
+        $this->setTranslations($configuration);
+    }
+
+    public function setTranslations(Configuration $translations): void
+    {
+        $this->translations = $translations;
     }
 
     public function getLocale(): Locale
@@ -39,20 +61,10 @@ class I18n
         return $this->culture;
     }
 
-    /**
-     * @throws UnknownPathAliasException
-     */
-    public function loadJsonTranslations($filePath): void
-    {
-        $path = resolve_path_alias($filePath);
-        file_exists($path) or throw new Exception("I18n: Language file [$path] doesn't exist");
-        $this->translations = json_decode(file_get_contents($path), true);
-    }
-
     public function translate($phrase): string
     {
-        if (array_key_exists($phrase, $this->translations)) {
-            return $this->translations[$phrase];
+        if ($this->translations?->has($phrase)) {
+            return $this->translations->get($phrase);
         }
 
         return $phrase;

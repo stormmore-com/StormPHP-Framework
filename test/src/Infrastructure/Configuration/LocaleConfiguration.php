@@ -3,6 +3,7 @@
 namespace Infrastructure\Configuration;
 
 use Infrastructure\Settings\Settings;
+use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\Configuration\JsonConfigurationLoader;
 use Stormmore\Framework\Internationalization\Culture;
@@ -14,20 +15,18 @@ readonly class LocaleConfigure implements IConfiguration
 {
     public function __construct(private Request $request,
                                 private Settings $settings,
-                                private I18n $i18n,
-                                private JsonConfigurationLoader $jsonConfigurationLoader)
+                                private I18n $i18n)
     {
     }
 
     public function configure(): void
     {
         $locale = $this->getAcceptedLocale();
-        $culture = $this->getCulture($locale);
 
         $this->i18n->setLocale($locale);
-        $this->i18n->setCulture($culture);
 
         $this->loadTranslations($locale);
+        $this->loadCulture($locale);
     }
 
     private function getAcceptedLocale(): Locale
@@ -45,28 +44,25 @@ readonly class LocaleConfigure implements IConfiguration
 
     private function loadTranslations(Locale $locale): void
     {
-        $tagFilename = "@/i18n/{$locale->tag}.json";
-        $languageFilename = "@/i18n/{$locale->languageCode}.json";
-        if ($this->jsonConfigurationLoader->exist($tagFilename)) {
-            $this->i18n->loadJsonTranslations($tagFilename);
+        $tagFilename = "@/i18n/$locale->tag.conf";
+        $languageFilename = "@/i18n/$locale->languageCode.conf";
+        if (file_path_exist($tagFilename)) {
+            $this->i18n->loadTranslations($tagFilename);
         }
-        else if ($this->jsonConfigurationLoader->exist($languageFilename)) {
-            $this->i18n->loadJsonTranslations($languageFilename);
+        if (file_path_exist($languageFilename)) {
+            $this->i18n->loadTranslations($languageFilename);
         }
     }
 
-    private function getCulture(Locale $locale): Culture
+    private function loadCulture(Locale $locale): void
     {
-        $culture = new Culture();
-        $tagFilename = "@/i18n/culture/{$locale->tag}.json";
-        $languageFilename = "@/i18n/culture/{$locale->languageCode}.json";
-
-        if ($this->jsonConfigurationLoader->exist($tagFilename)) {
-            $this->jsonConfigurationLoader->load($culture, $tagFilename);
+        $tagFilename = "@/i18n/culture/{$locale->tag}.conf";
+        $languageFilename = "@/i18n/culture/{$locale->languageCode}.conf";
+        if (file_path_exist($tagFilename)) {
+            $this->i18n->loadCulture($tagFilename);
         }
-        else if ($this->jsonConfigurationLoader->exist($languageFilename)) {
-            $this->jsonConfigurationLoader->load($culture, $languageFilename);
+        if (file_path_exist($languageFilename)) {
+            $this->i18n->loadCulture($languageFilename);
         }
-        return $culture;
     }
 }

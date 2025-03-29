@@ -46,6 +46,12 @@ function resolve_path_alias(string $templatePath): string
     return $templatePath;
 }
 
+function file_path_exist(string $filePath): bool
+{
+    $filePath = resolve_path_alias($filePath);
+    return file_exists($filePath);
+}
+
 function is_array_key_value_equal(array $array, string $key, mixed $value): bool
 {
     return array_key_exists($key, $array) and $array[$key] == $value;
