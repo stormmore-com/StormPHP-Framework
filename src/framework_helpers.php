@@ -18,6 +18,11 @@ if (!function_exists('array_is_list')) {
     }
 }
 
+function is_cli(): bool
+{
+    return php_sapi_name() === 'cli';
+}
+
 function resolve_path_alias(string $templatePath): string
 {
     $configuration = App::getInstance()->getAppConfiguration();
@@ -195,9 +200,9 @@ function url($path, $args = array()): string
     }
     $pos = strrpos($path, '.');
     if ($pos !== false and strlen($path) - $pos < 5) {
-        return concatenate_paths($request->basePath, $path);
+        return concatenate_paths($request->uri, $path);
     }
-    return concatenate_paths($request->baseUri, $path);
+    return concatenate_paths($request->uri, $path);
 }
 
 function back(string $url = "/"): Redirect

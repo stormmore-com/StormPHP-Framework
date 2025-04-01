@@ -5,7 +5,6 @@ namespace Stormmore\Framework\Mvc\IO\Request;
 use DateTime;
 use stdClass;
 use Exception;
-use Stormmore\Framework\FluentReflection\ObjectPropertyAccess;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\RedirectMessage;
@@ -14,56 +13,36 @@ class Request
 {
     private IParameters $routeParameters;
     private string $method;
-
+    public Cookies $cookies;
+    public Files $files;
     public string $uri;
-    public string $baseUri;
-    /**
-     * in case of /path/to/script/index.php/my-module returns /my-module
-     */
-    public string $requestUri;
-    public string $basePath;
     public string $query;
-    public ?array $acceptedLanguages = null;
+    public ?array $acceptedLanguages = [];
+    public IParameters $queryParameters;
+    public IParameters $postParameters;
 
     public RedirectMessage $messages;
 
-    function __construct(public Cookies $cookies,
-                         public Files $files,
-                         public IParameters $getParameters,
-                         public IParameters $postParameters)
+    function __construct(private RequestContext $context)
     {
-        $this->messages = new RedirectMessage($cookies);
-
-        $this->query = array_key_exists('QUERY_STRING', $_SERVER) ? $_SERVER['QUERY_STRING'] : "";
-        $this->uri = strtok($_SERVER["REQUEST_URI"], '?');
-        $this->requestUri = strtok($_SERVER["REQUEST_URI"], '?');
-
-        $self = $_SERVER['PHP_SELF'];
-        $self = substr($self, 0, strrpos($self, '.php') + 4);
-        $this->basePath = substr($self, 0, strpos($self, '.php'));
-        $this->basePath = substr($this->basePath, 0, strrpos($this->basePath, '/'));
-        if (str_starts_with($this->uri, $self)) {
-            $this->baseUri = $self;
-        } else {
-            $this->baseUri = $this->basePath;
-        }
-
-        $this->method = $_SERVER['REQUEST_METHOD'];
-
+        $this->cookies = $this->context->getCookies();
+        $this->files = $this->context->getFiles();
+        $this->query = $this->context->getQuery();
+        $this->uri = $this->context->getUri();
+        $this->method = $this->context->getMethod();
+        $this->queryParameters = $this->context->queryParameters();
+        $this->postParameters = $this->context->postParameters();
+        $this->messages = new RedirectMessage($this->cookies);
     }
 
     public function getReferer(): ?string
     {
-        $referer = null;
-        if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-            $referer = $_SERVER['HTTP_REFERER'];
-        }
-        return $referer;
+        return $this->context->getReferer();
     }
 
     public function encodeRequestUri(): string
     {
-        return urlencode($_SERVER["REQUEST_URI"]);
+        return urlencode($this->context->getUri());
     }
 
     public function decodeParameter(string $name): ?string
@@ -102,19 +81,18 @@ class Request
 
     public function getJson(): ?object
     {
-        if (array_key_exists("CONTENT_TYPE", $_SERVER) && $_SERVER["CONTENT_TYPE"] == "application/json") {
-            $data = file_get_contents('php://input');
-            return json_decode($data);
+        if ($this->context->getContentType() == "application/json") {
+            return json_decode($this->context->getContent());
         }
         return null;
     }
 
     public function has(string $name): bool
     {
-        return $this->getParameters->has($name) or
-                $this->postParameters->has($name) or
-                $this->routeParameters->has($name) or
-                $this->files->has($name);
+        return $this->queryParameters->has($name) or
+            $this->postParameters->has($name) or
+            $this->routeParameters->has($name) or
+            $this->files->has($name);
     }
 
     public function __get(string $name): mixed
@@ -127,8 +105,8 @@ class Request
         if ($this->files->has($name)) {
             return $this->files->get($name);
         }
-        if ($this->getParameters->has($name)) {
-            return $this->getParameters->get($name);
+        if ($this->queryParameters->has($name)) {
+            return $this->queryParameters->get($name);
         }
         if ($this->postParameters->has($name)) {
             return $this->postParameters->get($name);
@@ -162,7 +140,7 @@ class Request
 
     public function getAll(): array
     {
-        return array_merge($this->getParameters->toArray(),
+        return array_merge($this->queryParameters->toArray(),
             $this->postParameters->toArray(),
             $this->files->toArray(),
             $this->routeParameters->toArray());
@@ -211,7 +189,8 @@ class Request
         if ($value) {
             try {
                 return new DateTime($value);
-            } catch (Exception) { }
+            } catch (Exception) {
+            }
         }
         return null;
     }
@@ -226,14 +205,12 @@ class Request
         }
 
         $this->acceptedLanguages = [];
-        if (array_key_exists('HTTP_ACCEPT_LANGUAGE', $_SERVER)) {
-            $languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-            foreach ($languages as $language) {
-                if (str_contains($language, ';')) {
-                    $this->acceptedLanguages[] = new Locale(explode(';', $language)[0]);
-                } else {
-                    $this->acceptedLanguages[] = new Locale($language);
-                }
+        $languages = $this->context->getAcceptedLanguages();
+        foreach ($languages as $language) {
+            if (str_contains($language, ';')) {
+                $this->acceptedLanguages[] = new Locale(explode(';', $language)[0]);
+            } else {
+                $this->acceptedLanguages[] = new Locale($language);
             }
         }
 
@@ -244,7 +221,7 @@ class Request
     {
         $acceptedLanguages = $this->getAcceptedLocales();
         foreach ($acceptedLanguages as $acceptedLanguage) {
-            foreach($supportedLocales as $supportedLocale) {
+            foreach ($supportedLocales as $supportedLocale) {
                 if ($acceptedLanguage->equals($supportedLocale)) {
                     return $supportedLocale;
                 }

@@ -1,15 +1,15 @@
 <?php /**
  * TODO
  *
+ *
+ *  url a uri
+ *
  *   uruchamienia z cli
  *    urla (kontrolera)
  *     -> get
  *     -> post file
  *    uruchaminie tasków
  *   uruchamiene endpotionow z z testów jednostkowych poprzez cli
- *
- *
- *   dac mozlwiosc printownia na output bo jet ob_get i nie mozna debugowac za pomoca echo
  *
  *    response cache
  *
@@ -22,6 +22,8 @@
  *   obsługa meilów
  *
  *  - tlumaczenia iterałów
+ *
+ *   dac mozlwiosc printownia na output bo jet ob_get i nie mozna debugowac za pomoca echo
  *
  *   StormQueries
  *   - konfiguracja DateTimeów (czy ma zapisywac do utc czy nie) (konfiguracja jak ma wygladac, ew. na jaki timezone ma tlumaczyc domysl)

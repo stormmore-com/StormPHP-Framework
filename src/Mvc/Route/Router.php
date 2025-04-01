@@ -21,7 +21,7 @@ class Router
 
     public function find(Request $request): ?ExecutionRoute
     {
-        $requestUri = $request->requestUri;
+        $requestUri = $request->uri;
         foreach ($this->getAllRoutes() as $pattern => $target) {
             if ($pattern == $requestUri) {
                 return new ExecutionRoute($pattern, $this->createEndpoint($target));

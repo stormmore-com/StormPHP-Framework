@@ -68,7 +68,7 @@ readonly class ControllerReflection
 
     public function invoke(): mixed
     {
-        $this->actionArguments->areValid() or throw new Exception("Invalid parameters `{$this->request->requestUri}`", 400);
+        $this->actionArguments->areValid() or throw new Exception("Invalid parameters `{$this->request->uri}`", 400);
         $arguments = $this->actionArguments->getArguments();
         $obj = $this->resolver->resolve($this->fluentClass);
         return $this->fluentMethod->invoke($obj, $arguments);

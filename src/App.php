@@ -15,9 +15,8 @@ use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Logger\Logger;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
-use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\Request\Request;
-use Stormmore\Framework\Mvc\IO\Request\RequestCreator;
+use Stormmore\Framework\Mvc\IO\Request\RequestContext;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\MvcMiddleware;
 use Stormmore\Framework\Mvc\Route\Router;
@@ -99,14 +98,14 @@ class App
 
     private function __construct(string $projectDir, string $sourceDir = "", string $cacheDir = "")
     {
+        $context = new RequestContext();
+
         $this->configuration = new Configuration();
         $appConfiguration = new AppConfiguration($this->configuration);
         $appConfiguration->setProjectDirectory($projectDir);
         $appConfiguration->setSourceDirectory($sourceDir);
         $appConfiguration->setCacheDirectory($cacheDir);
         $appConfiguration->aliases['@src'] = $appConfiguration->sourceDirectory;
-
-        $cookies = new Cookies();
 
         $this->appConfiguration = $appConfiguration;
         $this->container = new Container();
@@ -116,8 +115,8 @@ class App
         $this->i18n = new I18n();
         $this->viewConfiguration = new ViewConfiguration();
         $this->classLoader = new ClassLoader($this->sourceCode, $this->appConfiguration);
-        $this->response = new Response($cookies);
-        $this->request = RequestCreator::create();
+        $this->response = new Response($context->getCookies());
+        $this->request = new Request($context);
         $this->logger = new Logger($appConfiguration);
 
         $this->container->registerAs($this->logger, ILogger::class);
@@ -149,11 +148,11 @@ class App
     private function runMiddlewares(): void
     {
         $this->middlewares = [ResponseMiddleware::class, ExceptionMiddleware::class, ...$this->middlewares, MvcMiddleware::class];
-        $first = $this->getMiddleware(0);
+        $first = $this->getMiddlewareAsCallable(0);
         $first();
     }
 
-    private function getMiddleware(int $i): closure
+    private function getMiddlewareAsCallable(int $i): closure
     {
         if ($i >= count($this->middlewares)) {
             return function() { };
@@ -162,7 +161,7 @@ class App
             $className = $this->middlewares[$i];
             $middleware = $this->resolver->resolve($className);
             $middleware instanceof IMiddleware or throw new Exception("Class `$className` does not implement IMiddleware interface");
-            $middleware->run($this->getMiddleware($i + 1));
+            $middleware->run($this->getMiddlewareAsCallable($i + 1));
         };
     }
 }
