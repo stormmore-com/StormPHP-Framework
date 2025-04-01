@@ -8,10 +8,10 @@ use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionMiddleware;
 use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\App\ResponseMiddleware;
+use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Internationalization\I18n;
-use Stormmore\Framework\Logger\Configuration;
 use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Logger\Logger;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
@@ -31,7 +31,8 @@ class App
     private SourceCode $sourceCode;
     private ClassLoader $classLoader;
     private Resolver $resolver;
-    private AppConfiguration $configuration;
+    private Configuration $configuration;
+    private AppConfiguration $appConfiguration;
     private ViewConfiguration $viewConfiguration;
     private static App|null $instance = null;
     private I18n $i18n;
@@ -39,17 +40,10 @@ class App
     private Request $request;
     private Router $router;
     private array $middlewares = [];
-    private array $configurations = [];
 
     public static function create(string $projectDir, string $sourceDir = "", string $cacheDir = ""): App
     {
-        $appConfiguration = new AppConfiguration();
-        $appConfiguration->setProjectDirectory($projectDir);
-        $appConfiguration->setSourceDirectory($sourceDir);
-        $appConfiguration->setCacheDirectory($cacheDir);
-        $appConfiguration->aliases['@src'] = $appConfiguration->sourceDirectory;
-
-        self::$instance = new App($appConfiguration);
+        self::$instance = new App($projectDir, $sourceDir, $cacheDir);
         return self::$instance;
     }
 
@@ -65,7 +59,7 @@ class App
 
     public function getAppConfiguration(): AppConfiguration
     {
-        return $this->configuration;
+        return $this->appConfiguration;
     }
 
     public function getResolver(): Resolver
@@ -98,40 +92,41 @@ class App
         $this->middlewares[] = $middlewareClassName;
     }
 
-    public function addConfiguration(string $configurationClassName): void
-    {
-        $this->configurations[] = $configurationClassName;
-    }
-
     public function addRoute(string $key, $value): void
     {
         $this->router->addRoute($key, $value);
     }
 
-    private function __construct(AppConfiguration $configuration)
+    private function __construct(string $projectDir, string $sourceDir = "", string $cacheDir = "")
     {
-        $cookies = new Cookies();
-        $loggerConfiguration = new Configuration();
+        $this->configuration = new Configuration();
+        $appConfiguration = new AppConfiguration($this->configuration);
+        $appConfiguration->setProjectDirectory($projectDir);
+        $appConfiguration->setSourceDirectory($sourceDir);
+        $appConfiguration->setCacheDirectory($cacheDir);
+        $appConfiguration->aliases['@src'] = $appConfiguration->sourceDirectory;
 
-        $this->configuration = $configuration;
+        $cookies = new Cookies();
+
+        $this->appConfiguration = $appConfiguration;
         $this->container = new Container();
         $this->resolver = new Resolver($this->container);
-        $this->sourceCode = new SourceCode($this->configuration);
+        $this->sourceCode = new SourceCode($this->appConfiguration);
         $this->router = new Router($this->sourceCode);
         $this->i18n = new I18n();
         $this->viewConfiguration = new ViewConfiguration();
-        $this->classLoader = new ClassLoader($this->sourceCode, $this->configuration);
+        $this->classLoader = new ClassLoader($this->sourceCode, $this->appConfiguration);
         $this->response = new Response($cookies);
         $this->request = RequestCreator::create();
-        $this->logger = new Logger($loggerConfiguration);
+        $this->logger = new Logger($appConfiguration);
 
-        $this->container->register($loggerConfiguration);
         $this->container->registerAs($this->logger, ILogger::class);
+        $this->container->register($this->configuration);
+        $this->container->register($this->appConfiguration);
         $this->container->register($this->sourceCode);
         $this->container->register($this->router);
         $this->container->register(new AppUser());
         $this->container->register($this->i18n);
-        $this->container->register($this->configuration);
         $this->container->register($this->viewConfiguration);
         $this->container->register($this->response);
         $this->container->register($this->request);
@@ -139,25 +134,20 @@ class App
 
     public function run(): void
     {
+        $environmentFilePath = $this->appConfiguration->projectDirectory . "/env.conf";
+        if (file_path_exist($environmentFilePath)) {
+            $this->configuration->loadFile($environmentFilePath);
+        }
+
         $this->sourceCode->loadCache();
         $this->classLoader->register();
 
-        $this->runConfigurations();
         $this->runMiddlewares();
     }
 
-    private function runConfigurations(): void
-    {
-        $this->logger->logD("Added " . count($this->configurations) . " configuration(s)");
-        foreach($this->configurations as $configurationClassName) {
-            $configuration = $this->resolver->resolve($configurationClassName);
-            $configuration->configure();
-        }
-    }
 
     private function runMiddlewares(): void
     {
-        $this->logger->logD("Added " . count($this->middlewares) . " middleware(s)");
         $this->middlewares = [ResponseMiddleware::class, ExceptionMiddleware::class, ...$this->middlewares, MvcMiddleware::class];
         $first = $this->getMiddleware(0);
         $first();

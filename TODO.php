@@ -9,18 +9,7 @@
  *   uruchamiene endpotionow z z testów jednostkowych poprzez cli
  *
  *
- *   konfiguracja
- *    - klasa konfiguracja czytajacy z plikow php jak i plików innych
- *    - format 'poziom1.poziom2.poziom3' etc.
- *    - rozne instacje klas
- *    - plik konfiguracyjny srodowisko
- *    - plik konfiguracja name: value z mozlwiocia multiline po 3x"
- *
  *   dac mozlwiosc printownia na output bo jet ob_get i nie mozna debugowac za pomoca echo
- *  *  enviro
- *  *  - debug umozlwiosc tpo
- *  *  - prodt
- *  *  - development
  *
  *    response cache
  *

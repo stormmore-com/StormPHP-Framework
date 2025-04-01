@@ -1,17 +1,16 @@
 <?php
 
-namespace Infrastructure\Configuration;
+namespace Infrastructure\Middleware;
 
-use Infrastructure\Settings\Settings;
-use Stormmore\Framework\Configuration\Configuration;
+use closure;
+use Infrastructure\Settings;
+use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Configuration\IConfiguration;
-use Stormmore\Framework\Configuration\JsonConfigurationLoader;
-use Stormmore\Framework\Internationalization\Culture;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Mvc\IO\Request\Request;
 
-readonly class LocaleConfigure implements IConfiguration
+readonly class LocaleMiddleware implements IMiddleware
 {
     public function __construct(private Request $request,
                                 private Settings $settings,
@@ -19,26 +18,16 @@ readonly class LocaleConfigure implements IConfiguration
     {
     }
 
-    public function configure(): void
-    {
-        $locale = $this->getAcceptedLocale();
-
-        $this->i18n->setLocale($locale);
-
-        $this->loadTranslations($locale);
-        $this->loadCulture($locale);
-    }
-
     private function getAcceptedLocale(): Locale
     {
         if ($this->request->cookies->has('locale')) {
             $tag = $this->request->cookies->get('locale');
-            if ($this->settings->i18n->localeExists($tag)) {
+            if ($this->settings->localeExists($tag)) {
                 return new Locale($tag);
             }
         }
-        $defaultLocale = $this->settings->i18n->defaultLocale;
-        $supportedLocales = $this->settings->i18n->locales;
+        $defaultLocale = $this->settings->defaultLocale;
+        $supportedLocales = $this->settings->locales;
         return $this->request->getFirstAcceptedLocale($supportedLocales) ?? $defaultLocale;
     }
 
@@ -64,5 +53,17 @@ readonly class LocaleConfigure implements IConfiguration
         if (file_path_exist($languageFilename)) {
             $this->i18n->loadCulture($languageFilename);
         }
+    }
+
+    public function run(closure $next): void
+    {
+        $locale = $this->getAcceptedLocale();
+
+        $this->i18n->setLocale($locale);
+
+        $this->loadTranslations($locale);
+        $this->loadCulture($locale);
+
+        $next();
     }
 }

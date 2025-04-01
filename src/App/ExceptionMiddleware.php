@@ -27,10 +27,11 @@ readonly class ExceptionMiddleware implements IMiddleware
         $this->logger->logI("Request started  `{$this->request->uri}`");
         try {
             $next();
+            $this->logger->logI("Request finished `{$this->request->uri}` [{$this->response->code}]");
         } catch (Throwable $throwable) {
             $this->handle($throwable);
+            $this->logger->logE("Request failed  `{$this->request->uri}` [{$this->response->code}]");
         }
-        $this->logger->logI("Request finished `{$this->request->uri}` [{$this->response->code}]");
     }
 
     private function handle(Throwable $throwable): void

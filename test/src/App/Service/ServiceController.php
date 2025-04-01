@@ -6,7 +6,7 @@ use Configuration\Commands\ExampleCommand;
 use Configuration\Commands\ServiceCommand;
 use Configuration\Events\ServiceEvent;
 use Exception;
-use Infrastructure\Settings\Settings;
+use Infrastructure\Settings;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
@@ -53,7 +53,7 @@ readonly class ServiceController
     public function index(): View
     {
         $locales = [];
-        foreach ($this->settings->i18n->locales as $locale) {
+        foreach ($this->settings->locales as $locale) {
             $locales[$locale->tag] = $locale->tag;
         }
         return view("@templates/service/index", [
@@ -66,7 +66,7 @@ readonly class ServiceController
     public function changeLocale(): Redirect
     {
         $tag = $this->request->getDefault('tag', '');
-        if ($this->settings->i18n->localeExists($tag)) {
+        if ($this->settings->localeExists($tag)) {
             $this->response->cookies->set(new Cookie('locale', $tag));
         }
         return back();

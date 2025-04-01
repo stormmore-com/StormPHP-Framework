@@ -20,7 +20,7 @@ $view->setLayout('@templates/includes/layout.php');
     </tr>
     <tr>
         <td><?php echo _('status.environment') ?>:</td>
-        <td><?php echo $configuration->environment ?></td>
+        <td><?php echo $configuration->getEnvironment() ?></td>
     </tr>
     <tr>
         <td><?php echo _('status.project_directory') ?></td>

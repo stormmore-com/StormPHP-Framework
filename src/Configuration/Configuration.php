@@ -13,7 +13,7 @@ class Configuration
         return $configuration;
     }
 
-    public function add(string $name, string $value)
+    public function set(string $name, string $value)
     {
         $this->configuration[$name] = $value;
     }
@@ -35,5 +35,24 @@ class Configuration
             return $defaultValue;
         }
         return $this->configuration[$name];
+    }
+
+    public function getBool(string $name): bool
+    {
+        if (array_key_exists($name, $this->configuration)) {
+            $value =  strtolower($this->configuration[$name]);
+            return in_array($value, ["1", "true", "yes"]);
+        }
+        return false;
+    }
+
+    public function getArray(string $name): array
+    {
+        if (array_key_exists($name, $this->configuration)) {
+            $value = $this->configuration[$name];
+            return array_map(fn($item) => trim($item), explode(',', $value));
+        }
+
+        return [];
     }
 }

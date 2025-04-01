@@ -3,29 +3,50 @@
 namespace Stormmore\Framework;
 
 use Error;
+use Stormmore\Framework\Configuration\Configuration;
 
 class AppConfiguration
 {
+    private Configuration $configuration;
+
     public string $projectDirectory;
     public string $sourceDirectory;
-    public ?string $cacheDirectory = null;
-    public ?string $baseUrl = null;
-    public ?string $environment = null;
+    public string $cacheDirectory;
     public array $aliases = array();
     public array $errors = array();
 
-    function __construct()
+    function __construct(Configuration $configuration)
     {
-        $env = getenv('STORM_ENV');
-        if (!$env) {
-            $env = 'development';
-        }
-        $this->environment = $env;
+        $this->configuration = $configuration;
+        $this->configuration->set('environment', 'production');
+        $this->configuration->set('logger.enabled', 'true');
+        $this->configuration->set('logger.level', 'debug');
+        $this->configuration->set('logger.directory', '@/.logs/');
+    }
+
+    public function isLoggerEnabled(): bool
+    {
+        return $this->configuration->getBool('logger.enabled');
+    }
+
+    public function getLogLevel(): string
+    {
+        return $this->configuration->get('logger.level');
+    }
+
+    public function setLogLevel(string $level): void
+    {
+        $this->configuration->set('logger.level', $level);
     }
 
     public function isDevelopment(): bool
     {
-        return str_starts_with($this->environment, 'development');
+        return str_starts_with($this->configuration->get('environment'), 'development');
+    }
+
+    public function getEnvironment(): string
+    {
+        return $this->configuration->get('environment');
     }
 
     public function setProjectDirectory(string $projectDirectory): void
@@ -53,13 +74,18 @@ class AppConfiguration
     public function setCacheDirectory(string $cacheDirectory): void
     {
         if (empty($cacheDirectory)) {
-            $cacheDirectory = $this->projectDirectory;
+            $cacheDirectory = $this->projectDirectory . "/.cache";
         }
 
         if (!is_dir($cacheDirectory)) {
             mkdir($cacheDirectory, 0777, true);
         }
         $this->cacheDirectory = realpath($cacheDirectory);
+    }
+
+    public function getLoggerDirectory(): string
+    {
+        return $this->configuration->get('logger.directory');
     }
 
     public function getCacheDirectory(): string
