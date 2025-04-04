@@ -24,13 +24,13 @@ readonly class ExceptionMiddleware implements IMiddleware
 
     public function run(closure $next): void
     {
-        $this->logger->logI("Request started  `{$this->request->uri}`");
+        $this->logger->logI("Request started  `{$this->request->path}`");
         try {
             $next();
-            $this->logger->logI("Request finished `{$this->request->uri}` [{$this->response->code}]");
+            $this->logger->logI("Request finished `{$this->request->path}` [{$this->response->code}]");
         } catch (Throwable $throwable) {
             $this->handle($throwable);
-            $this->logger->logE("Request failed  `{$this->request->uri}` [{$this->response->code}]");
+            $this->logger->logE("Request failed  `{$this->request->path}` [{$this->response->code}]");
         }
     }
 

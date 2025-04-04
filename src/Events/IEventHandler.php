@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Events;
 
-use Configuration\Events\ServiceEvent;
+use src\App\Service\Events\ServiceEvent;
 
 interface IEventHandler
 {

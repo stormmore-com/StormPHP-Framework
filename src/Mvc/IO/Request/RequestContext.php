@@ -6,19 +6,58 @@ use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 
 class RequestContext
 {
-    public function getUri(): string
+    private bool $printHeaders = false;
+    private bool $isCliRequest = false;
+
+    private string $path;
+    private string $query;
+    private string $method;
+    private IParameters $get;
+
+
+    public function __construct()
     {
-        return strtok($_SERVER["REQUEST_URI"], '?');
+        if (php_sapi_name() === 'cli') {
+            $this->isCliRequest = true;
+            $arg = new RequestArguments();
+            $this->printHeaders = $arg->printHeaders();
+            $this->path = $arg->getPath();
+            $this->query = $arg->getQuery();
+            $this->method = $arg->getMethod();
+            parse_str($this->getQuery(), $result);
+            $this->get = new Parameters($result);
+        }
+        else {
+            $this->path = strtok($_SERVER["REQUEST_URI"], '?');
+            $this->query = array_key_value($_SERVER, "QUERY_STRING", "");
+            $this->method = $_SERVER["REQUEST_METHOD"];
+            $this->get = new Parameters($_GET);
+        }
+    }
+
+    public function isCliRequest(): bool
+    {
+        return $this->isCliRequest;
+    }
+
+    public function printHeaders(): bool
+    {
+        return $this->printHeaders;
+    }
+
+    public function getPath(): string
+    {
+        return $this->path;
     }
 
     public function getQuery(): string
     {
-        return array_key_value($_SERVER, 'QUERY_STRING', '');
+        return $this->query;
     }
 
     public function getMethod(): string
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return $this->method;
     }
 
     public function getAcceptedLanguages(): array
@@ -54,7 +93,7 @@ class RequestContext
 
     public function queryParameters(): IParameters
     {
-        return new Parameters($_GET);
+        return $this->get;
     }
 
     public function postParameters(): IParameters

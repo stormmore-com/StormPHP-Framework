@@ -1,15 +1,17 @@
 <?php /**
  * TODO
  *
+ *   get (metoda)
+ *     -> ciasteczka (odyczt w testach)
+ *     -> ciasteczko wysłanie i dobieranie wartosci w body
+ *   zobacyzc warning i deprecations
  *
- *  url a uri
+ * -> post
+ * -> json
+ * -> form data
+ * -> file
  *
- *   uruchamienia z cli
- *    urla (kontrolera)
- *     -> get
- *     -> post file
  *    uruchaminie tasków
- *   uruchamiene endpotionow z z testów jednostkowych poprzez cli
  *
  *    response cache
  *

@@ -124,7 +124,7 @@ class ResponseCache
 
     private function requestToFileName(Request $request): string
     {
-        $id = $request->uri;
+        $id = $request->path;
         $id .= "-" . $this->i18n->culture->getLanguage()->primary;
         if ($request->query != '') {
             $id .= "-" . $request->query;

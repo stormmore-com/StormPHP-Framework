@@ -1,8 +1,8 @@
 .idea
 
 vendor/
-test/.cache
-test/.logs
+.cache/
+.logs/
 
 .DS_Store
 *.pem

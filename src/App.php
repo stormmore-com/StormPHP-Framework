@@ -25,6 +25,8 @@ use Stormmore\Framework\SourceCode\SourceCode;
 
 class App
 {
+    private static App|null $instance = null;
+
     private ILogger $logger;
     private Container $container;
     private SourceCode $sourceCode;
@@ -33,7 +35,6 @@ class App
     private Configuration $configuration;
     private AppConfiguration $appConfiguration;
     private ViewConfiguration $viewConfiguration;
-    private static App|null $instance = null;
     private I18n $i18n;
     private Response $response;
     private Request $request;

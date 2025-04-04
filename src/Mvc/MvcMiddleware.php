@@ -10,6 +10,7 @@ use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Mvc\IO\Redirect;
 use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request\RequestContext;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\Route\ExecutionRoute;
 use Stormmore\Framework\Mvc\Route\Router;
@@ -18,7 +19,6 @@ use Stormmore\Framework\SourceCode\SourceCode;
 
 readonly class MvcMiddleware implements IMiddleware
 {
-
     public function __construct(
         private SourceCode       $sourceCode,
         private AppConfiguration $configuration,
@@ -33,7 +33,7 @@ readonly class MvcMiddleware implements IMiddleware
     public function run(closure $next): void
     {
         $route = $this->find();
-        $route or throw new Exception("APP: route for [{$this->request->uri}] doesn't exist", 404);
+        $route or throw new Exception("APP: route for [{$this->request->path}] doesn't exist", 404);
         $this->request->addRouteParameters($route->parameters);
 
         $result = $this->handle($route);

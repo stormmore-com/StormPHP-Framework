@@ -12,5 +12,7 @@
             "email": "czerski.michal@gmail.com"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "^12.0"
+    }
 }

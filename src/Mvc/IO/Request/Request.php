@@ -15,7 +15,7 @@ class Request
     private string $method;
     public Cookies $cookies;
     public Files $files;
-    public string $uri;
+    public string $path;
     public string $query;
     public ?array $acceptedLanguages = [];
     public IParameters $queryParameters;
@@ -23,12 +23,12 @@ class Request
 
     public RedirectMessage $messages;
 
-    function __construct(private RequestContext $context)
+    function __construct(private readonly RequestContext $context)
     {
         $this->cookies = $this->context->getCookies();
         $this->files = $this->context->getFiles();
         $this->query = $this->context->getQuery();
-        $this->uri = $this->context->getUri();
+        $this->path = $this->context->getPath();
         $this->method = $this->context->getMethod();
         $this->queryParameters = $this->context->queryParameters();
         $this->postParameters = $this->context->postParameters();
@@ -42,7 +42,7 @@ class Request
 
     public function encodeRequestUri(): string
     {
-        return urlencode($this->context->getUri());
+        return urlencode($this->context->getPath());
     }
 
     public function decodeParameter(string $name): ?string
