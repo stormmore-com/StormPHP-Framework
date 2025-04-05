@@ -59,9 +59,12 @@ class AppResponse
     private function parseHeaders(): void
     {
         foreach (explode("\n", $this->rawHeaders) as $line) {
+            if (empty($line)) {
+                continue;
+            }
             $header = str_replace(array("<http-header>", "</http-header>"), "", $line);
             [$name, $value] = explode(":", $header);
-            $this->headers[$name] = trim($value);
+            $this->headers[$name] = $value;
         }
     }
 }

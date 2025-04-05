@@ -5,14 +5,12 @@
  *     -> simple header wyslanie i odebranie
  *     -> ciasteczka (odyczt w testach)
  *     -> ciasteczko wysłanie i dobieranie wartosci w body
- *   zobacyzc warning i deprecations
  *
  * -> post
  * -> json
  * -> form data
  * -> file
  *
- *   otworzenie za pomoca proc_open
  *
  *    uruchaminie tasków
  *
