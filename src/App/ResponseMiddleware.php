@@ -34,7 +34,6 @@ readonly class ResponseMiddleware implements IMiddleware
                 header("$name: $value");
             }
         }
-
         echo $this->response->body;
     }
 }

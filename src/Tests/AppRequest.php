@@ -6,12 +6,10 @@ use Exception;
 
 class AppRequest
 {
-
     private string $uri = "/";
 
-    private function __construct(private string $indexFilePath)
+    private function __construct(private readonly string $indexFilePath)
     {
-
     }
 
     public static function create(string $indexFilePath)
@@ -30,8 +28,19 @@ class AppRequest
     {
         $dir = dirname($this->indexFilePath);
         $filename = basename($this->indexFilePath);
-        $output = shell_exec("cd $dir && php $filename -r \"$this->uri\" -print-headers");;
 
-        return new AppResponse($output);
+        $_SERVER["argv"] = ["index.php", "-r", $this->uri, "-print-headers"];
+
+        $cwd = getcwd();
+        chdir($dir);
+        ob_start();
+        if (file_exists($filename)) {
+            include($filename);
+        }
+        $content = ob_get_flush();
+        ob_end_clean();
+        chdir($cwd);
+
+        return new AppResponse($content);
     }
 }
