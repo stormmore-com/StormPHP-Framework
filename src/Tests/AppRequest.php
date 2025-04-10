@@ -8,6 +8,12 @@ class AppRequest
 {
     private string $uri = "/";
 
+    private array $headers = [];
+
+    private array $cookies = [];
+
+    private string $method = "GET";
+
     private function __construct(private readonly string $indexFilePath)
     {
     }
@@ -18,9 +24,22 @@ class AppRequest
         return new AppRequest($indexFilePath);
     }
 
-    public function setUrl(string $uri): AppRequest
+    public function request(string $method, string $uri): AppRequest
     {
+        $this->method = strtoupper($method);
         $this->uri = $uri;
+        return $this;
+    }
+
+    public function withHeader(AppRequestHeader $header): AppRequest
+    {
+        $this->headers[] = $header;
+        return $this;
+    }
+
+    public function withCookie(AppCookie $cookie): AppRequest
+    {
+        $this->cookies[] = $cookie;
         return $this;
     }
 
@@ -29,7 +48,14 @@ class AppRequest
         $dir = dirname($this->indexFilePath);
         $filename = basename($this->indexFilePath);
 
-        $_SERVER["argv"] = ["index.php", "-r", $this->uri, "-print-headers"];
+        $headers = array_map(fn($item) => $item->name . ":" . $item->value, $this->headers);
+        $cookies = array_map(fn($item) => $item->name . ":" . $item->value, $this->cookies);
+        $_SERVER["argv"] = ["index.php",
+            "-r", $this->uri,
+            "-method", $this->method,
+            "-headers", ...$headers,
+            "-cookies", ...$cookies,
+            "-print-headers"];
 
         $cwd = getcwd();
         chdir($dir);

@@ -2,10 +2,14 @@
 
 namespace Stormmore\Framework\Mvc\IO\Request;
 
+use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Request\Header;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 
 class RequestContext
 {
+    private Cookies $cookies;
+    private array $headers = [];
     private bool $printHeaders = false;
     private bool $isCliRequest = false;
 
@@ -17,8 +21,11 @@ class RequestContext
 
     public function __construct()
     {
+        $this->cookies = new Cookies();
+
         if (php_sapi_name() === 'cli') {
             $this->isCliRequest = true;
+
             $arg = new RequestArguments();
             $this->printHeaders = $arg->printHeaders();
             $this->path = $arg->getPath();
@@ -26,12 +33,25 @@ class RequestContext
             $this->method = $arg->getMethod();
             parse_str($this->getQuery(), $result);
             $this->get = new Parameters($result);
+
+            foreach($arg->getHeaders() as $name => $value) {
+                $this->headers[$name] = new Header($name, $value);
+            }
+            foreach($arg->getCookies() as $name => $value) {
+                $this->cookies->add(new Cookie($name, $value));
+            }
         }
         else {
             $this->path = strtok($_SERVER["REQUEST_URI"], '?');
             $this->query = array_key_value($_SERVER, "QUERY_STRING", "");
             $this->method = $_SERVER["REQUEST_METHOD"];
             $this->get = new Parameters($_GET);
+            foreach (getallheaders() as $name => $value) {
+                $this->headers[$name] = new Header($name, $value);
+            }
+            foreach($_COOKIE as $name => $value) {
+                $this->cookies->add(new Cookie($name, $value));
+            }
         }
     }
 
@@ -44,6 +64,7 @@ class RequestContext
     {
         return $this->printHeaders;
     }
+
 
     public function getPath(): string
     {
@@ -58,6 +79,11 @@ class RequestContext
     public function getMethod(): string
     {
         return $this->method;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
     }
 
     public function getAcceptedLanguages(): array
@@ -88,7 +114,7 @@ class RequestContext
 
     public function getCookies(): Cookies
     {
-        return new Cookies();
+        return $this->cookies;
     }
 
     public function queryParameters(): IParameters

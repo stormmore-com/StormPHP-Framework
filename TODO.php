@@ -1,16 +1,15 @@
 <?php /**
  * TODO
  *
- *   get (metoda)
- *     -> simple header wyslanie i odebranie
- *     -> ciasteczka (odyczt w testach)
- *     -> ciasteczko wysłanie i dobieranie wartosci w body
+ *  requesty http
+ *  cookie/header podobne objecty dostepowe -> interface wspolny
  *
  * -> post
- * -> json
- * -> form data
- * -> file
+ *  -> json
+ *  -> form data
+ *  -> file
  *
+
  *
  *    uruchaminie tasków
  *

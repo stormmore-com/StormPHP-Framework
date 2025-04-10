@@ -8,15 +8,16 @@ class Cookies
 
     public function __construct()
     {
-        foreach($_COOKIE as $name => $value)
-        {
-            $this->cookies[$name] = new Cookie($name, $value);
-        }
     }
 
-    function get(string $name): string
+    function getAll(): array
     {
-        return $this->cookies[$name]->getValue();
+        return $this->cookies;
+    }
+
+    function get(string $name): Cookie
+    {
+        return $this->cookies[$name];
     }
 
     function has(string $name): bool
@@ -24,10 +25,11 @@ class Cookies
         return array_key_exists($name, $this->cookies);
     }
 
-    function set(Cookie $cookie): void
+    public function add(Cookie $cookie): void
     {
-        $this->cookies[$cookie->getName()] = $cookie->getValue();
+        $this->cookies[$cookie->getName()] = $cookie;
         setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpires(), $cookie->getPath());
+
     }
 
     function delete(string $name): void

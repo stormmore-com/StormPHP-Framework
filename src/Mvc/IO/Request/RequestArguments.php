@@ -4,8 +4,8 @@ namespace Stormmore\Framework\Mvc\IO\Request;
 
 class RequestArguments
 {
-    private $handledFlags = array('-r', '-m', "-p", "-print-headers");
-    private array $flagParameters = [];
+    private $handledFlags = array('-r', '-m', "-p", "-method", "-headers", "-cookies", "-print-headers");
+    private array $arguments = [];
 
     public function __construct()
     {
@@ -19,26 +19,26 @@ class RequestArguments
             $arg = $_SERVER['argv'][$i];
             if (in_array($arg, $this->handledFlags)) {
                 $switch = $arg;
-                if (!array_key_exists($switch, $this->flagParameters)) {
-                    $this->flagParameters[$switch] = [];
+                if (!array_key_exists($switch, $this->arguments)) {
+                    $this->arguments[$switch] = [];
                 }
                 continue;
             }
             if ($switch) {
-                $this->flagParameters[$switch][] = $arg;
+                $this->arguments[$switch][] = $arg;
             }
         }
     }
 
     public function printHeaders(): bool
     {
-        return array_key_exists("-print-headers", $this->flagParameters);
+        return array_key_exists("-print-headers", $this->arguments);
     }
 
     public function getPath(): string
     {
-        if (array_key_exists('-r', $this->flagParameters)) {
-            $uri = $this->flagParameters['-r'][0];
+        if (array_key_exists('-r', $this->arguments)) {
+            $uri = $this->arguments['-r'][0];
             if (str_contains($uri, '?')) {
                 $uri = substr($uri, 0, strpos($uri, '?'));
             }
@@ -49,13 +49,40 @@ class RequestArguments
 
     public function getMethod(): string
     {
-        return "";
+        if (array_key_exists('-method', $this->arguments)) {
+            return $this->arguments['-method'][0];
+        }
+        return "GET";
+    }
+
+    public function getHeaders(): array
+    {
+        $headers = [];
+        if (array_key_exists('-headers', $this->arguments)) {
+            foreach ($this->arguments['-headers'] as $header) {
+                [$name, $value] = explode(":", $header);
+                $headers[$name] = trim($value);
+            }
+        }
+        return $headers;
+    }
+
+    public function getCookies(): array
+    {
+        $cookies = [];
+        if (array_key_exists('-cookies', $this->arguments)) {
+            foreach ($this->arguments['-cookies'] as $header) {
+                [$name, $value] = explode(":", $header);
+                $cookies[$name] = trim($value);
+            }
+        }
+        return $cookies;
     }
 
     public function getQuery(): string
     {
-        if (array_key_exists('-r', $this->flagParameters)) {
-            $uri = $this->flagParameters['-r'][0];
+        if (array_key_exists('-r', $this->arguments)) {
+            $uri = $this->arguments['-r'][0];
             if (str_contains($uri, '?')) {
                 $uri = substr($uri, strpos($uri, '?') + 1);
             }
@@ -66,6 +93,6 @@ class RequestArguments
 
     public function hasRequestFlag(): bool
     {
-        return array_key_exists('-r', $this->flagParameters);
+        return array_key_exists('-r', $this->arguments);
     }
 }

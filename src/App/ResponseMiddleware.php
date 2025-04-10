@@ -23,6 +23,9 @@ readonly class ResponseMiddleware implements IMiddleware
             foreach($this->response->headers as $name => $value) {
                 echo "<http-header>$name: $value</http-header>\n";
             }
+            foreach($this->response->cookies->getAll() as $cookie) {
+                echo "<http-header>Set-Cookie: {$cookie->getName()}={$cookie->getValue()}</http-header>\n";
+            }
         }
         else {
             if ($this->response->location) {

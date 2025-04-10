@@ -4,6 +4,7 @@ namespace Stormmore\Framework\Tests;
 
 class AppResponse
 {
+    private $cookies = [];
     private $headers = [];
     private string $rawHeaders;
     private string $body;
@@ -12,6 +13,7 @@ class AppResponse
     {
         $this->parseOutput($output);
         $this->parseHeaders();
+        $this->parseCookies();
     }
 
     public function getStatusCode(): int
@@ -29,12 +31,25 @@ class AppResponse
         return json_decode($this->body);
     }
 
-    public function getHeader(string $name): ?string
+    public function getHeader(string $name): ?AppRequestHeader
     {
         if (array_key_exists($name, $this->headers)) {
-            return $this->headers[$name];
+            return new AppRequestHeader($name, $this->headers[$name]);
         }
-        return "";
+        return null;
+    }
+
+    public function getCookies(): array
+    {
+        return $this->cookies;
+    }
+
+    public function getCookie(string $name): ?AppCookie
+    {
+        if (array_key_exists($name, $this->cookies)) {
+            return $this->cookies[$name];
+        }
+        return null;
     }
 
     public function getHeaders(): array
@@ -64,7 +79,24 @@ class AppResponse
             }
             $header = str_replace(array("<http-header>", "</http-header>"), "", $line);
             [$name, $value] = explode(":", $header);
-            $this->headers[$name] = $value;
+            $name = trim($name);
+            $value = trim($value);
+            if ($name == 'Set-Cookie') {
+                $cookie = explode(";", $value);
+                [$name, $value] = explode("=", $cookie[0]);
+                $this->cookies[$name] = new AppCookie($name, $value);
+            }
+            else {
+                $this->headers[$name] = $value;
+            }
+
         }
+    }
+
+    private function parseCookies(): void
+    {
+//        if (array_key_exists("Set-Cookie", $this->rawHeaders)) {
+//
+//        }
     }
 }

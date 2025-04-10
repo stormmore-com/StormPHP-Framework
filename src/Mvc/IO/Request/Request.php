@@ -12,6 +12,8 @@ use Stormmore\Framework\Mvc\IO\RedirectMessage;
 class Request
 {
     private IParameters $routeParameters;
+    private array $headers;
+
     private string $method;
     public Cookies $cookies;
     public Files $files;
@@ -32,6 +34,7 @@ class Request
         $this->method = $this->context->getMethod();
         $this->queryParameters = $this->context->queryParameters();
         $this->postParameters = $this->context->postParameters();
+        $this->headers = $this->context->getHeaders();
         $this->messages = new RedirectMessage($this->cookies);
     }
 
@@ -85,6 +88,21 @@ class Request
             return json_decode($this->context->getContent());
         }
         return null;
+    }
+
+    public function hasHeader(string $name): bool
+    {
+        return array_key_exists($name, $this->headers);
+    }
+
+    public function getHeader(string $name): ?Header
+    {
+        return $this->headers[$name] ?? null;
+    }
+
+    public function getAllHeaders(): array
+    {
+        return $this->headers;
     }
 
     public function has(string $name): bool
