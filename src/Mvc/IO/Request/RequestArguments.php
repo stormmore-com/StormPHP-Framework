@@ -4,7 +4,14 @@ namespace Stormmore\Framework\Mvc\IO\Request;
 
 class RequestArguments
 {
-    private $handledFlags = array('-r', '-m', "-p", "-method", "-headers", "-cookies", "-print-headers");
+    private $handledFlags = array('-r', '-m', "-p",
+        "-method",
+        "-headers",
+        "-cookies",
+        "-content",
+        "-content-type",
+        "-form",
+        "-print-headers");
     private array $arguments = [];
 
     public function __construct()
@@ -15,7 +22,7 @@ class RequestArguments
     private function readArguments(): void
     {
         $switch = null;
-        for($i = 1; $i < count($_SERVER['argv']); $i++) {
+        for ($i = 1; $i < count($_SERVER['argv']); $i++) {
             $arg = $_SERVER['argv'][$i];
             if (in_array($arg, $this->handledFlags)) {
                 $switch = $arg;
@@ -89,6 +96,34 @@ class RequestArguments
             return $uri;
         }
         return "";
+    }
+
+    public function getPostParameters(): array
+    {
+        $parameters = [];
+        if (array_key_exists('-form', $this->arguments)) {
+            $form = $this->arguments['-form'][0];
+            $hierarchicalParametersBuilder = new RequestParametersParser($form);
+            return $hierarchicalParametersBuilder->parse();
+        }
+
+        return $parameters;
+    }
+
+    public function getContentType(): string
+    {
+        if (array_key_exists('-content-type', $this->arguments)) {
+            return $this->arguments['-content-type'][0];
+        }
+        return "";
+    }
+
+    public function getContent(): mixed
+    {
+        if (array_key_exists('-content', $this->arguments)) {
+            return $this->arguments['-content'][0];
+        }
+        return null;
     }
 
     public function hasRequestFlag(): bool

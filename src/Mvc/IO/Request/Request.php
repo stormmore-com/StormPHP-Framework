@@ -90,6 +90,11 @@ class Request
         return null;
     }
 
+    public function getBody(): mixed
+    {
+        return $this->context->getContent();
+    }
+
     public function hasHeader(string $name): bool
     {
         return array_key_exists($name, $this->headers);

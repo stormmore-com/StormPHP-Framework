@@ -8,6 +8,8 @@ use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 
 class RequestContext
 {
+    private RequestArguments $arguments;
+    private ?string $contentType;
     private Cookies $cookies;
     private array $headers = [];
     private bool $printHeaders = false;
@@ -26,26 +28,28 @@ class RequestContext
         if (php_sapi_name() === 'cli') {
             $this->isCliRequest = true;
 
-            $arg = new RequestArguments();
+            $this->arguments = $arg = new RequestArguments();
             $this->printHeaders = $arg->printHeaders();
             $this->path = $arg->getPath();
             $this->query = $arg->getQuery();
             $this->method = $arg->getMethod();
             parse_str($this->getQuery(), $result);
             $this->get = new Parameters($result);
-
+            $this->contentType = $arg->getContentType();
             foreach($arg->getHeaders() as $name => $value) {
                 $this->headers[$name] = new Header($name, $value);
             }
             foreach($arg->getCookies() as $name => $value) {
                 $this->cookies->add(new Cookie($name, $value));
             }
+            $arg->getPostParameters();
         }
         else {
             $this->path = strtok($_SERVER["REQUEST_URI"], '?');
             $this->query = array_key_value($_SERVER, "QUERY_STRING", "");
             $this->method = $_SERVER["REQUEST_METHOD"];
             $this->get = new Parameters($_GET);
+            $this->contentType = array_key_value($_SERVER, 'CONTENT_TYPE', '');
             foreach (getallheaders() as $name => $value) {
                 $this->headers[$name] = new Header($name, $value);
             }
@@ -94,11 +98,14 @@ class RequestContext
 
     public function getContentType(): string
     {
-        return array_key_value($_SERVER, 'CONTENT_TYPE', '');
+        return $this->contentType;
     }
 
     public function getContent(): string
     {
+        if ($this->isCliRequest()) {
+            return $this->arguments->getContent();
+        }
         return file_get_contents('php://input');
     }
 

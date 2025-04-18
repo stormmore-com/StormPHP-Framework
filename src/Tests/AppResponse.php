@@ -2,7 +2,12 @@
 
 namespace Stormmore\Framework\Tests;
 
-class AppResponse
+use Stormmore\Framework\Http\Cookie;
+use Stormmore\Framework\Http\Header;
+use Stormmore\Framework\Http\IHeader;
+use Stormmore\Framework\Http\IResponse;
+
+class AppResponse implements IResponse
 {
     private $cookies = [];
     private $headers = [];
@@ -31,10 +36,10 @@ class AppResponse
         return json_decode($this->body);
     }
 
-    public function getHeader(string $name): ?AppRequestHeader
+    public function getHeader(string $name): ?IHeader
     {
         if (array_key_exists($name, $this->headers)) {
-            return new AppRequestHeader($name, $this->headers[$name]);
+            return new Header($name, $this->headers[$name]);
         }
         return null;
     }
@@ -44,7 +49,7 @@ class AppResponse
         return $this->cookies;
     }
 
-    public function getCookie(string $name): ?AppCookie
+    public function getCookie(string $name): ?Cookie
     {
         if (array_key_exists($name, $this->cookies)) {
             return $this->cookies[$name];
@@ -84,7 +89,7 @@ class AppResponse
             if ($name == 'Set-Cookie') {
                 $cookie = explode(";", $value);
                 [$name, $value] = explode("=", $cookie[0]);
-                $this->cookies[$name] = new AppCookie($name, $value);
+                $this->cookies[$name] = new Cookie($name, $value);
             }
             else {
                 $this->headers[$name] = $value;

@@ -15,6 +15,11 @@ class UploadedFile
     {
     }
 
+    public static function createFromFile(string $file):UploadedFile
+    {
+        return null;
+    }
+
     public function isImage(): bool
     {
         return $this->isUploaded() and getimagesize($this->tmp) !== false;

@@ -1,15 +1,15 @@
 <?php /**
  * TODO
  *
- *  requesty http
- *  cookie/header podobne objecty dostepowe -> interface wspolny
- *
  * -> post
  *  -> json
  *  -> form data
  *  -> file
  *
-
+ * requesty http
+ *   ciasteczka zapis ciasteczków (zobacyzc jak sa przetrzymywane i lece na output)
+ *   -> usunac zbedne objecty ciasteczek
+ *   -> stworzyc obj  headers
  *
  *    uruchaminie tasków
  *

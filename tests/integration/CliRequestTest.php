@@ -3,86 +3,139 @@
 namespace integration;
 
 use PHPUnit\Framework\TestCase;
-use Stormmore\Framework\Tests\AppCookie;
-use Stormmore\Framework\Tests\AppRequest;
-use Stormmore\Framework\Tests\AppRequestHeader;
+use Stormmore\Framework\Http\Cookie;
+use Stormmore\Framework\Http\Header;
+use Stormmore\Framework\Mvc\IO\Request\UploadedFile;
+use Stormmore\Framework\Tests\AppClient;
+use Stormmore\Framework\Tests\AppRequestFile;
 
 class CliRequestTest extends TestCase
 {
-    private AppRequest $appRequest;
+    private AppClient $appClient;
 
     public function testGetRequest(): void
     {
-        $response = $this->appRequest->request("GET", "/test/get")->run();
+        $response = $this->appClient->request("GET", "/test/get")->call();
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("OK", $response->getBody());
-    }
-
-    public function testPostRequest(): void
-    {
-        $response = $this->appRequest->request("POST", "/test/post")->run();
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals("OK", $response->getBody());
-    }
-
-    public function testInternalServerError(): void
-    {
-        $response = $this->appRequest->request("GET", "/test/get500")->run();
-
-        $this->assertEquals(500, $response->getStatusCode());
     }
 
     public function testQueryParameters(): void
     {
-        $response = $this->appRequest->request("GET", "/test/concatenate-query-params?a=one&b=two&c=three")->run();
+        $response = $this->appClient
+            ->request("GET", "/test/concatenate-query-params")
+            ->withQuery(['a' => 'one', 'b' => 'two', 'c' => 'three'])
+            ->call();
 
         $this->assertEquals("onetwothree", $response->getBody());
     }
 
+    public function testQueryParametersWithUrl(): void
+    {
+        $response = $this->appClient
+            ->request("GET", "/test/concatenate-query-params?a=one")
+            ->withQuery(['b' => 'two', 'c' => 'three'])
+            ->call();
+
+        $this->assertEquals("onetwothree", $response->getBody());
+    }
+
+    public function testPostRequest(): void
+    {
+        $response = $this->appClient->request("POST", "/test/post")->call();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("OK", $response->getBody());
+    }
+
+    public function testPostJson(): void
+    {
+        $response = $this->appClient
+            ->request("POST", "/test/post/json")
+            ->withJson('{"name": "Micheal"}')
+            ->call();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('{"name":"Micheal"}', $response->getBody());
+    }
+
+    public function testPostFormWithFiles(): void
+    {
+        $response = $this->appClient
+            ->request("POST", "/test/post/form")
+            ->withForm([
+                'arr[]' => 5,
+                'number' => 7,
+                'name' => 'Micheal',
+                'file' => new AppRequestFile(''),
+                ])
+            ->call();
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('{"name":"Micheal"}', $response->getBody());
+    }
+//
+//    public function testPostBinary(): void
+//    {
+//
+//    }
+//
+//    public function testPostBody(): void
+//    {
+//
+//    }
+
+
+    public function testInternalServerError(): void
+    {
+        $response = $this->appClient->request("GET", "/test/get500")->call();
+
+        $this->assertEquals(500, $response->getStatusCode());
+    }
+
+
     public function testReadingHeaderFromRequest(): void
     {
-        $response = $this->appRequest->request("GET", "/test/read-header")->run();
+        $response = $this->appClient->request("GET", "/test/read-header")->call();
 
         $header  = $response->getHeader("service-key");
 
-        $this->assertEquals("123456790", $header->value);
+        $this->assertEquals("123456790", $header->getValue());
     }
 
     public function testSendingHeaderToApp(): void
     {
-        $response = $this->appRequest
+        $response = $this->appClient
             ->request("GET", "/test/get-header")
-            ->withHeader(AppRequestHeader::create("service-key", "service-key-unique-value"))
-            ->run();
+            ->withHeader(new Header("service-key", "service-key-unique-value"))
+            ->call();
 
         $this->assertEquals("service-key-unique-value", $response->getBody());
     }
 
     public function testReadingCookieFromRequest(): void
     {
-        $response = $this->appRequest
+        $response = $this->appClient
             ->request("GET", "/test/read-cookie")
-            ->run();
+            ->call();
 
-        $this->assertEquals("0987654321", $response->getCookie('session-id')->value);
+        $this->assertEquals("0987654321", $response->getCookie('session-id')->getValue());
     }
 
     public function testSendingCookieToApp(): void
     {
-        $response = $this->appRequest
+        $response = $this->appClient
             ->request("GET", "/test/write-cookie-to-body")
-            ->withCookie(AppCookie::create('session-id', 'session-id-unique-value'))
-            ->withCookie(AppCookie::create("service-key", "service-key-unique-value"))
-            ->run();
+            ->withCookie(new Cookie('session-id', 'session-id-unique-value'))
+            ->withCookie(new Cookie("service-key", "service-key-unique-value"))
+            ->call();
 
         $this->assertEquals("session-id-unique-value", $response->getBody());
     }
 
     public function testAjax(): void
     {
-        $response = $this->appRequest->request("GET", "/test/ajax")->run();
+        $response = $this->appClient->request("GET", "/test/ajax")->call();
 
         $json = $response->getJson();
 
@@ -92,6 +145,6 @@ class CliRequestTest extends TestCase
 
     public function setUp(): void
     {
-        $this->appRequest = AppRequest::create("./tests/app/server/index.php");
+        $this->appClient = AppClient::create("./tests/app/server/index.php");
     }
 }

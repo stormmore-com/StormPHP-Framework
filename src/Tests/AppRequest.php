@@ -2,60 +2,89 @@
 
 namespace Stormmore\Framework\Tests;
 
-use Exception;
+use Stormmore\Framework\Http\ICookie;
+use Stormmore\Framework\Http\IHeader;
+use Stormmore\Framework\Http\IRequest;
+use Stormmore\Framework\Http\IResponse;
 
-class AppRequest
+class AppRequest implements IRequest
 {
-    private string $uri = "/";
-
+    private string $contentType = "";
+    private string $content = "";
     private array $headers = [];
-
     private array $cookies = [];
+    private array $formData;
 
-    private string $method = "GET";
-
-    private function __construct(private readonly string $indexFilePath)
+    public function __construct(private readonly string $indexFilePath,
+                                private readonly string $method,
+                                private string $uri)
     {
     }
 
-    public static function create(string $indexFilePath)
+    public function withQuery(array $query): IRequest
     {
-        file_exists($indexFilePath) or throw new Exception("Storm app index file not found `$indexFilePath`");
-        return new AppRequest($indexFilePath);
-    }
-
-    public function request(string $method, string $uri): AppRequest
-    {
-        $this->method = strtoupper($method);
-        $this->uri = $uri;
+        $queryString = http_build_query($query);
+        $this->uri .= str_contains($this->uri, '?') ? '&' . $queryString : '?' . $queryString;
         return $this;
     }
 
-    public function withHeader(AppRequestHeader $header): AppRequest
+    public function withHeader(IHeader $header): IRequest
     {
         $this->headers[] = $header;
         return $this;
     }
 
-    public function withCookie(AppCookie $cookie): AppRequest
+    public function withCookie(ICookie $cookie): IRequest
     {
         $this->cookies[] = $cookie;
         return $this;
     }
 
-    public function run(): AppResponse
+    public function withForm(array $formData): IRequest
+    {
+        $this->contentType = "multipart/form-data";
+        $this->formData = $formData;
+        return $this;
+    }
+
+    public function withJson(mixed $json): IRequest
+    {
+        $this->contentType = "application/json";
+        $this->content = $json;
+        return $this;
+    }
+
+    public function withContent(string $type, mixed $content): IRequest
+    {
+        return $this;
+    }
+
+    public function call(): IResponse
     {
         $dir = dirname($this->indexFilePath);
         $filename = basename($this->indexFilePath);
 
-        $headers = array_map(fn($item) => $item->name . ":" . $item->value, $this->headers);
-        $cookies = array_map(fn($item) => $item->name . ":" . $item->value, $this->cookies);
-        $_SERVER["argv"] = ["index.php",
+        $headers = array_map(fn($item) => $item->getName() . ":" . $item->getValue(), $this->headers);
+        $cookies = array_map(fn($item) => $item->getName() . ":" . $item->getValue(), $this->cookies);
+        $args = ["index.php",
             "-r", $this->uri,
             "-method", $this->method,
             "-headers", ...$headers,
             "-cookies", ...$cookies,
             "-print-headers"];
+
+        if ($this->method === "POST") {
+            $args[] = '-content-type';
+            $args[] = $this->contentType;
+            $args[] = '-content';
+            $args[] = $this->content;
+            if ($this->contentType === "multipart/form-data") {
+                $args[] = "-form";
+                $args[] = $this->formData;
+            }
+        }
+
+        $_SERVER["argv"] = $args;
 
         $cwd = getcwd();
         chdir($dir);

@@ -13,9 +13,10 @@ use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
 use Stormmore\Framework\Mvc\IO\Response;
 
 #[Controller]
-class TestController
+readonly class TestController
 {
-    public function __construct(private Request $request, private Response $response)
+    public function __construct(private Request $request,
+                                private Response $response)
     {
     }
 
@@ -31,6 +32,20 @@ class TestController
     public function post(): string
     {
         return "OK";
+    }
+
+    #[Post]
+    #[Route("/test/post/json")]
+    public function postJson(): object
+    {
+        return $this->request->getJson();
+    }
+
+    #[Post]
+    #[Route("/test/post/form")]
+    public function postForm(): string
+    {
+        return "INVALID";// $this->request->getJson();
     }
 
     #[Route("/test/get500")]
