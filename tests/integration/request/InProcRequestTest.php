@@ -1,15 +1,14 @@
 <?php
 
-namespace integration;
+namespace integration\request;
 
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Cookie;
+use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Header;
-use Stormmore\Framework\Mvc\IO\Request\UploadedFile;
 use Stormmore\Framework\Tests\AppClient;
-use Stormmore\Framework\Tests\AppRequestFile;
 
-class CliRequestTest extends TestCase
+class InProcRequestTest extends TestCase
 {
     private AppClient $appClient;
 
@@ -62,14 +61,22 @@ class CliRequestTest extends TestCase
 
     public function testPostFormWithFiles(): void
     {
-        $response = $this->appClient
-            ->request("POST", "/test/post/form")
-            ->withForm([
+        /*
+         *
+         * [
                 'arr[]' => 5,
                 'number' => 7,
                 'name' => 'Micheal',
                 'file' => new AppRequestFile(''),
-                ])
+                ]
+         */
+        $response = $this->appClient
+            ->request("POST", "/test/post/form")
+            ->withForm((new FormData())
+                ->add('arr[]', 5)
+                ->add('number', 7)
+                ->add('name', 'Micheal')
+                ->addFile('file',''))
             ->call();
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('{"name":"Micheal"}', $response->getBody());

@@ -3,11 +3,13 @@
 namespace Stormmore\Framework\Mvc\IO\Request;
 
 use DateTime;
-use stdClass;
 use Exception;
+use stdClass;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\RedirectMessage;
+use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
+use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
 
 class Request
 {

@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Tests;
 
+use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\ICookie;
 use Stormmore\Framework\Http\IHeader;
 use Stormmore\Framework\Http\IRequest;
@@ -13,7 +14,7 @@ class AppRequest implements IRequest
     private string $content = "";
     private array $headers = [];
     private array $cookies = [];
-    private array $formData;
+    private FormData $formData;
 
     public function __construct(private readonly string $indexFilePath,
                                 private readonly string $method,
@@ -40,7 +41,7 @@ class AppRequest implements IRequest
         return $this;
     }
 
-    public function withForm(array $formData): IRequest
+    public function withForm(FormData $formData): IRequest
     {
         $this->contentType = "multipart/form-data";
         $this->formData = $formData;

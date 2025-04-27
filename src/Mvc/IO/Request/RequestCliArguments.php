@@ -2,7 +2,10 @@
 
 namespace Stormmore\Framework\Mvc\IO\Request;
 
-class RequestArguments
+use Stormmore\Framework\Http\FormData;
+use Stormmore\Framework\Mvc\IO\Request\Parameters\RequestParametersParser;
+
+class RequestCliArguments
 {
     private $handledFlags = array('-r', '-m', "-p",
         "-method",
@@ -98,16 +101,16 @@ class RequestArguments
         return "";
     }
 
+
     public function getPostParameters(): array
     {
-        $parameters = [];
+        /** @var FormData $form */
         if (array_key_exists('-form', $this->arguments)) {
             $form = $this->arguments['-form'][0];
-            $hierarchicalParametersBuilder = new RequestParametersParser($form);
-            return $hierarchicalParametersBuilder->parse();
+            return $form->toArray();
         }
 
-        return $parameters;
+        return [];
     }
 
     public function getContentType(): string

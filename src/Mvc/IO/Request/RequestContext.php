@@ -3,12 +3,13 @@
 namespace Stormmore\Framework\Mvc\IO\Request;
 
 use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
-use Stormmore\Framework\Mvc\IO\Request\Header;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
+use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
+use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
 
 class RequestContext
 {
-    private RequestArguments $arguments;
+    private RequestCliArguments $arguments;
     private ?string $contentType;
     private Cookies $cookies;
     private array $headers = [];
@@ -28,7 +29,7 @@ class RequestContext
         if (php_sapi_name() === 'cli') {
             $this->isCliRequest = true;
 
-            $this->arguments = $arg = new RequestArguments();
+            $this->arguments = $arg = new RequestCliArguments();
             $this->printHeaders = $arg->printHeaders();
             $this->path = $arg->getPath();
             $this->query = $arg->getQuery();
