@@ -18,9 +18,7 @@ class RequestArgumentsTest extends TestCase
                 ->add('tab[]', 'tab_flat_1')
                 ->add('tab[]', 'tab_flat_2')
                 ->add('tab2["a"][0]', '1tab[][]')
-                ->add('tab2["a"][2]', '2tab[][]')
-                //->add('tab3[][][]', 'tab2_1')
-                //->add('tab3[]["test"][]', 'tab2_test')
+                ->add('tab2["a"][1]', '2tab[][]')
         ];
         $requestArguments = new RequestCliArguments();
 
@@ -28,9 +26,9 @@ class RequestArgumentsTest extends TestCase
             'field1' => 'value1',
             'tab' => ['tab_flat_1', 'tab_flat_2'],
             'tab2' => [
-                [
-                    ['tab2_1'],
-                    'test' => ['tab2_test']
+                'a' => [
+                    '1tab[][]',
+                    '2tab[][]'
                 ],
             ],
         ], $requestArguments->getPostParameters());
