@@ -44,7 +44,7 @@ class FormData
                         $key = str_replace(['[', ']', "'", '"'], '', $path);
                     }
                     if ($idx < count($arrayPath) - 1) {
-                        if ($key and !is_array($value[$key])) {
+                        if ($key and !array_key_exists($key, $value)) {
                             $array = array();
                             $value[$key] = $array;
                         }

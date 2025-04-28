@@ -43,9 +43,14 @@ readonly class TestController
 
     #[Post]
     #[Route("/test/post/form")]
-    public function postForm(): string
+    public function postForm(): void
     {
-        return "INVALID";// $this->request->getJson();
+        $this->response->setJson((object)[
+            'name' => $this->request->postParameters->get('name'),
+            'number' => $this->request->postParameters->get('number'),
+            'prime' => $this->request->postParameters->get('prime'),
+            'file-size' => '0007777'
+        ]);
     }
 
     #[Route("/test/get500")]

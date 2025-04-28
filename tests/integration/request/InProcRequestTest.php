@@ -61,32 +61,25 @@ class InProcRequestTest extends TestCase
 
     public function testPostFormWithFiles(): void
     {
-        /*
-         *
-         * [
-                'arr[]' => 5,
-                'number' => 7,
-                'name' => 'Micheal',
-                'file' => new AppRequestFile(''),
-                ]
-         */
         $response = $this->appClient
             ->request("POST", "/test/post/form")
             ->withForm((new FormData())
-                ->add('arr[]', 5)
+                ->add('prime[]', 1)
+                ->add('prime[]', 2)
                 ->add('number', 7)
                 ->add('name', 'Micheal')
                 ->addFile('file',''))
             ->call();
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('{"name":"Micheal"}', $response->getBody());
+        $this->assertEquals((object)[
+            'prime' => [1, 2],
+            'number' => 7,
+            'name' => 'Micheal',
+            'file-size' => '128'
+        ], $response->getJson());
     }
-//
-//    public function testPostBinary(): void
-//    {
-//
-//    }
-//
+
+//    ziomuś md5
 //    public function testPostBody(): void
 //    {
 //

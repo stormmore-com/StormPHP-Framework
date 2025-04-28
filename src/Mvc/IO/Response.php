@@ -26,4 +26,18 @@ class Response
     {
         $this->headers[$name] = $value;
     }
+
+    public function setBody(string $body): void
+    {
+        $this->body = $body;
+    }
+
+    public function setJson(array|object|string $json): void
+    {
+        $this->headers['Content-Type'] = 'application/json; charset=utf-8';
+        if (!is_string($json)) {
+            $json = json_encode($json);
+        }
+        $this->body = $json;
+    }
 }

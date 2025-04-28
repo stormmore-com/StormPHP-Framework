@@ -20,6 +20,7 @@ class RequestContext
     private string $query;
     private string $method;
     private IParameters $get;
+    private IParameters $post;
 
 
     public function __construct()
@@ -36,6 +37,7 @@ class RequestContext
             $this->method = $arg->getMethod();
             parse_str($this->getQuery(), $result);
             $this->get = new Parameters($result);
+            $this->post = new Parameters($arg->getPostParameters());
             $this->contentType = $arg->getContentType();
             foreach($arg->getHeaders() as $name => $value) {
                 $this->headers[$name] = new Header($name, $value);
@@ -43,13 +45,13 @@ class RequestContext
             foreach($arg->getCookies() as $name => $value) {
                 $this->cookies->add(new Cookie($name, $value));
             }
-            $arg->getPostParameters();
         }
         else {
             $this->path = strtok($_SERVER["REQUEST_URI"], '?');
             $this->query = array_key_value($_SERVER, "QUERY_STRING", "");
             $this->method = $_SERVER["REQUEST_METHOD"];
             $this->get = new Parameters($_GET);
+            $this->post = new Parameters($_POST);
             $this->contentType = array_key_value($_SERVER, 'CONTENT_TYPE', '');
             foreach (getallheaders() as $name => $value) {
                 $this->headers[$name] = new Header($name, $value);
@@ -132,6 +134,6 @@ class RequestContext
 
     public function postParameters(): IParameters
     {
-        return new Parameters($_POST);
+        return $this->post;
     }
 }
