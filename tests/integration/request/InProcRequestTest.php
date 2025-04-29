@@ -11,10 +11,11 @@ use Stormmore\Framework\Tests\AppClient;
 class InProcRequestTest extends TestCase
 {
     private AppClient $appClient;
+    private string $files;
 
     public function testGetRequest(): void
     {
-        $response = $this->appClient->request("GET", "/test/get")->call();
+        $response = $this->appClient->request("GET", "/test/get")->send();
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("OK", $response->getBody());
@@ -25,7 +26,7 @@ class InProcRequestTest extends TestCase
         $response = $this->appClient
             ->request("GET", "/test/concatenate-query-params")
             ->withQuery(['a' => 'one', 'b' => 'two', 'c' => 'three'])
-            ->call();
+            ->send();
 
         $this->assertEquals("onetwothree", $response->getBody());
     }
@@ -35,14 +36,14 @@ class InProcRequestTest extends TestCase
         $response = $this->appClient
             ->request("GET", "/test/concatenate-query-params?a=one")
             ->withQuery(['b' => 'two', 'c' => 'three'])
-            ->call();
+            ->send();
 
         $this->assertEquals("onetwothree", $response->getBody());
     }
 
     public function testPostRequest(): void
     {
-        $response = $this->appClient->request("POST", "/test/post")->call();
+        $response = $this->appClient->request("POST", "/test/post")->send();
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("OK", $response->getBody());
@@ -53,7 +54,7 @@ class InProcRequestTest extends TestCase
         $response = $this->appClient
             ->request("POST", "/test/post/json")
             ->withJson('{"name": "Micheal"}')
-            ->call();
+            ->send();
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals('{"name":"Micheal"}', $response->getBody());
@@ -68,14 +69,15 @@ class InProcRequestTest extends TestCase
                 ->add('prime[]', 2)
                 ->add('number', 7)
                 ->add('name', 'Micheal')
-                ->addFile('file',''))
-            ->call();
+                ->addFile('file', $this->files . "/storm.webp"))
+            ->send();
+
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals((object)[
             'prime' => [1, 2],
             'number' => 7,
             'name' => 'Micheal',
-            'file-size' => '128'
+            'file-md5' => '1648c2a85dd50f2dfaa51fb5c8478261'
         ], $response->getJson());
     }
 
@@ -88,7 +90,7 @@ class InProcRequestTest extends TestCase
 
     public function testInternalServerError(): void
     {
-        $response = $this->appClient->request("GET", "/test/get500")->call();
+        $response = $this->appClient->request("GET", "/test/get500")->send();
 
         $this->assertEquals(500, $response->getStatusCode());
     }
@@ -96,7 +98,7 @@ class InProcRequestTest extends TestCase
 
     public function testReadingHeaderFromRequest(): void
     {
-        $response = $this->appClient->request("GET", "/test/read-header")->call();
+        $response = $this->appClient->request("GET", "/test/read-header")->send();
 
         $header  = $response->getHeader("service-key");
 
@@ -108,7 +110,7 @@ class InProcRequestTest extends TestCase
         $response = $this->appClient
             ->request("GET", "/test/get-header")
             ->withHeader(new Header("service-key", "service-key-unique-value"))
-            ->call();
+            ->send();
 
         $this->assertEquals("service-key-unique-value", $response->getBody());
     }
@@ -117,7 +119,7 @@ class InProcRequestTest extends TestCase
     {
         $response = $this->appClient
             ->request("GET", "/test/read-cookie")
-            ->call();
+            ->send();
 
         $this->assertEquals("0987654321", $response->getCookie('session-id')->getValue());
     }
@@ -128,14 +130,14 @@ class InProcRequestTest extends TestCase
             ->request("GET", "/test/write-cookie-to-body")
             ->withCookie(new Cookie('session-id', 'session-id-unique-value'))
             ->withCookie(new Cookie("service-key", "service-key-unique-value"))
-            ->call();
+            ->send();
 
         $this->assertEquals("session-id-unique-value", $response->getBody());
     }
 
     public function testAjax(): void
     {
-        $response = $this->appClient->request("GET", "/test/ajax")->call();
+        $response = $this->appClient->request("GET", "/test/ajax")->send();
 
         $json = $response->getJson();
 
@@ -145,6 +147,7 @@ class InProcRequestTest extends TestCase
 
     public function setUp(): void
     {
+        $this->files = dirname(__FILE__) . "/files" ;
         $this->appClient = AppClient::create("./tests/app/server/index.php");
     }
 }

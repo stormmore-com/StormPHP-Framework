@@ -10,5 +10,5 @@ interface IRequest
     public function withForm(FormData $formData): IRequest;
     public function withJson(mixed $json): IRequest;
     public function withContent(string $contentType, string $content): IRequest;
-    public function call(): IResponse;
+    public function send(): IResponse;
 }

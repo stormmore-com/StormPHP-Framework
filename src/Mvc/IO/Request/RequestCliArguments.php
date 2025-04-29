@@ -3,7 +3,6 @@
 namespace Stormmore\Framework\Mvc\IO\Request;
 
 use Stormmore\Framework\Http\FormData;
-use Stormmore\Framework\Mvc\IO\Request\Parameters\RequestParametersParser;
 
 class RequestCliArguments
 {
@@ -107,10 +106,32 @@ class RequestCliArguments
         /** @var FormData $form */
         if (array_key_exists('-form', $this->arguments)) {
             $form = $this->arguments['-form'][0];
-            return $form->toArray();
+            return $form->getFields();
         }
 
         return [];
+    }
+
+    public function getFiles(): array
+    {
+        $files = [];
+        /** @var FormData $form */
+        if (array_key_exists('-form', $this->arguments)) {
+            $form = $this->arguments['-form'][0];
+            foreach($form->getFiles() as $file) {
+                $filepath = $file->getValue();
+                $tmpName = tempnam(sys_get_temp_dir(), 'fle');
+                copy($filepath, $tmpName);
+                $files[$file->getName()] = [
+                    'name' => basename($filepath),
+                    'tmp_name' => $tmpName,
+                    'type' => '',
+                    'error' => 0,
+                    'size' => filesize($filepath)
+                ];
+            }
+        }
+        return $files;
     }
 
     public function getContentType(): string

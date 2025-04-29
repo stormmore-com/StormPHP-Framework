@@ -7,11 +7,11 @@ class Files
     /**
      * @type UploadedFile[]
      */
-    private array $files;
+    private array $uploadedFiles = [];
 
-    public function __construct()
+    public function __construct(array $files)
     {
-        $this->files = $this->parseFiles();
+        $this->parseFiles($files);
     }
 
     /**
@@ -20,7 +20,7 @@ class Files
      */
     public function get(string $name): UploadedFile|null
     {
-        foreach ($this->files as $file) {
+        foreach ($this->uploadedFiles as $file) {
             if ($file->fieldName == $name) {
                 return $file;
             }
@@ -36,7 +36,7 @@ class Files
     public function getMany(string $name): array
     {
         $files = array();
-        foreach ($this->files as $file) {
+        foreach ($this->uploadedFiles as $file) {
             if ($file->fieldName == $name) {
                 $files[] = $file;
             }
@@ -55,15 +55,26 @@ class Files
         return $this->get($name)?->isUploaded() ?? false;
     }
 
-    private function parseFiles(): array
+    public function toArray(): array
     {
-        $files = array();
-        foreach ($_FILES as $formFieldName => $formFieldFiles) {
+        return $this->uploadedFiles;
+    }
+
+    public function delete(): void
+    {
+        foreach($this->uploadedFiles as $file) {
+            $file->delete();
+        }
+    }
+
+    private function parseFiles(array $files): array
+    {
+        foreach ($files as $formFieldName => $formFieldFiles) {
             if (is_array($formFieldFiles['name'])) {
                 $size = count($formFieldFiles['name']);
-                $files[$formFieldName] = array();
+                $this->uploadedFiles[$formFieldName] = array();
                 for ($i = 0; $i < $size; $i++) {
-                    $files[$formFieldName][$i] = new UploadedFile(
+                    $this->uploadedFiles[$formFieldName][$i] = new UploadedFile(
                         $formFieldName,
                         $formFieldFiles['name'][$i],
                         $formFieldFiles['tmp_name'][$i],
@@ -72,7 +83,7 @@ class Files
                         $formFieldFiles['size'][$i]);
                 }
             } else {
-                $files[$formFieldName] = new UploadedFile(
+                $this->uploadedFiles[$formFieldName] = new UploadedFile(
                     $formFieldName,
                     $formFieldFiles['name'],
                     $formFieldFiles['tmp_name'],
@@ -82,11 +93,6 @@ class Files
             }
         }
 
-        return $files;
-    }
-
-    public function toArray(): array
-    {
-        return $this->files;
+        return $this->uploadedFiles;
     }
 }

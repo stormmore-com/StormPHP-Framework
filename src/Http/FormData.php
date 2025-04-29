@@ -2,6 +2,9 @@
 
 namespace Stormmore\Framework\Http;
 
+use Stormmore\Framework\Exceptions\FileNotFoundException;
+use Stormmore\Framework\Http\Fields\FileField;
+
 class FormData
 {
     /** @var Field[]  */
@@ -17,13 +20,12 @@ class FormData
 
     public function addFile(string $field, string $path): FormData
     {
+        $path = realpath($path);
+        if (!file_exists($path)) {
+            throw new FileNotFoundException($path);
+        }
         $this->files[] = new Field($field, $path);
         return $this;
-    }
-
-    public function getFields(): array
-    {
-        return $this->fields;
     }
 
     public function getFiles(): array
@@ -31,10 +33,19 @@ class FormData
         return $this->files;
     }
 
-    public function toArray(): array
+    public function getFields(): array
+    {
+        return $this->toNestedArray($this->fields);
+    }
+
+    /**
+     * @param Field[] $array
+     * @return array
+     */
+    private function toNestedArray(array $fields): array
     {
         $parameters = [];
-        foreach ($this->fields as $field) {
+        foreach ($fields as $field) {
             if ($field->isArrayType()) {
                 $value = &$parameters;
                 $arrayPath = $field->getArrayPath();

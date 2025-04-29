@@ -60,7 +60,7 @@ class AppRequest implements IRequest
         return $this;
     }
 
-    public function call(): IResponse
+    public function send(): IResponse
     {
         $dir = dirname($this->indexFilePath);
         $filename = basename($this->indexFilePath);

@@ -49,7 +49,7 @@ readonly class TestController
             'name' => $this->request->postParameters->get('name'),
             'number' => $this->request->postParameters->get('number'),
             'prime' => $this->request->postParameters->get('prime'),
-            'file-size' => '0007777'
+            'file-md5' => md5_file($this->request->files->get('file')->path)
         ]);
     }
 

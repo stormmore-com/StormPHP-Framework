@@ -1,19 +1,19 @@
 <?php /**
  * TODO
  *
- * -> post
- *  -> json
- *  -> form data
- *  -> file
+ *
+ *   ciasteczka zapis ciasteczków (zobacyzc jak sa przetrzymywane i lece na output)
+ *    -> usunac zbedne objecty ciasteczek
+ *    -> stworzyc obj  headers
+ *
+ * uruchaminie tasków
  *
  * requesty http
- *   ciasteczka zapis ciasteczków (zobacyzc jak sa przetrzymywane i lece na output)
- *   -> usunac zbedne objecty ciasteczek
- *   -> stworzyc obj  headers
+ * requesty cli
  *
- *    uruchaminie tasków
+ * multidimensional files
  *
- *    response cache
+ *   response cache
  *
  *   update Readme
  *    Support for cli tasks (define tasks and run it from cli)

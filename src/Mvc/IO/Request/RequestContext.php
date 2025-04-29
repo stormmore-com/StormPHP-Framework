@@ -21,6 +21,7 @@ class RequestContext
     private string $method;
     private IParameters $get;
     private IParameters $post;
+    private Files $files;
 
 
     public function __construct()
@@ -45,6 +46,7 @@ class RequestContext
             foreach($arg->getCookies() as $name => $value) {
                 $this->cookies->add(new Cookie($name, $value));
             }
+            $this->files = new Files($arg->getFiles());
         }
         else {
             $this->path = strtok($_SERVER["REQUEST_URI"], '?');
@@ -59,6 +61,7 @@ class RequestContext
             foreach($_COOKIE as $name => $value) {
                 $this->cookies->add(new Cookie($name, $value));
             }
+            $this->files = new Files($_FILES);
         }
     }
 
@@ -119,7 +122,7 @@ class RequestContext
 
     public function getFiles(): Files
     {
-        return new Files();
+        return $this->files;
     }
 
     public function getCookies(): Cookies

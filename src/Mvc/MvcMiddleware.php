@@ -53,6 +53,8 @@ readonly class MvcMiddleware implements IMiddleware
             return $controllerReflection->invoke();
         }
 
+        $this->request->files->delete();
+
         return null;
     }
 
