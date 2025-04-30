@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Mvc\IO\Request;
+namespace Stormmore\Framework\Mvc\IO\Headers;
 
 class Header
 {

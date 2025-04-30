@@ -4,6 +4,8 @@ namespace Stormmore\Framework\Mvc\IO\Request;
 
 use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
+use Stormmore\Framework\Mvc\IO\Headers\Header;
+use Stormmore\Framework\Mvc\IO\Headers\Headers;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
 
@@ -12,7 +14,7 @@ class RequestContext
     private RequestCliArguments $arguments;
     private ?string $contentType;
     private Cookies $cookies;
-    private array $headers = [];
+    private Headers $headers;
     private bool $printHeaders = false;
     private bool $isCliRequest = false;
 
@@ -38,10 +40,8 @@ class RequestContext
             $this->get = new Parameters($result);
             $this->post = new Parameters($arg->getPostParameters());
             $this->contentType = $arg->getContentType();
-            foreach($arg->getHeaders() as $name => $value) {
-                $this->headers[$name] = new Header($name, $value);
-            }
             $cookies = $arg->getCookies();
+            $headers = $arg->getHeaders();
             $this->files = new Files($arg->getFiles());
         }
         else {
@@ -51,18 +51,22 @@ class RequestContext
             $this->get = new Parameters($_GET);
             $this->post = new Parameters($_POST);
             $this->contentType = array_key_value($_SERVER, 'CONTENT_TYPE', '');
-            foreach (getallheaders() as $name => $value) {
-                $this->headers[$name] = new Header($name, $value);
-            }
+            $headers = getallheaders();
             $cookies = $_COOKIE;
             $this->files = new Files($_FILES);
         }
 
-        $cookiesObjectArray = [];
-        foreach($cookies as $name => $value) {
-            $cookiesObjectArray[$name] = new Cookie($name, $value);
+        $_headers = [];
+        foreach($headers as $name => $value) {
+            $_headers[$name] = new Header($name, $value);
         }
-        $this->cookies = new Cookies($cookiesObjectArray);
+        $this->headers = new Headers($_headers);
+
+        $_cookies = [];
+        foreach($cookies as $name => $value) {
+            $_cookies[$name] = new Cookie($name, $value);
+        }
+        $this->cookies = new Cookies($_cookies);
     }
 
     public function isCliRequest(): bool
@@ -91,7 +95,7 @@ class RequestContext
         return $this->method;
     }
 
-    public function getHeaders(): array
+    public function getHeaders(): Headers
     {
         return $this->headers;
     }

@@ -1,8 +1,6 @@
 <?php /**
  * TODO
  *
- *-> stworzyc obj  headers
- *
  * uruchaminie tasków
  *
  * requesty http

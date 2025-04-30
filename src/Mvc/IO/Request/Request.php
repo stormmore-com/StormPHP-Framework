@@ -8,6 +8,8 @@ use stdClass;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
+use Stormmore\Framework\Mvc\IO\Headers\Header;
+use Stormmore\Framework\Mvc\IO\Headers\Headers;
 use Stormmore\Framework\Mvc\IO\RedirectMessage;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
@@ -16,7 +18,7 @@ class Request
 {
     private Cookies $cookies;
     private IParameters $routeParameters;
-    private array $headers;
+    private Headers $headers;
     private string $method;
 
     public Files $files;
@@ -110,15 +112,15 @@ class Request
 
     public function hasHeader(string $name): bool
     {
-        return array_key_exists($name, $this->headers);
+        return $this->headers->has($name);
     }
 
     public function getHeader(string $name): ?Header
     {
-        return $this->headers[$name] ?? null;
+        return $this->headers->get($name);
     }
 
-    public function getAllHeaders(): array
+    public function getHeaders(): Headers
     {
         return $this->headers;
     }
