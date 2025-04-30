@@ -21,11 +21,11 @@ readonly class SessionStorage
         $session->createdAt = $now->format("Y-m-d H:i:s");
         $session->privileges = $privileges;
         $json = json_encode($session);
-        $this->response->cookies->set(new Cookie('session', $json));
+        $this->response->setCookie(new Cookie('session', $json));
     }
 
     public function delete(): void
     {
-        $this->response->cookies->delete('session');
+        $this->response->unsetCookie('session');
     }
 }

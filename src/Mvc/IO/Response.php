@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Mvc\IO;
 
+use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 
 class Response
@@ -17,9 +18,24 @@ class Response
 
     public RedirectMessage $messages;
 
-    public function __construct(public Cookies $cookies)
+    public function __construct(private readonly Cookies $cookies)
     {
         $this->messages = new RedirectMessage($cookies);
+    }
+
+    public function setCookie(Cookie $cookie): void
+    {
+        $this->cookies->setCookie($cookie);
+    }
+
+    public function unsetCookie(string $name): void
+    {
+        $this->cookies->unsetCookie($name);
+    }
+
+    public function getCookies(): Cookies
+    {
+        return $this->cookies;
     }
 
     public function addHeader(string $name, string $value): void

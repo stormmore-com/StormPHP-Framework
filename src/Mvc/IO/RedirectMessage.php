@@ -17,7 +17,7 @@ class RedirectMessage
     {
         $cookieName = $this->prefix . $name;
         if ($this->cookies->has($cookieName)) {
-            $this->cookies->delete($cookieName);
+            $this->cookies->unsetCookie($cookieName);
             return true;
         }
 
@@ -31,7 +31,7 @@ class RedirectMessage
 
     public function add(string $name, string $message = '1'): void
     {
-        $this->cookies->set(new Cookie($this->prefix . $name, $message));
+        $this->cookies->setCookie(new Cookie($this->prefix . $name, $message));
     }
 
     public function get($name): string
@@ -39,8 +39,8 @@ class RedirectMessage
         $message = null;
         $cookieName = $this->prefix . $name;
         if ($this->cookies->has($cookieName)) {
-            $message = $this->cookies->get($cookieName);
-            $this->cookies->delete($cookieName);
+            $message = $this->cookies->get($cookieName)->getValue();
+            $this->cookies->unsetCookie($cookieName);
         }
 
         return $message;

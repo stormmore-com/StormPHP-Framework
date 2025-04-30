@@ -20,8 +20,8 @@ readonly class LocaleMiddleware implements IMiddleware
 
     private function getAcceptedLocale(): Locale
     {
-        if ($this->request->cookies->has('locale')) {
-            $tag = $this->request->cookies->get('locale');
+        if ($this->request->hasCookie('locale')) {
+            $tag = $this->request->getCookie('locale');
             if ($this->settings->localeExists($tag)) {
                 return new Locale($tag);
             }

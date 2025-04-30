@@ -18,16 +18,22 @@ readonly class ResponseMiddleware implements IMiddleware
         $next();
         ob_clean();
 
-        if ($this->requestContext->printHeaders()) {
+        if ($this->requestContext->isCliRequest()) {
             echo "<http-header>Status-Code: {$this->response->code}</http-header>\n";
             foreach($this->response->headers as $name => $value) {
                 echo "<http-header>$name: $value</http-header>\n";
             }
-            foreach($this->response->cookies->getAll() as $cookie) {
+            foreach($this->response->getCookies()->getSetCookies() as $cookie) {
                 echo "<http-header>Set-Cookie: {$cookie->getName()}={$cookie->getValue()}</http-header>\n";
             }
         }
         else {
+            foreach($this->response->getCookies()->getSetCookies() as $cookie) {
+                setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpires(), $cookie->getPath());
+            }
+            foreach($this->response->getCookies()->getUnsetCookies() as $cookieName) {
+                setcookie($cookieName, '', -1, '/');
+            }
             if ($this->response->location) {
                 header("Location: {$this->response->location}");
                 die;

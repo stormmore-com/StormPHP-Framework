@@ -148,7 +148,12 @@ class App
 
     private function runMiddlewares(): void
     {
-        $this->middlewares = [ResponseMiddleware::class, ExceptionMiddleware::class, ...$this->middlewares, MvcMiddleware::class];
+        $this->middlewares = [
+            ResponseMiddleware::class,
+            ExceptionMiddleware::class,
+            ...$this->middlewares,
+            MvcMiddleware::class
+        ];
         $first = $this->getMiddlewareAsCallable(0);
         $first();
     }

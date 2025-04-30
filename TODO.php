@@ -1,10 +1,7 @@
 <?php /**
  * TODO
  *
- *
- *   ciasteczka zapis ciasteczków (zobacyzc jak sa przetrzymywane i lece na output)
- *    -> usunac zbedne objecty ciasteczek
- *    -> stworzyc obj  headers
+ *-> stworzyc obj  headers
  *
  * uruchaminie tasków
  *

@@ -69,7 +69,7 @@ readonly class ServiceController
     {
         $tag = $this->request->getDefault('tag', '');
         if ($this->settings->localeExists($tag)) {
-            $this->response->cookies->set(new Cookie('locale', $tag));
+            $this->response->setCookie(new Cookie('locale', $tag));
         }
         return back();
     }

@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use stdClass;
 use Stormmore\Framework\Internationalization\Locale;
+use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\RedirectMessage;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
@@ -13,11 +14,11 @@ use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
 
 class Request
 {
+    private Cookies $cookies;
     private IParameters $routeParameters;
     private array $headers;
-
     private string $method;
-    public Cookies $cookies;
+
     public Files $files;
     public string $path;
     public string $query;
@@ -95,6 +96,16 @@ class Request
     public function getBody(): mixed
     {
         return $this->context->getContent();
+    }
+
+    public function hasCookie(string $name): bool
+    {
+        return $this->cookies->has($name);
+    }
+
+    public function getCookie(string $name): Cookie
+    {
+        return $this->cookies->get($name);
     }
 
     public function hasHeader(string $name): bool

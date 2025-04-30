@@ -4,15 +4,13 @@ namespace Stormmore\Framework\Mvc\IO\Cookie;
 
 class Cookies
 {
+    private array $setCookies = [];
+    private array $unsetCookies = [];
     private array $cookies = [];
 
-    public function __construct()
+    public function __construct(array $cookies)
     {
-    }
-
-    function getAll(): array
-    {
-        return $this->cookies;
+        $this->cookies = $cookies;
     }
 
     function get(string $name): Cookie
@@ -25,16 +23,23 @@ class Cookies
         return array_key_exists($name, $this->cookies);
     }
 
-    public function add(Cookie $cookie): void
+    function getSetCookies(): array
     {
-        $this->cookies[$cookie->getName()] = $cookie;
-        setcookie($cookie->getName(), $cookie->getValue(), $cookie->getExpires(), $cookie->getPath());
-
+        return $this->setCookies;
     }
 
-    function delete(string $name): void
+    function getUnsetCookies(): array
     {
-        unset($this->cookies[$name]);
-        setcookie($name, '', -1, '/');
+        return $this->unsetCookies;
+    }
+
+    public function setCookie(Cookie $cookie): void
+    {
+        $this->setCookies[] = $cookie;
+    }
+
+    public function unsetCookie(string $name): void
+    {
+        $this->unsetCookies[] = $name;
     }
 }

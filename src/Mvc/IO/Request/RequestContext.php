@@ -26,8 +26,6 @@ class RequestContext
 
     public function __construct()
     {
-        $this->cookies = new Cookies();
-
         if (php_sapi_name() === 'cli') {
             $this->isCliRequest = true;
 
@@ -43,9 +41,7 @@ class RequestContext
             foreach($arg->getHeaders() as $name => $value) {
                 $this->headers[$name] = new Header($name, $value);
             }
-            foreach($arg->getCookies() as $name => $value) {
-                $this->cookies->add(new Cookie($name, $value));
-            }
+            $cookies = $arg->getCookies();
             $this->files = new Files($arg->getFiles());
         }
         else {
@@ -58,11 +54,15 @@ class RequestContext
             foreach (getallheaders() as $name => $value) {
                 $this->headers[$name] = new Header($name, $value);
             }
-            foreach($_COOKIE as $name => $value) {
-                $this->cookies->add(new Cookie($name, $value));
-            }
+            $cookies = $_COOKIE;
             $this->files = new Files($_FILES);
         }
+
+        $cookiesObjectArray = [];
+        foreach($cookies as $name => $value) {
+            $cookiesObjectArray[$name] = new Cookie($name, $value);
+        }
+        $this->cookies = new Cookies($cookiesObjectArray);
     }
 
     public function isCliRequest(): bool

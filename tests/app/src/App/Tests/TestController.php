@@ -80,15 +80,15 @@ readonly class TestController
     #[Route("/test/read-cookie")]
     public function readCookie(): string
     {
-        $this->response->cookies->add(new Cookie("session-id", "0987654321"));
-        $this->response->cookies->add(new Cookie("locale", "en-US"));
+        $this->response->setCookie(new Cookie("session-id", "0987654321"));
+        $this->response->setCookie(new Cookie("locale", "en-US"));
         return "";
     }
 
     #[Route("/test/write-cookie-to-body")]
     public function writeCookieToBody(): string
     {
-        return $this->request->cookies->get("session-id")->getValue();
+        return $this->request->getCookie("session-id")->getValue();
     }
 
     #[Route("/test/ajax")]
