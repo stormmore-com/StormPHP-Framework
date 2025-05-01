@@ -7,6 +7,7 @@ use Stormmore\Framework\SourceCode\Scanners\ClassScanner;
 use Stormmore\Framework\SourceCode\Scanners\CommandHandlerScanner;
 use Stormmore\Framework\SourceCode\Scanners\EventHandlerScanner;
 use Stormmore\Framework\SourceCode\Scanners\RouteScanner;
+use Stormmore\Framework\SourceCode\Scanners\TaskScanner;
 
 class SourceCode
 {
@@ -14,8 +15,11 @@ class SourceCode
     private array $routes;
     private array $commandHandlers;
     private array $eventHandlers;
+    private array $tasks;
+
     private CommandHandlerScanner $commandHandlerScanner;
     private EventHandlerScanner $eventHandlerScanner;
+    private TaskScanner $taskScanner;
     private ClassScanner $classScanner;
     private RouteScanner $routeScanner;
     private ClassCacheStorage $cache;
@@ -28,6 +32,7 @@ class SourceCode
         $this->routeScanner = new RouteScanner();
         $this->commandHandlerScanner = new CommandHandlerScanner();
         $this->eventHandlerScanner = new EventHandlerScanner();
+        $this->taskScanner = new TaskScanner();
     }
 
     public function loadCache(): void
@@ -41,6 +46,7 @@ class SourceCode
             $this->routes = $cache['routes'];
             $this->commandHandlers = $cache['commands'];
             $this->eventHandlers = $cache['handlers'];
+            $this->tasks = $cache['tasks'];
         }
     }
 
@@ -50,6 +56,7 @@ class SourceCode
         $this->routes = $this->routeScanner->scan($this->classes);
         $this->commandHandlers = $this->commandHandlerScanner->scan($this->classes);
         $this->eventHandlers = $this->eventHandlerScanner->scan($this->classes);
+        $this->tasks = $this->taskScanner->scan($this->classes);
     }
 
     public function writeCache(): void
@@ -59,6 +66,7 @@ class SourceCode
             'routes' => $this->routes,
             'commands' => $this->commandHandlers,
             'handlers' => $this->eventHandlers,
+            'tasks' => $this->tasks
         ]);
     }
 
@@ -99,5 +107,10 @@ class SourceCode
     public function getEventHandlers(): array
     {
         return $this->eventHandlers;
+    }
+
+    public function getTask(): array
+    {
+        return $this->tasks;
     }
 }

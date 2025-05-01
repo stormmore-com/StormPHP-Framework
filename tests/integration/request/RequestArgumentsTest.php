@@ -3,8 +3,8 @@
 namespace integration\request;
 
 use PHPUnit\Framework\TestCase;
+use Stormmore\Framework\Cli\CliArguments;
 use Stormmore\Framework\Http\FormData;
-use Stormmore\Framework\Mvc\IO\Request\RequestCliArguments;
 
 class RequestArgumentsTest extends TestCase
 {
@@ -20,7 +20,7 @@ class RequestArgumentsTest extends TestCase
                 ->add('tab2["a"][0]', '1tab[][]')
                 ->add('tab2["a"][1]', '2tab[][]')
         ];
-        $requestArguments = new RequestCliArguments();
+        $requestArguments = new CliArguments();
 
         $this->assertEquals([
             'field1' => 'value1',

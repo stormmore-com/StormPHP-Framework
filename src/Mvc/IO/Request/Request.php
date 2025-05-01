@@ -5,6 +5,7 @@ namespace Stormmore\Framework\Mvc\IO\Request;
 use DateTime;
 use Exception;
 use stdClass;
+use Stormmore\Framework\App\RequestContext;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;

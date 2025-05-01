@@ -7,7 +7,9 @@ use Exception;
 use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionMiddleware;
 use Stormmore\Framework\App\IMiddleware;
+use Stormmore\Framework\App\RequestContext;
 use Stormmore\Framework\App\ResponseMiddleware;
+use Stormmore\Framework\Cli\CliMiddleware;
 use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
@@ -16,7 +18,6 @@ use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Logger\Logger;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
 use Stormmore\Framework\Mvc\IO\Request\Request;
-use Stormmore\Framework\Mvc\IO\Request\RequestContext;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\MvcMiddleware;
 use Stormmore\Framework\Mvc\Route\Router;
@@ -151,6 +152,7 @@ class App
         $this->middlewares = [
             ResponseMiddleware::class,
             ExceptionMiddleware::class,
+            CliMiddleware::class,
             ...$this->middlewares,
             MvcMiddleware::class
         ];

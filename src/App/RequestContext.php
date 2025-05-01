@@ -1,23 +1,26 @@
 <?php
 
-namespace Stormmore\Framework\Mvc\IO\Request;
+namespace Stormmore\Framework\App;
 
+use Stormmore\Framework\Cli\CliArguments;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\Headers\Header;
 use Stormmore\Framework\Mvc\IO\Headers\Headers;
+use Stormmore\Framework\Mvc\IO\Request\Files;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
 
 class RequestContext
 {
-    private RequestCliArguments $arguments;
+    private CliArguments $arguments;
     private ?string $contentType;
     private Cookies $cookies;
     private Headers $headers;
     private bool $printHeaders = false;
+    private bool $isCli = false;
     private bool $isCliRequest = false;
-
+    private bool $isCliCommand = false;
     private string $path;
     private string $query;
     private string $method;
@@ -29,9 +32,10 @@ class RequestContext
     public function __construct()
     {
         if (php_sapi_name() === 'cli') {
-            $this->isCliRequest = true;
+            $this->isCli = true;
+            $this->arguments = $arg = new CliArguments();
 
-            $this->arguments = $arg = new RequestCliArguments();
+
             $this->printHeaders = $arg->printHeaders();
             $this->path = $arg->getPath();
             $this->query = $arg->getQuery();
@@ -43,6 +47,13 @@ class RequestContext
             $cookies = $arg->getCookies();
             $headers = $arg->getHeaders();
             $this->files = new Files($arg->getFiles());
+
+            if ($arg->isRequest()) {
+                $this->isCliRequest = true;
+            }
+            else {
+                $this->isCliCommand = true;
+            }
         }
         else {
             $this->path = strtok($_SERVER["REQUEST_URI"], '?');
@@ -69,9 +80,24 @@ class RequestContext
         $this->cookies = new Cookies($_cookies);
     }
 
+    public function getTaskName(): ?string
+    {
+        return $this->arguments->getTask();
+    }
+
+    public function isCli(): bool
+    {
+        return $this->isCli;
+    }
+
+    public function isCliCommand(): bool
+    {
+         return $this->isCliCommand;
+    }
+
     public function isCliRequest(): bool
     {
-        return $this->isCliRequest;
+        return $this->isCli and $this->isCliRequest;
     }
 
     public function printHeaders(): bool

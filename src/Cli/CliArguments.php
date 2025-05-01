@@ -1,12 +1,13 @@
 <?php
 
-namespace Stormmore\Framework\Mvc\IO\Request;
+namespace Stormmore\Framework\Cli;
 
 use Stormmore\Framework\Http\FormData;
 
-class RequestCliArguments
+class CliArguments
 {
-    private $handledFlags = array('-r', '-m', "-p",
+    private $handledFlags = array(
+        '-r', '-t', '-m', "-p",
         "-method",
         "-headers",
         "-cookies",
@@ -39,9 +40,22 @@ class RequestCliArguments
         }
     }
 
+    public function getTask(): ?string
+    {
+        if (array_key_exists('-t', $this->arguments)) {
+            return $this->arguments['-t'][0];
+        }
+        return null;
+    }
+
     public function printHeaders(): bool
     {
         return array_key_exists("-print-headers", $this->arguments);
+    }
+
+    public function isRequest(): bool
+    {
+        return array_key_exists("-r", $this->arguments);
     }
 
     public function getPath(): string

@@ -10,7 +10,6 @@ use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Mvc\IO\Redirect;
 use Stormmore\Framework\Mvc\IO\Request\Request;
-use Stormmore\Framework\Mvc\IO\Request\RequestContext;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\Route\ExecutionRoute;
 use Stormmore\Framework\Mvc\Route\Router;

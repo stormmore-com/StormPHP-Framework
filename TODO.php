@@ -3,20 +3,13 @@
  *
  * uruchaminie tasków
  *
- * requesty http
  * requesty cli
+ * requesty http
+ *
+ * obsługa meilów
  *
  * multidimensional files
  *
- *   response cache
- *
- *   update Readme
- *    Support for cli tasks (define tasks and run it from cli)
- *    Support for running controller endpoints from cli
- *    Support e2e tests with php cli (test your entire backend stack from phpunit easilly)
- *    Response cache. Event driven cache. EDC
- *
- *   obsługa meilów
  *
  *  - tlumaczenia iterałów
  *
@@ -29,6 +22,7 @@
  *
  *  refaktor
  *   -> przejrzec katalog i klasa po klasie
+ *   -> refaktor request -> pozbyc sie properties
  *   -> strukture frameworka
  *   -> pousuwac te helpery
  */

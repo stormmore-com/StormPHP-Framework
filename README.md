@@ -17,6 +17,9 @@ Made with love without unnecessary complexity.
 - Built-in mature view system using pure PHP, views can control content of layout (adding css/jss scripts or changing title
 - Build-in validation
 - Build forms
+- Support cli tasks (define tasks and run it from cli)
+- Support for running controller from cli
+- Support e2e tests with php cli (test automatically your entire backend stack from phpunit easilly)
 - Support error customization
 - Support middleware (put your code to pipeline before and after request is handled)
 - Support Docker out of the box
@@ -29,7 +32,7 @@ If you want to join project or share with ideas fell free to contact me.
 
 ### keycode13.com
 
-Framework designed to build it. 
+Framework designed to deliver. 
 
 ## Quick start
 
