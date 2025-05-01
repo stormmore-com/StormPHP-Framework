@@ -19,13 +19,14 @@ readonly class CliCommandRunner
 
     public function run(): void
     {
-        $taskName = $this->requestContext->getTaskName();
-        if (!$taskName) {
-            $this->response->setBody("Parameter '-t' task is required");
+        $cliArguments = $this->requestContext->getCliArguments();
+        if (!$cliArguments->hasCommandParameters()) {
+            $this->response->setBody("No proper command parameters found.");
             return;
         }
 
         $tasks = $this->sourceCode->getTask();
+        $taskName = $cliArguments->getTaskName();
         if (!array_key_exists($taskName, $tasks)) {
             $this->response->setBody("Task '$taskName' is not found");
             return;

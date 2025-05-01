@@ -6,7 +6,7 @@ use closure;
 use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\App\RequestContext;
 
-class CliMiddleware implements IMiddleware
+readonly class CliMiddleware implements IMiddleware
 {
     public function __construct(private RequestContext $requestContext,
                                 private CliCommandRunner $commandRunner)

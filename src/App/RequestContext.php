@@ -80,9 +80,9 @@ class RequestContext
         $this->cookies = new Cookies($_cookies);
     }
 
-    public function getTaskName(): ?string
+    public function getCliArguments(): CliArguments
     {
-        return $this->arguments->getTask();
+        return $this->arguments;
     }
 
     public function isCli(): bool

@@ -6,6 +6,9 @@ use Stormmore\Framework\Http\FormData;
 
 class CliArguments
 {
+    private $commandParameters = array(
+        '-t'
+    );
     private $handledFlags = array(
         '-r', '-t', '-m', "-p",
         "-method",
@@ -40,7 +43,17 @@ class CliArguments
         }
     }
 
-    public function getTask(): ?string
+    public function hasCommandParameters(): bool
+    {
+        foreach($this->commandParameters as $commandParameter) {
+            if (array_key_exists($commandParameter, $this->arguments)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getTaskName(): ?string
     {
         if (array_key_exists('-t', $this->arguments)) {
             return $this->arguments['-t'][0];
