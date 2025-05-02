@@ -10,23 +10,32 @@ $view->setTitle("Storm App - Emails");
 $view->setLayout("@templates/includes/layout.php");
 ?>
 
-<form method="post" action="send-email">
+<form method="post"
+      action="send-email"
+      xmlns="http://www.w3.org/1999/html">
     <div class="send-email-form">
-        <label>Email</label>
-        <div>
-            <input name="email" type="text" value="<?= $bag->form->email ?>" />
-            <div class="error"><?= $bag->form->errors->email ?></div>
+        <div class="row">
+            <label>Email: </label>
+            <div>
+                <input name="email" type="text" value="<?= $bag->form->email ?>" />
+                <div class="error"><?= $bag->form->errors->email ?></div>
+            </div>
         </div>
-        <label>Subject</label>
-        <div>
-            <input name="subject" type="text" value="<?= $bag->form->subject ?>" />
-            <div class="error"><?= $bag->form->errors->subject ?></div>
+        <div class="row">
+            <label>Subject: </label>
+            <div>
+                <input name="subject" type="text" value="<?= $bag->form->subject ?>" />
+                <div class="error"><?= $bag->form->errors->subject ?></div>
+            </div>
         </div>
-        <label>Content:</label>
-        <div>
-            <input name="content" type="text" value="<?= $bag->form->content ?>" />
-            <div class="error"><?= $bag->form->errors->content ?></div>
+        <div class="row">
+            <label>Content:</label>
+            <div>
+                <textarea name="content"><?= $bag->form->content ?></textarea>
+                <div class="error"><?= $bag->form->errors->content ?></div>
+            </div>
         </div>
-        <div><button>Send</button></div>
+
+        <button>Send</button>
     </div>
 </form>

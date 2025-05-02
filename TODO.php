@@ -6,9 +6,7 @@
  * mail -> fomularz dla simple
  * mail -> formualrz dla fluent
  *
- * wyswietladnie danych przez view baga
  *
- *   formularze Field 'Email' is required (pomyslec nad systemem komunikatów)
  *  apke testową naprawić np. zmiane jezyka
  *  formularz poprawic -> testy automatyczne
  *  formularz przeniesic do testów automatycznych

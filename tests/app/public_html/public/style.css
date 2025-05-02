@@ -23,16 +23,18 @@ table th {
 }
 
 .send-email-form {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: auto auto;
     width: 500px
 }
-
-.send-email-form div {
-    grid-column: 1 / span 2;
+.send-email-form .row {
+    margin-bottom: 10px;
 }
-
-.send-email-form div button{
-    float: right;
+.send-email-form input, textarea {
+    box-sizing: border-box;
+    width: 100%;
+}
+.send-email-form textarea {
+    min-height: 100px;
+}
+.send-email-form button {
+    width: 100%;
 }

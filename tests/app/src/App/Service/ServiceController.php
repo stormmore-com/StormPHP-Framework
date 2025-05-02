@@ -41,7 +41,7 @@ readonly class ServiceController
     #[Route('/send-email')]
     public function email(?string $email, ?string $subject, ?string $content): View|Redirect
     {
-        $form =(new Form($this->request))
+        $form = (new Form($this->request))
             ->add(Field::for('email')->email()->required())
             ->add(Field::for('subject')->required())
             ->add(Field::for('content')->required());
