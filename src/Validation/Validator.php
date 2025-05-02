@@ -2,13 +2,27 @@
 
 namespace Stormmore\Framework\Validation;
 
+use stdClass;
+
 class Validator
 {
+    private ?ValidationResult $result = null;
     private array $fields;
 
     function __construct()
     {
         $this->fields = array();
+    }
+
+    public static function create(): Validator
+    {
+        return new Validator();
+    }
+
+    public function add(Field $field): Validator
+    {
+        $this->fields[] = $field;
+        return $this;
     }
 
     public function for(string $name): Field
@@ -23,12 +37,26 @@ class Validator
         return $field;
     }
 
+    public function getResult(): ?ValidationResult
+    {
+        return $this->result;
+    }
+
+    public function isValid(object $object = new stdClass()): bool
+    {
+        $this->result = $this->validate($object);
+        return $this->result->isValid();
+    }
+
     public function validate(object $object): ValidationResult
     {
         $result = new ValidationResult();
         foreach ($this->fields as $field) {
             $name = $field->getName();
             $value = $object->{$name};
+            if ($value == null) {
+                $value = $field->getValue();
+            }
             foreach ($field->getValidators() as $validator) {
                 $validatorResult = $validator->validate($value, $name, array(), []);
                 if (!$validatorResult->isValid) {

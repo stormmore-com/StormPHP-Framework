@@ -3,12 +3,10 @@
 use Stormmore\Framework\App;
 use Stormmore\Framework\Mvc\View\IViewComponent;
 use Stormmore\Framework\Mvc\View\View;
+use Stormmore\Framework\Mvc\View\ViewBag;
 
-function view(string $templateFileName, array|object $data = []): View
+function view(string $templateFileName, array|ViewBag $data = []): View
 {
-    if (!str_ends_with($templateFileName, '.php')) {
-        $templateFileName .= '.php';
-    }
     return new View($templateFileName, $data);
 }
 

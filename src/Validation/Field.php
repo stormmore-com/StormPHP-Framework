@@ -23,9 +23,14 @@ class Field
 {
     private array $validators;
 
-    public function __construct(private readonly string $name)
+    public function __construct(private readonly string $name, private mixed $value = null)
     {
         $this->validators = array();
+    }
+
+    public static function for(string $name, mixed $value = null): Field
+    {
+        return new self($name, $value);
     }
 
     public function alpha(null|string $message = null): Field
@@ -146,6 +151,11 @@ class Field
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getValue(): mixed
+    {
+        return $this->value;
     }
 
     /**

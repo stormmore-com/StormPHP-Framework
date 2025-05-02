@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Form;
 use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Validation\Field;
 use Stormmore\Framework\Validation\ValidationResult;
 use Stormmore\Framework\Validation\Validator;
 
@@ -24,11 +25,22 @@ class Form
         $this->model = array();
     }
 
+    function getValidator(): Validator
+    {
+        return $this->validator;
+    }
+
     function validate(): ValidationResult
     {
         $this->validationResult = $this->validator->validate($this->request);
-        $this->errors->setErrors($this->validationResult);
+        $this->errors->setValidationResult($this->validationResult);
         return $this->validationResult;
+    }
+
+    public function add(Field $field): Form
+    {
+        $this->validator->add($field);
+        return $this;
     }
 
     function setModel(array|object $model): void

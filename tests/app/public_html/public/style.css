@@ -21,3 +21,18 @@
 table th {
     text-align: left;
 }
+
+.send-email-form {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto auto;
+    width: 500px
+}
+
+.send-email-form div {
+    grid-column: 1 / span 2;
+}
+
+.send-email-form div button{
+    float: right;
+}

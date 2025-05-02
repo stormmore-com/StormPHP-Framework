@@ -18,15 +18,29 @@ class View extends stdClass
 
     public Html $html;
 
+    public ViewBag $bag;
+
     private string|null $layoutFileName = null;
     private string|null $htmlMetaTitle = null;
     private array $htmlMetaJsScripts = [];
     private array $htmlMetaCssScripts = [];
 
     public function __construct(
-        private readonly string $fileName,
-        private array  $data = [])
+        private string $fileName,
+        private array|ViewBag $data = [])
     {
+        if (!str_ends_with($this->fileName, '.php')) {
+            $this->fileName .= '.php';
+        }
+
+        if (is_object($this->data)) {
+            $this->data = get_object_vars($this->data);
+        }
+        $this->bag = new ViewBag();
+        foreach($this->data as $name => $value) {
+            $this->bag->add($name, $value);
+        }
+
         $this->i18n = App::getInstance()->getContainer()->resolve(I18n::class);
         $this->request = App::getInstance()->getContainer()->resolve(Request::class);
         $this->appUser = App::getInstance()->getContainer()->resolve(AppUser::class);
@@ -62,6 +76,7 @@ class View extends stdClass
     {
         ob_start();
         $view = $this;
+        $bag = $this->bag;
         extract($this->data, EXTR_OVERWRITE, 'wddx');
         require $templateFileName;
         $content = ob_get_clean();
@@ -74,6 +89,11 @@ class View extends stdClass
             return $layoutView->toHtml();
         }
         return $content;
+    }
+
+    public function isset(string $key): bool
+    {
+        return array_key_exists($key, $this->data);
     }
 
     public function setLayout(string $filename): void

@@ -12,6 +12,8 @@ use src\Infrastructure\Settings;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
+use Stormmore\Framework\Form\Form;
+use Stormmore\Framework\Mail\Mailer;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
@@ -19,17 +21,58 @@ use Stormmore\Framework\Mvc\IO\Redirect;
 use Stormmore\Framework\Mvc\IO\Request\Request;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\View\View;
+use Stormmore\Framework\Mvc\View\ViewBag;
+use Stormmore\Framework\Validation\Field;
+use Stormmore\Framework\Validation\Validator;
 
 #[Controller]
 readonly class ServiceController
 {
     public function __construct(private AppConfiguration $configuration,
-                                private Settings $settings,
-                                private Request $request,
-                                private Response $response,
-                                private Gate $gate,
-                                private EventDispatcher $eventDispatcher)
+                                private Settings         $settings,
+                                private Mailer           $mailer,
+                                private Request          $request,
+                                private Response         $response,
+                                private Gate             $gate,
+                                private EventDispatcher  $eventDispatcher)
     {
+    }
+
+    #[Route('/send-email')]
+    public function email(?string $email, ?string $subject, ?string $content): View|Redirect
+    {
+        $form =(new Form($this->request))
+            ->add(Field::for('email')->email()->required())
+            ->add(Field::for('subject')->required())
+            ->add(Field::for('content')->required());
+
+        if ($form->isSubmittedSuccessfully()) {
+            $this->mailer->create($email, $subject, $content)->send();
+            return redirect(success: "Email was sent");
+        }
+        return view('@templates/mails/form', [
+            'form' => $form
+        ]);
+    }
+
+    #[Route("/send-template-mail")]
+    public function sendTemplateMail(?string $email, ?string $subject): Redirect
+    {
+        $validator = Validator::create()
+            ->add(Field::for('recipient', $email))
+            ->add(Field::for('subject', $subject));
+
+        if (!$validator->isValid()) {
+            return back();
+        }
+
+        $this->mailer->create()
+            ->withRecipient('czerski.michal@gmail.com')
+            ->withSubject('template subject')
+            ->withContentTemplate('@templates/mails/custom')
+            ->send();
+
+        return back();
     }
 
     #[Route("/cqs-test")]
@@ -37,7 +80,7 @@ readonly class ServiceController
     {
         $this->gate->handle(new ExampleCommand());
         $this->gate->handle(new ServiceCommand());
-        return view("@templates/service/cqs",[
+        return view("@templates/service/cqs", [
             'history' => $this->gate->getHistory()
         ]);
     }
@@ -46,7 +89,7 @@ readonly class ServiceController
     public function events(): View
     {
         $this->eventDispatcher->handle(new ServiceEvent());
-        return view("@templates/service/events",[
+        return view("@templates/service/events", [
             'history' => $this->eventDispatcher->getHistory()
         ]);
     }
@@ -83,15 +126,13 @@ readonly class ServiceController
     #[Route("/redirect-with-success")]
     public function redirectWithSuccess(): Redirect
     {
-        $this->response->messages->add("success");
-        return redirect();
+        return redirect(success: true);
     }
 
     #[Route("/redirect-with-failure")]
     public function redirectWithFailure(): Redirect
     {
-        $this->response->messages->add("failure");
-        return redirect();
+        return redirect(failure: true);
     }
 
     #[Route("/form")]

@@ -200,16 +200,22 @@ function url($path, $args = array()): string
     return concatenate_paths($request->path, $path);
 }
 
-function back(string $url = "/"): Redirect
+function back(string $url = "/", string|bool $success = false, string|bool $failure = false): Redirect
 {
     if (array_key_exists('HTTP_REFERER', $_SERVER)) {
-        return redirect($_SERVER['HTTP_REFERER']);
+        return redirect($_SERVER['HTTP_REFERER'], $success, $failure);
     }
-
-    return redirect($url);
+    return redirect($url, $success, $failure);
 }
 
-function redirect(string $url = "/"): Redirect
+function redirect(string $url = "/", string|bool $success = false, string|bool $failure = false): Redirect
 {
+    $response = App::getInstance()->getResponse();
+    if ($success) {
+        $response->messages->add("success", $success);
+    }
+    if ($failure) {
+        $response->messages->add("failure", $failure);
+    }
     return new Redirect($url);
 }

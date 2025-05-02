@@ -13,7 +13,7 @@ class Errors
         $this->validationResult = null;
     }
 
-    public function setErrors(ValidationResult $result): void
+    public function setValidationResult(ValidationResult $result): void
     {
         $this->validationResult = $result;
     }

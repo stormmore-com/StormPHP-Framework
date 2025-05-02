@@ -88,6 +88,11 @@ class App
         return $this->request;
     }
 
+    public function getResponse(): Response
+    {
+        return $this->response;
+    }
+
     public function addMiddleware(string $middlewareClassName): void
     {
         $this->middlewares[] = $middlewareClassName;
