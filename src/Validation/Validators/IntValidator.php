@@ -12,7 +12,7 @@ readonly class IntValidator implements IValidator
     }
     function validate(mixed $value, string $name, array $data, mixed $arg): ValidatorResult
     {
-        $message = $this->message ?? _("validation.integer");
+        $message = $this->message ?? t("validation.integer");
         if ($value and !preg_match('/^[0-9]+$/', $value)) {
             return new ValidatorResult(false, $message);
         }

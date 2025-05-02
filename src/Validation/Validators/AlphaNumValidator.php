@@ -15,7 +15,7 @@ class AlphaNumValidator implements IValidator
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
         if ($value and !ctype_alnum($value)) {
-            $message = $this->message ?? _("validation.alpha-numeric");
+            $message = $this->message ?? t("validation.alpha-numeric");
             return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();

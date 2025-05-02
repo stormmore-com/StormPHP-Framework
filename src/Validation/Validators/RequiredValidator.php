@@ -14,7 +14,7 @@ class RequiredValidator implements IValidator
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
         if ($value === null or $value === '') {
-            $message = $this->message ?? _('validation.required');
+            $message = $this->message ?? t('validation.required');
             $message = array_key_value($args, 'message', $message);
             return new ValidatorResult(false, $message);
         }

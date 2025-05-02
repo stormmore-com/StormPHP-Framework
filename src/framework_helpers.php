@@ -135,7 +135,7 @@ function di(string|null $key = null): mixed
     return $container->resolve($key);
 }
 
-function _(string $phrase, ...$args): string
+function t(string $phrase, ...$args): string
 {
     return _args($phrase, $args);
 }

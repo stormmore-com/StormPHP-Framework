@@ -14,7 +14,7 @@ readonly class RegexpValidator implements IValidator
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
         if ($value and !preg_match($this->regexp, $value)) {
-            $message = $this->message ?? _("validation.invalid_value");
+            $message = $this->message ?? t("validation.invalid_value");
             return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();

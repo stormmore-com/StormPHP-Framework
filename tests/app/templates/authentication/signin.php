@@ -10,7 +10,7 @@ $view->setLayout('@templates/includes/layout.php');
             It's made just for demonstration purposes so user data are written in cookie and there is no password validation. Don't worry about that.
         </p>
         <input type="text" name="username">
-        <button><?php echo _('signin.post') ?></button>
+        <button><?php echo t('signin.post') ?></button>
         <p>
             <input id="admin" type="checkbox" name="privileges[]" value="administrator" />
             <label for="admin">Administrator</label>

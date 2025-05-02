@@ -14,7 +14,7 @@ class AlphaValidator implements IValidator
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
         if ($value and !ctype_alpha($value)) {
-            $message = $this->message ?? _("validation.alpha");
+            $message = $this->message ?? t("validation.alpha");
             return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();

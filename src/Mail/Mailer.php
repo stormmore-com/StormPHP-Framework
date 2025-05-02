@@ -35,11 +35,12 @@ class Mailer
         return $builder;
     }
 
-    public function useMailSender(string $sender): void
+    public function useMailSender(string $sender): Mailer
     {
         if (array_key_exists($sender, $this->senders)) {
             $this->defaultSender = $sender;
         }
+        return $this;
     }
 
     public function addMailServer(string $name, IMailSender $sender): void

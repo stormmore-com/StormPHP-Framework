@@ -15,13 +15,13 @@ readonly class MaxValidator implements IValidator
     {
         if (is_numeric($value)) {
             if ($value > $this->max) {
-                $message = $this->message ?? _("validation.max_number");
+                $message = $this->message ?? t("validation.max_number");
                 return new ValidatorResult(false, $message);
             }
         }
         else if (is_string($value)) {
             if (mb_strlen($value) > $this->max) {
-                $message = $this->message ?? _("validation.max_string");
+                $message = $this->message ?? t("validation.max_string");
                 return new ValidatorResult(false, $message);
             }
         }

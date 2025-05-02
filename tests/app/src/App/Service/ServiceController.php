@@ -13,6 +13,7 @@ use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
 use Stormmore\Framework\Form\Form;
+use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mail\Mailer;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Route;
@@ -56,23 +57,27 @@ readonly class ServiceController
     }
 
     #[Route("/send-template-mail")]
-    public function sendTemplateMail(?string $email, ?string $subject): Redirect
+    public function sendTemplateMail(?string $email, ?string $subject, ?string $content): View|Redirect
     {
-        $validator = Validator::create()
-            ->add(Field::for('recipient', $email))
-            ->add(Field::for('subject', $subject));
+        $form = (new Form($this->request))
+            ->add(Field::for('email')->email()->required())
+            ->add(Field::for('subject')->required())
+            ->add(Field::for('content')->required());
 
-        if (!$validator->isValid()) {
-            return back();
+        if ($form->isSubmittedSuccessfully()) {
+            $i18n = I18n::create("en", "@/i18n/en.conf", "@/i18n/culture/en-US.conf");
+            $this->mailer
+                ->create()
+                ->withRecipient('czerski.michal@gmail.com')
+                ->withSubject($subject)
+                ->withContentTemplate('@templates/mails/contact', ['content' => $content], $i18n)
+                ->send();
+            return redirect(success: "Email was sent");
         }
 
-        $this->mailer->create()
-            ->withRecipient('czerski.michal@gmail.com')
-            ->withSubject('template subject')
-            ->withContentTemplate('@templates/mails/custom')
-            ->send();
-
-        return back();
+        return view('@templates/mails/form', [
+            'form' => $form
+        ]);
     }
 
     #[Route("/cqs-test")]

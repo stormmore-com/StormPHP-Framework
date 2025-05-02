@@ -13,7 +13,7 @@ readonly class ValuesValidator implements IValidator
 
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
-        $message = $this->message ?? _("validation.invalid_value");
+        $message = $this->message ?? t("validation.invalid_value");
         if (is_array($value)) {
             $diff = array_diff($value, $this->values);
             if (count($diff)) {

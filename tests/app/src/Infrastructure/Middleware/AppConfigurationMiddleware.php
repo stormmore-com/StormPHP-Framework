@@ -14,6 +14,7 @@ readonly class AppConfigurationMiddleware implements IMiddleware
 
     public function run(closure $next): void
     {
+
         $this->appConfiguration->addAliases([
             '@templates' => "@/templates"
         ]);

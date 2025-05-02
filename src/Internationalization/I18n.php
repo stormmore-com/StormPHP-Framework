@@ -12,12 +12,20 @@ class I18n
     public Culture $culture;
     public ?Configuration $translations;
 
-
     public function __construct()
     {
         $this->translations = null;
         $this->locale = new Locale();
         $this->culture = new Culture();
+    }
+
+    public static function create(string $locale = "", string $translationFile = "", string $cultureFile = ""): I18n
+    {
+        $i18n = new self();
+        $i18n->setLocale(new Locale($locale));
+        $i18n->loadTranslations($translationFile);
+        $i18n->loadCulture($cultureFile);
+        return $i18n;
     }
 
     public function setLocale(Locale $locale): void

@@ -10,9 +10,7 @@ $view->setTitle("Storm App - Emails");
 $view->setLayout("@templates/includes/layout.php");
 ?>
 
-<form method="post"
-      action="send-email"
-      xmlns="http://www.w3.org/1999/html">
+<form method="post">
     <div class="send-email-form">
         <div class="row">
             <label>Email: </label>

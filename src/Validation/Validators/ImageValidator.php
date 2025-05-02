@@ -16,17 +16,17 @@ readonly class ImageValidator implements IValidator
     {
         if ($file instanceof UploadedFile) {
             if (!$file->isUploaded() and ($file->error == 1 or $this->error == 2)) {
-                $message = $this->message ?? _("validation.image_max_size");
+                $message = $this->message ?? t("validation.image_max_size");
                 return new ValidatorResult(false, $message);
             }
             else if (!$file->isUploaded()) {
-                $message = $this->message ?? _("validation.image_not_uploaded");
+                $message = $this->message ?? t("validation.image_not_uploaded");
                 return new ValidatorResult(false, $message);
             }
             $type = exif_imagetype($file->path);
             if ($type === false || (!empty($this->allowed) and !in_array($type, $this->allowed))) {
-                $message = $this->message ?? _("validation.image_format");
-                return new ValidatorResult(false, _($message));
+                $message = $this->message ?? t("validation.image_format");
+                return new ValidatorResult(false, t($message));
             }
         }
         return new ValidatorResult();

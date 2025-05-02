@@ -28,11 +28,11 @@ class DateTimeRangeValidator implements IValidator
             }
 
             if ($this->after != null and $value < $this->after) {
-                $message = $this->message ?? _("validation.date_min");
+                $message = $this->message ?? t("validation.date_min");
                 return new ValidatorResult(false, $message);
             }
             if ($this->before != null and $value > $this->before) {
-                $message = $this->message ?? _("validation.date_max");
+                $message = $this->message ?? t("validation.date_max");
                 return new ValidatorResult(false, $message);
             }
         }

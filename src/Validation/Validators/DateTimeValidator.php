@@ -20,7 +20,7 @@ class DateTimeValidator implements IValidator
                 new DateTime($value);
             }
             catch (Exception) {
-                $message = $this->message ?? _("validation.invalid_date");
+                $message = $this->message ?? t("validation.invalid_date");
                 return new ValidatorResult(false, $message);
             }
 

@@ -13,7 +13,7 @@ readonly class NumberValidator implements IValidator
 
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
-        $message = $this->message ?? _("validation.numeric");
+        $message = $this->message ?? t("validation.numeric");
         if ($value and !is_numeric($value)) {
             return new ValidatorResult(false, $message);
         }

@@ -1,11 +1,7 @@
 <?php /**
  * TODO
  *
- * mail -> szablony
- * mail -> w ustawieniach zrobic customowy server
- * mail -> fomularz dla simple
- * mail -> formualrz dla fluent
- *
+ * mail -> smtp
  *
  *  apke testową naprawić np. zmiane jezyka
  *  formularz poprawic -> testy automatyczne

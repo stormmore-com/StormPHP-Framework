@@ -14,7 +14,7 @@ class EmailValidator implements IValidator
     function validate(mixed $value, string $name, array $data, mixed $args): ValidatorResult
     {
         if ($value and !self::isValidEmail($value)) {
-            $message = $this->message ?? _("validation.email");
+            $message = $this->message ?? t("validation.email");
             return new ValidatorResult(false, $message);
         }
         return new ValidatorResult();

@@ -19,12 +19,12 @@ readonly class FileValidator implements IValidator
             if (!empty($this->extensions)) {
                 $extensions = pathinfo($value->name)['extension'];
                 if (!in_array($extensions, $this->extensions)) {
-                    $message = $this->message ?? _('validation.file_extension');
+                    $message = $this->message ?? t('validation.file_extension');
                     return new ValidatorResult(false, $message);
                 }
             }
             if ($this->size > 0 and $value->exceedSize($this->size)) {
-                $message = $this->message ?? _('validation.file_size');
+                $message = $this->message ?? t('validation.file_size');
                 return new ValidatorResult(false, $message);
             }
         }

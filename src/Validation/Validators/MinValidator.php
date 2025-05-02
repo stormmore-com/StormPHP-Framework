@@ -15,12 +15,12 @@ readonly class MinValidator implements IValidator
     {
         if ($value != '' and is_numeric($value)) {
             if ( $value < $this->min) {
-                $message = $this->message ?? _("validation.min_number");
+                $message = $this->message ?? t("validation.min_number");
                 return new ValidatorResult(false, $message);
             }
         } else if ($value != '' and is_string($value)) {
             if (mb_strlen($value) < $this->min) {
-                $message = $this->message ?? _("validation.min_string");
+                $message = $this->message ?? t("validation.min_string");
                 return new ValidatorResult(false, $message);
             }
         }

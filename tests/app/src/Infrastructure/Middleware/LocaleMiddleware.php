@@ -5,7 +5,6 @@ namespace src\Infrastructure\Middleware;
 use closure;
 use src\Infrastructure\Settings;
 use Stormmore\Framework\App\IMiddleware;
-use Stormmore\Framework\Configuration\IConfiguration;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Internationalization\Locale;
 use Stormmore\Framework\Mvc\IO\Request\Request;
@@ -21,7 +20,7 @@ readonly class LocaleMiddleware implements IMiddleware
     private function getAcceptedLocale(): Locale
     {
         if ($this->request->hasCookie('locale')) {
-            $tag = $this->request->getCookie('locale');
+            $tag = $this->request->getCookie('locale')->getValue();
             if ($this->settings->localeExists($tag)) {
                 return new Locale($tag);
             }
