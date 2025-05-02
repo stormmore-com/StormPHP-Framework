@@ -148,6 +148,6 @@ class InProcRequestTest extends TestCase
     public function setUp(): void
     {
         $this->files = dirname(__FILE__) . "/files" ;
-        $this->appClient = AppClient::create("./tests/app/server/index.php");
+        $this->appClient = AppClient::create("./tests/app/public_html/index.php");
     }
 }
