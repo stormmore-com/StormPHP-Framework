@@ -43,12 +43,14 @@ class Form
         return $this;
     }
 
-    function setModel(array|object $model): void
+    function setModel(array|object $model): Form
     {
         if (is_object($model)) {
             $model = get_object_vars($model);
         }
         $this->model = $model;
+
+        return $this;
     }
 
     public function getValue(string $name): mixed

@@ -10,12 +10,23 @@ use Stormmore\Framework\Mvc\View\View;
 
 class MailBuilder
 {
-    private string $recipient;
-    private string $subject;
-    private string $content;
+    private string $sender = "";
+    private string $recipient = "";
+    private string $subject = "";
+    private string $content = "";
+    /* @var Attachment[] */
+    private array $attachments = [];
+    private string $contentType = "text/html";
+    private string $charset = "utf-8";
 
-    public function __construct(private IMailSender $sender)
+    public function __construct(private readonly IMailSender $mailSender)
     {
+    }
+
+    public function withSender(string $sender): self
+    {
+        $this->sender = $sender;
+        return $this;
     }
 
     public function withRecipient(string $recipient): MailBuilder
@@ -58,9 +69,27 @@ class MailBuilder
         return $this;
     }
 
+    public function withAttachment(string $filepath, string $name = ""): MailBuilder
+    {
+        $this->attachments[] = new Attachment($filepath);
+        return $this;
+    }
+
+    public function withContentType(string $contentType): MailBuilder
+    {
+        $this->contentType = $contentType;
+        return $this;
+    }
+
+    public function withCharset(string $charset): MailBuilder
+    {
+        $this->charset = $charset;
+        return $this;
+    }
+
     public function send(): void
     {
-        $mail = new Mail($this->recipient, $this->subject, $this->content);
-        $this->sender->send($mail);
+        $mail = new Mail($this->sender, $this->recipient, $this->subject, $this->content, $this->attachments, $this->contentType, $this->charset);
+        $this->mailSender->send($mail);
     }
 }

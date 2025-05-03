@@ -33,16 +33,12 @@ class Files
      * @param string $name
      * @return UploadedFile[]
      */
-    public function getMany(string $name): array
+    public function getAll(string $name): array
     {
-        $files = array();
-        foreach ($this->uploadedFiles as $file) {
-            if ($file->fieldName == $name) {
-                $files[] = $file;
-            }
+        if (array_key_exists($name, $this->uploadedFiles)) {
+            return $this->uploadedFiles[$name];
         }
-
-        return $files;
+        return [];
     }
 
     /**

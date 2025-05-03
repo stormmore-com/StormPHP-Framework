@@ -39,40 +39,29 @@ readonly class ServiceController
     {
     }
 
-    #[Route('/send-email')]
-    public function email(?string $email, ?string $subject, ?string $content): View|Redirect
+    #[Route('/send-mail')]
+    public function quickEmailUsingLocalSmtp(): View|Redirect
     {
         $form = (new Form($this->request))
-            ->add(Field::for('email')->email()->required())
-            ->add(Field::for('subject')->required())
-            ->add(Field::for('content')->required());
-
-        if ($form->isSubmittedSuccessfully()) {
-            $this->mailer->create($email, $subject, $content)->send();
-            return redirect(success: "Email was sent");
-        }
-        return view('@templates/mails/form', [
-            'form' => $form
-        ]);
-    }
-
-    #[Route("/send-template-mail")]
-    public function sendTemplateMail(?string $email, ?string $subject, ?string $content): View|Redirect
-    {
-        $form = (new Form($this->request))
+            ->setModel(['email' => 'test@test.com', 'subject' => 'Testing STMP', 'content' => 'Hello...'])
             ->add(Field::for('email')->email()->required())
             ->add(Field::for('subject')->required())
             ->add(Field::for('content')->required());
 
         if ($form->isSubmittedSuccessfully()) {
             $i18n = I18n::create("en", "@/i18n/en.conf", "@/i18n/culture/en-US.conf");
-            $this->mailer
+            $builder = $this->mailer
                 ->create()
-                ->withRecipient('czerski.michal@gmail.com')
-                ->withSubject($subject)
-                ->withContentTemplate('@templates/mails/contact', ['content' => $content], $i18n)
-                ->send();
-            return redirect(success: "Email was sent");
+                ->withSender('admin@localhost')
+                ->withRecipient($form->email)
+                ->withSubject($form->subject)
+                ->withContentTemplate('@templates/mails/contact', ['content' => $form->content], $i18n);
+//            foreach($this->request->files->getAll('attachment') as $file) {
+//                $builder->withAttachment($file->path, $file->name);
+//            }
+            $builder->send();
+
+            return back(success: "Email was sent");
         }
 
         return view('@templates/mails/form', [

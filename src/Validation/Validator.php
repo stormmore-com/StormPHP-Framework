@@ -48,12 +48,12 @@ class Validator
         return $this->result->isValid();
     }
 
-    public function validate(object $object): ValidationResult
+    public function validate(object $data): ValidationResult
     {
         $result = new ValidationResult();
         foreach ($this->fields as $field) {
             $name = $field->getName();
-            $value = $object->{$name};
+            $value = $data->{$name};
             if ($value == null) {
                 $value = $field->getValue();
             }

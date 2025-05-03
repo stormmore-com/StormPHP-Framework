@@ -16,7 +16,8 @@ Made with love without unnecessary complexity.
 - Built-in path alias system ('@templates/homepage.php' refers to /your/project/dir/templates/homepage.php)
 - Built-in mature view system using pure PHP, views can control content of layout (adding css/jss scripts or changing title
 - Build-in validation
-- Build forms
+- Build-in forms
+- Build-in mailing (i18n, smtp client)
 - Support cli tasks (define tasks and run it from cli)
 - Support for running controller from cli
 - Support e2e tests with php cli (test automatically your entire backend stack from phpunit easilly)

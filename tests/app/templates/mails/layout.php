@@ -1,5 +1,5 @@
 <?php /** @var \Stormmore\Framework\Mvc\View\View $view */ ?>
 
-<?= t('email.header'); ?>
+<h1><?= t('email.header'); ?></h1>
 </br>
 <?= $view->content ?>

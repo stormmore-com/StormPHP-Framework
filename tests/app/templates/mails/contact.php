@@ -9,4 +9,4 @@ $view->setLayout("@templates/mails/layout.php");
 
 <?= t('email.boilerplate'); ?>
 </br>
-<?= $bag->content ?>
+Content: <?= $bag->content ?>

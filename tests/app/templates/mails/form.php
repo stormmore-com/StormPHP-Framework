@@ -10,7 +10,7 @@ $view->setTitle("Storm App - Emails");
 $view->setLayout("@templates/includes/layout.php");
 ?>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="send-email-form">
         <div class="row">
             <label>Email: </label>
@@ -33,7 +33,16 @@ $view->setLayout("@templates/includes/layout.php");
                 <div class="error"><?= $bag->form->errors->content ?></div>
             </div>
         </div>
-
-        <button>Send</button>
+        <div class="row">
+            <lable>Attachments:</lable>
+            <div>
+                <input name="attachment[]" type="file" />
+                <input name="attachment[]" type="file" />
+                <input name="attachment[]" type="file" />
+            </div>
+        </div>
+        <div class="row">
+            <button>Send</button>
+        </div>
     </div>
 </form>

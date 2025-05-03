@@ -1,26 +1,32 @@
 <?php /**
  * TODO
  *
- * mail -> smtp
+ * najpeirw http client
+ * -> łączenie się z testami integracyjnymi
+ * -> pliki mapowanie zrobic jak należy z tesami
  *
- *  apke testową naprawić np. zmiane jezyka
- *  formularz poprawic -> testy automatyczne
- *  formularz przeniesic do testów automatycznych
+ * mail -> zalaczniki ( dorobic w formularzu)
+ * mail -> wielu odbiorców
+ * mail -> dodac imiona
+ * mail -> reply to
+ * mail -> cc
+ * mail -> bcc
+ * mail -> secure
+ * mail -> polaczcy sie z gmail
+ * mail -> walidacja przed send
  *
  *
- *  porzadek z apka testowa (tylko tym powinna byc, 1 jezyk + 1 testowy)
+ *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)
  * dac mozlwiosc printownia na output bo jet ob_get i nie mozna debugowac za pomoca echo na devie
  * tlumaczenia iterałów
  *
  * requesty cli
  * requesty http
  *
+ * obsługa wszytkihc 7 typów put delete etc. (atrybuty i w request metoda)
+ *
  *
  * multidimensional files
- *
- *   StormQueries
- *   - konfiguracja DateTimeów (czy ma zapisywac do utc czy nie) (konfiguracja jak ma wygladac, ew. na jaki timezone ma tlumaczyc domysl)
- *   - zrobic te zapytania bez funkcji execute na najwyzszym poziomie
  *
  *
  *  refaktor
@@ -28,6 +34,10 @@
  *   -> refaktor request -> pozbyc sie properties
  *   -> strukture frameworka
  *   -> pousuwac te helpery
+ *
+ *    StormQueries
+ *    - konfiguracja DateTimeów (czy ma zapisywac do utc czy nie) (konfiguracja jak ma wygladac, ew. na jaki timezone ma tlumaczyc domysl)
+ *    - zrobic te zapytania bez funkcji execute na najwyzszym poziomie
  */
 
 
