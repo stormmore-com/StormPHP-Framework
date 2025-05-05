@@ -5,8 +5,12 @@ namespace Stormmore\Framework\Mail;
 class Mail
 {
     public function __construct(
-        public string $sender,
-        public string $recipient,
+        public Address $sender,
+        /** @var Address[] */
+        public array $recipients,
+        public array $cc,
+        public array $bcc,
+        public array $replyTo,
         public string $subject,
         public string $content,
         /** @var Attachment[] */

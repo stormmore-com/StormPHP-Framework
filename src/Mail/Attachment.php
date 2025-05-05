@@ -6,7 +6,7 @@ class Attachment
 {
     private string $filename;
 
-    public function __construct(string $filepath, string $filename = "", private string $mimeType = "application/octet-stream")
+    public function __construct(private string $filepath, string $filename = "", private string $mimeType = "application/octet-stream")
     {
         $this->filename = $filename;
         if (empty($this->filename)) {
@@ -21,7 +21,7 @@ class Attachment
 
     public function getContent(): string
     {
-        return base64_encode(file_get_contents($this->filename));
+        return base64_encode(file_get_contents($this->filepath));
     }
 
     public function getMimeType(): string

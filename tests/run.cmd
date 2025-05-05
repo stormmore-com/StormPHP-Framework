@@ -1,1 +1,1 @@
-./vendor/bin/phpunit .\tests\
+../vendor/bin/phpunit --display-deprecations --display-phpunit-deprecations

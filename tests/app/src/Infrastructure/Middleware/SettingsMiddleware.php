@@ -19,6 +19,15 @@ readonly class SettingsMiddleware implements IMiddleware
     {
         $this->mailer->addMailServer("local-smtp", new SmtpSender());
         $this->mailer->useMailSender("local-smtp");
+        $this->mailer->addMailServer('gmail', new SmtpSender(
+            "smtp.gmail.com",
+            465,
+            "tls",
+            true,
+            "christxpdev@gmail.com",
+            "hkha rkze keoi agma"
+        ));
+        $this->mailer->useMailSender('gmail');
         $this->configuration->loadFile('@/settings.conf');
         $next();
     }

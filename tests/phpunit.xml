@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit>
+    <testsuites>
+        <testsuite name="unit">
+            <directory>unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>integration</directory>
+        </testsuite>
+    </testsuites>
+    <extensions>
+        <bootstrap class="Stormmore\Framework\Tests\Phpunit\BoostrapExtension" />
+    </extensions>
+</phpunit>

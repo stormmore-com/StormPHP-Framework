@@ -43,7 +43,7 @@ readonly class ServiceController
     public function quickEmailUsingLocalSmtp(): View|Redirect
     {
         $form = (new Form($this->request))
-            ->setModel(['email' => 'test@test.com', 'subject' => 'Testing STMP', 'content' => 'Hello...'])
+            ->setModel(['email' => 'czerski.michal@gmail.com', 'subject' => 'Testing STMP', 'content' => 'Hello...'])
             ->add(Field::for('email')->email()->required())
             ->add(Field::for('subject')->required())
             ->add(Field::for('content')->required());
@@ -52,16 +52,24 @@ readonly class ServiceController
             $i18n = I18n::create("en", "@/i18n/en.conf", "@/i18n/culture/en-US.conf");
             $builder = $this->mailer
                 ->create()
-                ->withSender('admin@localhost')
-                ->withRecipient($form->email)
+                ->withSender('admin@example.com', "Admistrator")
+                ->withRecipient($form->email, "Dear friend")
+                ->withCc("cc@example.com", "CC reader")
+                ->withBcc("bcc@example.com", "BCC reader")
+                ->withReplyTo("reply.to@exaples.com", "Replies")
                 ->withSubject($form->subject)
                 ->withContentTemplate('@templates/mails/contact', ['content' => $form->content], $i18n);
-//            foreach($this->request->files->getAll('attachment') as $file) {
-//                $builder->withAttachment($file->path, $file->name);
-//            }
+            if ($this->request->files->has('attachment1')) {
+                $file = $this->request->files->get('attachment1');
+                $builder->withAttachment($file->path, $file->name);
+            }
+            if ($this->request->files->has('attachment2')) {
+                $file = $this->request->files->get('attachment2');
+                $builder->withAttachment($file->path, $file->name);
+            }
             $builder->send();
 
-            return back(success: "Email was sent");
+            return redirect("/send-mail", success: "Email was sent");
         }
 
         return view('@templates/mails/form', [

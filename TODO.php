@@ -1,19 +1,12 @@
 <?php /**
  * TODO
  *
- * najpeirw http client
- * -> łączenie się z testami integracyjnymi
- * -> pliki mapowanie zrobic jak należy z tesami
  *
- * mail -> zalaczniki ( dorobic w formularzu)
- * mail -> wielu odbiorców
- * mail -> dodac imiona
- * mail -> reply to
- * mail -> cc
- * mail -> bcc
- * mail -> secure
- * mail -> polaczcy sie z gmail
- * mail -> walidacja przed send
+ *  najpeirw http client
+ *  -> łączenie się z testami integracyjnymi
+ *  -> pliki mapowanie zrobic jak należy z tesami
+ *
+ * task -> przeskanowac kiedy nie znajduje
  *
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)

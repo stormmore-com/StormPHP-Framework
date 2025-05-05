@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Mail;
 
+use Exception;
 use Throwable;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Internationalization\I18n;
@@ -10,8 +11,11 @@ use Stormmore\Framework\Mvc\View\View;
 
 class MailBuilder
 {
-    private string $sender = "";
-    private string $recipient = "";
+    private ?Address $sender = null;
+    private array $recipients = [];
+    private array $cc = [];
+    private array $bcc = [];
+    private array $replyTo = [];
     private string $subject = "";
     private string $content = "";
     /* @var Attachment[] */
@@ -23,15 +27,38 @@ class MailBuilder
     {
     }
 
-    public function withSender(string $sender): self
+    public function withSender(string $sender, string $name = ""): self
     {
-        $this->sender = $sender;
+        filter_var($sender, FILTER_VALIDATE_EMAIL) or throw new Exception("Invalid sender email");
+        $this->sender = new Address($sender, $name);
         return $this;
     }
 
-    public function withRecipient(string $recipient): MailBuilder
+    public function withRecipient(string $recipient, string $name = ""): MailBuilder
     {
-        $this->recipient = $recipient;
+        filter_var($recipient, FILTER_VALIDATE_EMAIL) or throw new Exception("Invalid recipient email");
+        $this->recipients[] = new Address($recipient, $name);
+        return $this;
+    }
+
+    public function withCc(string $recipient, string $name = ""): MailBuilder
+    {
+        filter_var($recipient, FILTER_VALIDATE_EMAIL) or throw new Exception("Invalid cc email");
+        $this->cc[] = new Address($recipient, $name);
+        return $this;
+    }
+
+    public function withBcc(string $recipient, string $name = ""): MailBuilder
+    {
+        filter_var($recipient, FILTER_VALIDATE_EMAIL) or throw new Exception("Invalid bcc email");
+        $this->bcc[] = new Address($recipient, $name);
+        return $this;
+    }
+
+    public function withReplyTo(string $recipient, string $name = ""): MailBuilder
+    {
+        filter_var($recipient, FILTER_VALIDATE_EMAIL) or throw new Exception("Invalid repoly to email");
+        $this->replyTo[] = new Address($recipient, $name);
         return $this;
     }
 
@@ -71,7 +98,7 @@ class MailBuilder
 
     public function withAttachment(string $filepath, string $name = ""): MailBuilder
     {
-        $this->attachments[] = new Attachment($filepath);
+        $this->attachments[] = new Attachment($filepath, $name);
         return $this;
     }
 
@@ -89,7 +116,27 @@ class MailBuilder
 
     public function send(): void
     {
-        $mail = new Mail($this->sender, $this->recipient, $this->subject, $this->content, $this->attachments, $this->contentType, $this->charset);
+        $mail = $this->build();
         $this->mailSender->send($mail);
+    }
+
+    public function build(): Mail
+    {
+        $this->sender !== null or throw new Exception("MailBuilder. Sender is required");
+        count($this->recipients) or throw new Exception("MailBuilder. Recipients are required");
+        !empty($this->subject) or throw new Exception("MailBuilder. Subject is required");
+        !empty($this->content) or throw new Exception("MailBuilder. Content is required");
+
+        return  new Mail(
+            $this->sender,
+            $this->recipients,
+            $this->cc,
+            $this->bcc,
+            $this->replyTo,
+            $this->subject,
+            $this->content,
+            $this->attachments,
+            $this->contentType,
+            $this->charset);
     }
 }
