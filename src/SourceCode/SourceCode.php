@@ -109,7 +109,7 @@ class SourceCode
         return $this->eventHandlers;
     }
 
-    public function getTask(): array
+    public function getTasks(): array
     {
         return $this->tasks;
     }

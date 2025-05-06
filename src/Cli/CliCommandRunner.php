@@ -4,6 +4,7 @@ namespace Stormmore\Framework\Cli;
 
 use Exception;
 use Stormmore\Framework\App\RequestContext;
+use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\SourceCode\SourceCode;
@@ -11,6 +12,7 @@ use Stormmore\Framework\SourceCode\SourceCode;
 readonly class CliCommandRunner
 {
     public function __construct(private RequestContext $requestContext,
+                                private AppConfiguration $configuration,
                                 private SourceCode $sourceCode,
                                 private Resolver $resolver,
                                 private Response $response)
@@ -25,11 +27,24 @@ readonly class CliCommandRunner
             return;
         }
 
-        $tasks = $this->sourceCode->getTask();
-        $taskName = $cliArguments->getTaskName();
+        $this->runTask($cliArguments->getTaskName());
+    }
+
+    private function runTask(string $taskName): void
+    {
+        $tasks = $this->sourceCode->getTasks();
         if (!array_key_exists($taskName, $tasks)) {
-            $this->response->setBody("Task '$taskName' is not found");
-            return;
+            if ($this->configuration->isDevelopment()) {
+                $this->sourceCode->scan();
+                $tasks = $this->sourceCode->getTasks();
+                if (array_key_exists($taskName, $tasks)) {
+                    $this->sourceCode->writeCache();
+                }
+            }
+            if(!array_key_exists($taskName, $tasks)) {
+                $this->response->setBody("Task '$taskName' is not found");
+                return;
+            }
         }
 
         $taskClassName = $tasks[$taskName];

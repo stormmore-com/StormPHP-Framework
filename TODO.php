@@ -1,22 +1,17 @@
 <?php /**
  * TODO
  *
+ * dac mozlwiosc printownia na output bo jet ob_get i nie mozna debugowac za pomoca echo na devie
  *
- * task -> przeskanowac kiedy nie znajduje
- *
- *  najpeirw http client
- *  -> łączenie się z testami integracyjnymi
- *  -> pliki mapowanie zrobic jak należy z tesami
+ *  requesty http
+ * requesty cli
+ *  mapowanie plikó
+ * mail -> tablice plików
  *
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)
- * dac mozlwiosc printownia na output bo jet ob_get i nie mozna debugowac za pomoca echo na devie
+ *
  * tlumaczenia iterałów
- *
- * requesty cli
- * requesty http
- *
- * o
  *
  *
  * multidimensional files
