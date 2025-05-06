@@ -2,11 +2,11 @@
  * TODO
  *
  *
+ * task -> przeskanowac kiedy nie znajduje
+ *
  *  najpeirw http client
  *  -> łączenie się z testami integracyjnymi
  *  -> pliki mapowanie zrobic jak należy z tesami
- *
- * task -> przeskanowac kiedy nie znajduje
  *
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)
@@ -16,7 +16,7 @@
  * requesty cli
  * requesty http
  *
- * obsługa wszytkihc 7 typów put delete etc. (atrybuty i w request metoda)
+ * o
  *
  *
  * multidimensional files

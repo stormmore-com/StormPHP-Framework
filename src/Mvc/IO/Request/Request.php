@@ -68,9 +68,9 @@ class Request
         $this->routeParameters = new Parameters($parameters);
     }
 
-    function isPost(): bool
+    function is(string $method): bool
     {
-        return $this->method == 'POST';
+        return $this->method === strtoupper($method);
     }
 
     function isGet(): bool
@@ -78,14 +78,24 @@ class Request
         return $this->method == 'GET';
     }
 
-    function isDelete(): bool
+    function isPost(): bool
     {
-        return $this->method == 'DELETE';
+        return $this->method == 'POST';
     }
 
     public function isPut(): bool
     {
         return $this->method == 'PUT';
+    }
+
+    public function isPatch(): bool
+    {
+        return $this->method == 'PATCH';
+    }
+
+    function isDelete(): bool
+    {
+        return $this->method == 'DELETE';
     }
 
     public function getJson(): ?object
@@ -237,7 +247,7 @@ class Request
     /**
      * @return Locale[]
      */
-    public function getAcceptedLocales(): array
+    public function getLocales(): array
     {
         if ($this->acceptedLanguages) {
             return $this->acceptedLanguages;
@@ -258,7 +268,7 @@ class Request
 
     public function getFirstAcceptedLocale(array $supportedLocales): Locale|null
     {
-        $acceptedLanguages = $this->getAcceptedLocales();
+        $acceptedLanguages = $this->getLocales();
         foreach ($acceptedLanguages as $acceptedLanguage) {
             foreach ($supportedLocales as $supportedLocale) {
                 if ($acceptedLanguage->equals($supportedLocale)) {

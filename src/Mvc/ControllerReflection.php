@@ -7,8 +7,11 @@ use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\FluentReflection\Class\FluentClass;
 use Stormmore\Framework\FluentReflection\Class\FluentClassMethod;
+use Stormmore\Framework\Mvc\Attributes\Delete;
 use Stormmore\Framework\Mvc\Attributes\Get;
+use Stormmore\Framework\Mvc\Attributes\Patch;
 use Stormmore\Framework\Mvc\Attributes\Post;
+use Stormmore\Framework\Mvc\Attributes\Put;
 use Stormmore\Framework\Mvc\Authentication\Ajax;
 use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
@@ -41,12 +44,16 @@ readonly class ControllerReflection
             $user->isAuthenticated() or throw new AjaxAuthenticationException("APP: authentication required", 401);
         }
 
-        if ($this->endpointHasAttribute(Post::class)) {
-            $this->request->isPost() or throw new Exception("POST required", 404);
-        }
-
-        if ($this->endpointHasAttribute(Get::class)) {
-            $this->request->isGet() or throw new Exception("GET required", 404);
+        $methodAttributes = [
+            'GET' => Get::class,
+            'POST' => Post::class,
+            'PUT' => Put::class,
+            'PATCH' => Patch::class,
+            'DELETE' => Delete::class];
+        foreach($methodAttributes as $name => $class) {
+            if ($this->endpointHasAttribute($class)) {
+                $this->request->is($name) or throw new Exception("$name required", 404);
+            }
         }
 
         if ($this->endpointHasAttribute(Authenticate::class)) {

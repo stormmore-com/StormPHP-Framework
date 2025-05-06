@@ -4,5 +4,7 @@ vendor/
 .cache/
 .logs/
 
+tests/.phpunit.result.cache
+
 .DS_Store
 *.pem
