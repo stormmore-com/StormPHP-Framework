@@ -44,9 +44,18 @@ class AppConfiguration
         return str_starts_with($this->configuration->get('environment'), 'development');
     }
 
+    public function isProduction(): bool
+    {
+        return str_starts_with($this->configuration->get('environment'), 'production');
+    }
+
     public function getEnvironment(): string
     {
-        return $this->configuration->get('environment');
+        if ($this->isDevelopment())
+        {
+            return 'development';
+        }
+        return 'production';
     }
 
     public function setProjectDirectory(string $projectDirectory): void

@@ -1,20 +1,19 @@
 <?php /**
  * TODO
  *
- * dac mozlwiosc printownia na output bo jet ob_get i nie mozna debugowac za pomoca echo na devie
+ *  unity wywalaja sie w wersji prod
  *
- *  requesty http
+ * requesty http
  * requesty cli
- *  mapowanie plikó
- * mail -> tablice plików
+ *
+ *
  *
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)
- *
  * tlumaczenia iterałów
  *
- *
  * multidimensional files
+ * mail -> tablica plikó
  *
  *
  *  refaktor

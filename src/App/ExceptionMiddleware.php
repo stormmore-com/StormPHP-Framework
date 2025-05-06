@@ -70,8 +70,14 @@ readonly class ExceptionMiddleware implements IMiddleware
     private function getErrorPageContent(string $path, Throwable $throwable): string
     {
         ob_start();
-        include_once resolve_path_alias($path);
-        return ob_get_clean();
+        try {
+            include_once resolve_path_alias($path);
+            return ob_get_clean();
+        }
+        catch(Throwable $t) {
+            ob_clean();
+            throw $t;
+        }
     }
 
     private function printException(Throwable $throwable): void

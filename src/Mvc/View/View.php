@@ -64,22 +64,23 @@ class View extends stdClass
         $templateFilePath = resolve_path_alias($this->fileName);
         file_exists($templateFilePath) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");
 
-        try {
-            return $this->getTemplateContent($templateFilePath);
-        } catch (Throwable $t) {
-            ob_end_clean();
-            throw $t;
-        }
+        return $this->getTemplateContent($templateFilePath);
     }
 
     private function getTemplateContent(string $templateFileName): string
     {
         ob_start();
-        $view = $this;
-        $bag = $this->bag;
-        extract($this->data, EXTR_OVERWRITE, 'wddx');
-        require $templateFileName;
-        $content = ob_get_clean();
+        try {
+            $view = $this;
+            $bag = $this->bag;
+            extract($this->data, EXTR_OVERWRITE, 'wddx');
+            require $templateFileName;
+            $content = ob_get_clean();
+        } catch(Throwable $t) {
+            ob_clean();
+            throw $t;
+        }
+
         if ($this->layoutFileName) {
             $layoutView = new View($this->layoutFileName);
             $layoutView->content = $content;

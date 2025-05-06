@@ -22,7 +22,7 @@ readonly class AppConfigurationMiddleware implements IMiddleware
             404 => '@templates/errors/404.php',
             'unauthenticated' => redirect('/signin'),
             'unauthorized' => redirect('/signin'),
-            'default' => '@templates/errors/500.php'
+            'default' => '@templates/errors/500_prod.php'
         ]);
         if ($this->appConfiguration->isDevelopment()) {
             $this->appConfiguration->addErrors([

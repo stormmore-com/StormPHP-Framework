@@ -94,7 +94,7 @@ class AppRequest implements IRequest
             include($filename);
         }
         $content = ob_get_flush();
-        ob_end_clean();
+        ob_clean();
         chdir($cwd);
 
         return new AppResponse($content);

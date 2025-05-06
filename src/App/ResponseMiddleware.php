@@ -3,19 +3,23 @@
 namespace Stormmore\Framework\App;
 
 use closure;
+use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Mvc\IO\Response;
 
 readonly class ResponseMiddleware implements IMiddleware
 {
-    public function __construct(private Response $response, private RequestContext $requestContext)
+    public function __construct(private Response $response, private RequestContext $requestContext, private AppConfiguration $configuration)
     {
     }
 
     public function run(closure $next): void
     {
-        ob_start();
-        $next();
-        ob_clean();
+        try {
+           if ($this->configuration->isProduction()) ob_start();
+            $next();
+        } finally {
+           if ($this->configuration->isProduction()) ob_end_flush();
+        }
 
         if ($this->requestContext->isCliRequest()) {
             echo "<http-header>Status-Code: {$this->response->code}</http-header>\n";
