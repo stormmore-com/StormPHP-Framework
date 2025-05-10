@@ -2,6 +2,8 @@
 
 namespace Stormmore\Framework\Http;
 
+use Stormmore\Framework\Http\Interfaces\ICookie;
+
 readonly class Cookie implements ICookie
 {
     public function __construct(private string $name, private string $value)

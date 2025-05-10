@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Tests;
+namespace Stormmore\Framework\Tests\Client;
 
 class AppRequestFile
 {

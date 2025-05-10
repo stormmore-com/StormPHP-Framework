@@ -1,11 +1,11 @@
 <?php
 
-namespace Stormmore\Framework\Tests;
+namespace Stormmore\Framework\Tests\Client;
 
 use Stormmore\Framework\Http\Cookie;
 use Stormmore\Framework\Http\Header;
-use Stormmore\Framework\Http\IHeader;
-use Stormmore\Framework\Http\IResponse;
+use Stormmore\Framework\Http\Interfaces\IHeader;
+use Stormmore\Framework\Http\Interfaces\IResponse;
 
 class AppResponse implements IResponse
 {

@@ -1,6 +1,8 @@
 <?php
 
-namespace Stormmore\Framework\Http;
+namespace Stormmore\Framework\Http\Interfaces;
+
+use Stormmore\Framework\Http\FormData;
 
 interface IRequest
 {

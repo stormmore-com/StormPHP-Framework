@@ -1,10 +1,10 @@
 <?php
 
-namespace Stormmore\Framework\Tests;
+namespace Stormmore\Framework\Tests\Client;
 
 use Exception;
-use Stormmore\Framework\Http\IClient;
-use Stormmore\Framework\Http\IRequest;
+use Stormmore\Framework\Http\Interfaces\IClient;
+use Stormmore\Framework\Http\Interfaces\IRequest;
 
 readonly class AppClient implements IClient
 {
@@ -18,9 +18,9 @@ readonly class AppClient implements IClient
         return new AppClient($indexFilePath);
     }
 
-    public function request(string $method, string $uri): IRequest
+    public function request(string $method, string $url): IRequest
     {
         $method = strtoupper($method);
-        return new AppRequest($this->indexFilePath, $method,$uri);
+        return new AppRequest($this->indexFilePath, $method,$url);
     }
 }

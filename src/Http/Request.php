@@ -2,8 +2,16 @@
 
 namespace Stormmore\Framework\Http;
 
+use Stormmore\Framework\Http\Interfaces\ICookie;
+use Stormmore\Framework\Http\Interfaces\IHeader;
+use Stormmore\Framework\Http\Interfaces\IRequest;
+use Stormmore\Framework\Http\Interfaces\IResponse;
+
 class Request implements IRequest
 {
+    public function __construct(private string $url, private string $method)
+    {
+    }
 
     public function withQuery(array $query): IRequest
     {
@@ -43,7 +51,15 @@ class Request implements IRequest
 
     public function send(): IResponse
     {
-        // TODO: Implement send() method.
-        return $this;
+        $ch = curl_init($this->url);
+        curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $body = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $response = new Response($body, $status);
+
+        return $response;
     }
 }

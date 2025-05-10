@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Http;
+namespace Stormmore\Framework\Http\Interfaces;
 
 interface IResponse
 {

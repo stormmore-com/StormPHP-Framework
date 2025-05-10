@@ -1,12 +1,12 @@
 <?php
 
-namespace integration\request;
+namespace request;
 
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Cookie;
 use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Header;
-use Stormmore\Framework\Tests\AppClient;
+use Stormmore\Framework\Tests\Client\AppClient;
 
 class InProcRequestTest extends TestCase
 {

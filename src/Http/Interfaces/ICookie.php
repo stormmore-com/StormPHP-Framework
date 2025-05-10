@@ -1,10 +1,9 @@
 <?php
 
-namespace Stormmore\Framework\Http;
+namespace Stormmore\Framework\Http\Interfaces;
 
-interface IHeader
+interface ICookie
 {
     public function getName(): string;
-
     public function getValue(): string;
 }

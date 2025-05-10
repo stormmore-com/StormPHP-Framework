@@ -1,12 +1,12 @@
 <?php
 
-namespace Stormmore\Framework\Tests;
+namespace Stormmore\Framework\Tests\Client;
 
 use Stormmore\Framework\Http\FormData;
-use Stormmore\Framework\Http\ICookie;
-use Stormmore\Framework\Http\IHeader;
-use Stormmore\Framework\Http\IRequest;
-use Stormmore\Framework\Http\IResponse;
+use Stormmore\Framework\Http\Interfaces\ICookie;
+use Stormmore\Framework\Http\Interfaces\IHeader;
+use Stormmore\Framework\Http\Interfaces\IRequest;
+use Stormmore\Framework\Http\Interfaces\IResponse;
 
 class AppRequest implements IRequest
 {

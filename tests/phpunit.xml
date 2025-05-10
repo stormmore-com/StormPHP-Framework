@@ -9,6 +9,9 @@
         </testsuite>
     </testsuites>
     <extensions>
-        <bootstrap class="Stormmore\Framework\Tests\Phpunit\BoostrapExtension" />
+        <bootstrap class="Stormmore\Framework\Tests\Phpunit\TestWebServerExtension" >
+            <parameter name="directory" value="app/public_html"/>
+            <parameter name="port" value="7123"/>
+        </bootstrap>
     </extensions>
 </phpunit>

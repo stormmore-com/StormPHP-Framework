@@ -1,12 +1,9 @@
 <?php /**
  * TODO
  *
- *  unity wywalaja sie w wersji prod
  *
  * requesty http
  * requesty cli
- *
- *
  *
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)
