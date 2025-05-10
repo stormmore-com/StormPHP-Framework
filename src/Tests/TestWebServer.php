@@ -39,8 +39,15 @@ class TestWebServer
 
     public function shutdown(): void
     {
+
         if ($this->process) {
-             proc_terminate($this->process);
+            $os = php_uname('s');
+            $isWindows = str_contains(strtolower($os), 'win');
+            $status = proc_get_status($this->process);
+            $pid = $status['pid'];
+            $isWindows  ? exec("taskkill /F /T /PID $pid") : exec("kill -9 $pid");
+            proc_close($this->process);
+            $this->process = null;
         }
     }
 }

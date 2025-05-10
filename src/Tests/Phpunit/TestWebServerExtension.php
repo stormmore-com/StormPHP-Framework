@@ -12,8 +12,16 @@ class TestWebServerExtension implements Extension
 {
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void
     {
-        $directory = $parameters->get('directory');
-        $port = $parameters->get('port');
+        $directory = getcwd();
+        $port = 7123;
+
+        if ($parameters->has('directory')) {
+            $directory = $parameters->get('directory');
+        }
+        if ($parameters->has('port')) {
+            $port = $parameters->get('port');
+        }
+
         $testWebServer = new TestWebServer($directory, $port);
 
         $facade->registerSubscriber(new RunTestWebServer($testWebServer));
