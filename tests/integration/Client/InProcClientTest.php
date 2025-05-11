@@ -10,8 +10,9 @@ use Stormmore\Framework\Tests\Client\AppClient;
 
 class InProcClientTest extends TestCase
 {
+    private string $stormFilepath;
+    private string $filesDirectory;
     private AppClient $appClient;
-    private string $files;
 
     public function testGetRequest(): void
     {
@@ -69,7 +70,7 @@ class InProcClientTest extends TestCase
                 ->add('prime[]', 2)
                 ->add('number', 7)
                 ->add('name', 'Micheal')
-                ->addFile('file', $this->files . "/storm.webp"))
+                ->addFile('file', $this->filesDirectory . "/storm.webp"))
             ->send();
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -81,9 +82,15 @@ class InProcClientTest extends TestCase
         ], $response->getJson());
     }
 
-    public function tesPostBody(): void
+    public function testPostBody(): void
     {
+        $response = $this->appClient
+            ->request("POST", "/test/post/file-in-body")
+            ->withContent(file_get_contents($this->stormFilepath))
+            ->send();
 
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("1648c2a85dd50f2dfaa51fb5c8478261", $response->getBody());
     }
 
     public function testInternalServerError(): void
@@ -145,7 +152,8 @@ class InProcClientTest extends TestCase
 
     public function setUp(): void
     {
-        $this->files = dirname(__FILE__) . "/files" ;
+        $this->filesDirectory = dirname(__FILE__) . "/files" ;
+        $this->stormFilepath = $this->filesDirectory . "/storm.webp";
         $this->appClient = AppClient::create("app/public_html/index.php");
     }
 }

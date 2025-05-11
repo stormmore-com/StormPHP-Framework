@@ -53,6 +53,13 @@ readonly class TestController
         ]);
     }
 
+    #[Post]
+    #[Route("/test/post/file-in-body")]
+    public function sendFileInBody(): string
+    {
+        return md5($this->request->getBody());
+    }
+
     #[Route("/test/get500")]
     public function get500(): string
     {

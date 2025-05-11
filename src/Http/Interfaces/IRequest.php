@@ -11,6 +11,6 @@ interface IRequest
     public function withCookie(ICookie $cookie): IRequest;
     public function withForm(FormData $formData): IRequest;
     public function withJson(mixed $json): IRequest;
-    public function withContent(string $contentType, string $content): IRequest;
+    public function withContent(string $content, string $contentType): IRequest;
     public function send(): IResponse;
 }

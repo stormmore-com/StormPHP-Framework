@@ -9,6 +9,7 @@ use Stormmore\Framework\Http\Interfaces\IClient;
 
 class HttpClientTest extends TestCase
 {
+    private string $stormFilepath;
     private string $filesDirectory;
     private IClient $client;
 
@@ -80,15 +81,22 @@ class HttpClientTest extends TestCase
         ], $response->getJson());
     }
 
-    public function tesPostBody(): void
+    public function testPostBody(): void
     {
+        $response = $this->client
+            ->request("POST", "/test/post/file-in-body")
+            ->withContent(file_get_contents($this->stormFilepath))
+            ->send();
 
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("1648c2a85dd50f2dfaa51fb5c8478261", $response->getBody());
     }
 
 
     public function setUp(): void
     {
         $this->filesDirectory = dirname(__FILE__) . "/files" ;
+        $this->stormFilepath = $this->filesDirectory . "/storm.webp";
         $this->client = Client::create("http://localhost:7123");
     }
 }

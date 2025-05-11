@@ -55,8 +55,10 @@ class AppRequest implements IRequest
         return $this;
     }
 
-    public function withContent(string $type, mixed $content): IRequest
+    public function withContent(mixed $content, string $type = "application/octet-stream"): IRequest
     {
+        $this->content = $content;
+        $this->contentType = $type;
         return $this;
     }
 

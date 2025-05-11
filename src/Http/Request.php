@@ -10,6 +10,8 @@ use Stormmore\Framework\Http\Interfaces\IResponse;
 
 class Request implements IRequest
 {
+    private null|string $content = null;
+    private null|string $contentType = null;
     private null|object|string $json = null;
     private null|FormData $formData = null;
 
@@ -52,9 +54,10 @@ class Request implements IRequest
         return $this;
     }
 
-    public function withContent(string $contentType, string $content): IRequest
+    public function withContent(string $content, string $contentType = "application/octet-stream"): IRequest
     {
-        // TODO: Implement withContent() method.
+        $this->content = $content;
+        $this->contentType = $contentType;
         return $this;
     }
 
@@ -76,6 +79,11 @@ class Request implements IRequest
 
         if ($this->formData) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, $this->getFormData());
+        }
+
+        if ($this->content) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: $this->contentType"));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->content);
         }
 
         $body = curl_exec($ch);
