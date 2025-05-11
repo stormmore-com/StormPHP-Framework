@@ -5,6 +5,7 @@ namespace Client;
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Client;
 use Stormmore\Framework\Http\FormData;
+use Stormmore\Framework\Http\Header;
 use Stormmore\Framework\Http\Interfaces\IClient;
 
 class HttpClientTest extends TestCase
@@ -90,6 +91,33 @@ class HttpClientTest extends TestCase
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("1648c2a85dd50f2dfaa51fb5c8478261", $response->getBody());
+    }
+
+    public function testInternalServerError(): void
+    {
+        $response = $this->client->request("GET", "/test/get500")->send();
+
+        $this->assertEquals(500, $response->getStatusCode());
+    }
+
+    public function testReadingHeaderFromRequest(): void
+    {
+        $response = $this->client->request("GET", "/test/read-header")->send();
+
+        $header  = $response->getHeader("service-key");
+
+        $this->assertEquals("123456790", $header->getValue());
+    }
+
+    public function testSendingHeaderToApp(): void
+    {
+        $response = $this->client
+            ->request("GET", "/test/get-header")
+            ->withHeader(new Header("service-key", "service-key-unique-value"))
+            ->send();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("service-key-unique-value", $response->getBody());
     }
 
 

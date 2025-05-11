@@ -12,11 +12,11 @@ class InProcClientTest extends TestCase
 {
     private string $stormFilepath;
     private string $filesDirectory;
-    private AppClient $appClient;
+    private AppClient $client;
 
     public function testGetRequest(): void
     {
-        $response = $this->appClient->request("GET", "/test/get")->send();
+        $response = $this->client->request("GET", "/test/get")->send();
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("OK", $response->getBody());
@@ -24,7 +24,7 @@ class InProcClientTest extends TestCase
 
     public function testQueryParameters(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("GET", "/test/concatenate-query-params")
             ->withQuery(['a' => 'one', 'b' => 'two', 'c' => 'three'])
             ->send();
@@ -34,7 +34,7 @@ class InProcClientTest extends TestCase
 
     public function testQueryParametersWithUrl(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("GET", "/test/concatenate-query-params?a=one")
             ->withQuery(['b' => 'two', 'c' => 'three'])
             ->send();
@@ -44,7 +44,7 @@ class InProcClientTest extends TestCase
 
     public function testPostRequest(): void
     {
-        $response = $this->appClient->request("POST", "/test/post")->send();
+        $response = $this->client->request("POST", "/test/post")->send();
 
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("OK", $response->getBody());
@@ -52,7 +52,7 @@ class InProcClientTest extends TestCase
 
     public function testPostJson(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("POST", "/test/post/json")
             ->withJson('{"name": "Micheal"}')
             ->send();
@@ -63,7 +63,7 @@ class InProcClientTest extends TestCase
 
     public function testPostFormWithFiles(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("POST", "/test/post/form")
             ->withForm((new FormData())
                 ->add('prime[]', 1)
@@ -84,7 +84,7 @@ class InProcClientTest extends TestCase
 
     public function testPostBody(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("POST", "/test/post/file-in-body")
             ->withContent(file_get_contents($this->stormFilepath))
             ->send();
@@ -95,15 +95,14 @@ class InProcClientTest extends TestCase
 
     public function testInternalServerError(): void
     {
-        $response = $this->appClient->request("GET", "/test/get500")->send();
+        $response = $this->client->request("GET", "/test/get500")->send();
 
         $this->assertEquals(500, $response->getStatusCode());
     }
 
-
     public function testReadingHeaderFromRequest(): void
     {
-        $response = $this->appClient->request("GET", "/test/read-header")->send();
+        $response = $this->client->request("GET", "/test/read-header")->send();
 
         $header  = $response->getHeader("service-key");
 
@@ -112,17 +111,18 @@ class InProcClientTest extends TestCase
 
     public function testSendingHeaderToApp(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("GET", "/test/get-header")
             ->withHeader(new Header("service-key", "service-key-unique-value"))
             ->send();
 
+        $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals("service-key-unique-value", $response->getBody());
     }
 
     public function testReadingCookieFromRequest(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("GET", "/test/read-cookie")
             ->send();
 
@@ -131,7 +131,7 @@ class InProcClientTest extends TestCase
 
     public function testSendingCookieToApp(): void
     {
-        $response = $this->appClient
+        $response = $this->client
             ->request("GET", "/test/write-cookie-to-body")
             ->withCookie(new Cookie('session-id', 'session-id-unique-value'))
             ->withCookie(new Cookie("service-key", "service-key-unique-value"))
@@ -142,7 +142,7 @@ class InProcClientTest extends TestCase
 
     public function testAjax(): void
     {
-        $response = $this->appClient->request("GET", "/test/ajax")->send();
+        $response = $this->client->request("GET", "/test/ajax")->send();
 
         $json = $response->getJson();
 
@@ -154,6 +154,6 @@ class InProcClientTest extends TestCase
     {
         $this->filesDirectory = dirname(__FILE__) . "/files" ;
         $this->stormFilepath = $this->filesDirectory . "/storm.webp";
-        $this->appClient = AppClient::create("app/public_html/index.php");
+        $this->client = AppClient::create("app/public_html/index.php");
     }
 }

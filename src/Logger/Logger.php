@@ -27,29 +27,29 @@ class Logger implements ILogger
     public function log(string $level, string $message, Throwable $t = null): void
     {
         if ($t) {
-            $message .= "\n" . $t->getTraceAsString();
+            $message  .= "\n" . $t->getMessage() . "\n" . $t->getTraceAsString();
         }
         $this->write($level, $message);
     }
 
-    public function logD(string $message): void
+    public function logD(string $message, Throwable $t = null): void
     {
-        $this->write(self::DEBUG, $message);
+        $this->log(self::DEBUG, $message, $t);
     }
 
-    public function logI(string $message): void
+    public function logI(string $message, Throwable $t = null): void
     {
-        $this->log(self::INFO, $message);
+        $this->log(self::INFO, $message, $t);
     }
 
-    public function logN(string $message): void
+    public function logN(string $message, Throwable $t = null): void
     {
-        $this->log(self::NOTICE, $message);
+        $this->log(self::NOTICE, $message, $t);
     }
 
-    public function logW(string $message): void
+    public function logW(string $message, Throwable $t = null): void
     {
-        $this->log(self::WARNING, $message);
+        $this->log(self::WARNING, $message, $t);
     }
 
     public function logE(string $message, Throwable $t = null): void
@@ -57,9 +57,9 @@ class Logger implements ILogger
         $this->log(self::ERROR, $message, $t);
     }
 
-    public function logF(string $message): void
+    public function logF(string $message, Throwable $t = null): void
     {
-        $this->log(self::FATAL, $message);
+        $this->log(self::FATAL, $message, $t);
     }
 
     private function write(string $level, string $line): void

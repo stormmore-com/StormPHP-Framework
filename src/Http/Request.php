@@ -10,6 +10,7 @@ use Stormmore\Framework\Http\Interfaces\IResponse;
 
 class Request implements IRequest
 {
+    private array $headers = [];
     private null|string $content = null;
     private null|string $contentType = null;
     private null|object|string $json = null;
@@ -29,8 +30,8 @@ class Request implements IRequest
 
     public function withHeader(IHeader $header): IRequest
     {
+        $this->headers[$header->getName()] = $header;
         return $this;
-        // TODO: Implement withHeader() method.
     }
 
     public function withCookie(ICookie $cookie): IRequest
@@ -63,36 +64,60 @@ class Request implements IRequest
 
     public function send(): IResponse
     {
+        $headers = [];
+
         $ch = curl_init($this->url);
 
         curl_setopt($ch, CURLOPT_URL, $this->url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         if ($this->method === 'POST') {
             curl_setopt($ch, CURLOPT_POST, 1);
         }
 
-        if ($this->json) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->json);
+        if ($this->method !== 'GET') {
+            if ($this->content) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: $this->contentType"));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $this->content);
+            }
+
+            if ($this->json) {
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $this->json);
+            }
+
+            if ($this->formData) {
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $this->getFormData());
+            }
         }
 
-        if ($this->formData) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->getFormData());
+        if (count($this->headers)) {
+            $requestHeaders = [];
+            foreach($this->headers as $header) {
+                $requestHeaders[] = $header->getName() .  ":" .  $header->getValue();
+            }
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $requestHeaders);
         }
 
-        if ($this->content) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: $this->contentType"));
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->content);
-        }
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION,
+            function($curl, $header) use (&$headers)
+            {
+                $len = strlen($header);
+                if (!str_contains($header, ':')) return $len;
+                list($key, $value) = explode(':', $header);
+
+                $headers[strtolower(trim($key))] = trim($value);
+
+                return $len;
+            }
+        );
 
         $body = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        $response = new Response($body, $status);
-
-        return $response;
+       return new Response($body, $status, $headers);
     }
 
     private function getFormData(): array

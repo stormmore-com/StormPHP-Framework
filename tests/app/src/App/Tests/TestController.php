@@ -81,7 +81,7 @@ readonly class TestController
     #[Route("/test/get-header")]
     public function getHeader(): string
     {
-        return $this->request->getHeader("service-key")->value;
+        return $this->request->getHeader("service-key")->getValue();
     }
 
     #[Route("/test/read-cookie")]
