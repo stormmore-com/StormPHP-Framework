@@ -1,13 +1,13 @@
 <?php
 
-namespace request;
+namespace Client;
 
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Client;
 use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Interfaces\IClient;
 
-class HttpRequestTest extends TestCase
+class HttpClientTest extends TestCase
 {
     private string $filesDirectory;
     private IClient $client;
@@ -59,7 +59,7 @@ class HttpRequestTest extends TestCase
         $this->assertEquals('{"name":"Micheal"}', $response->getBody());
     }
 
-    public function tesPostFormWithFiles(): void
+    public function testPostFormWithFiles(): void
     {
         $response = $this->client
             ->request("POST", "/test/post/form")

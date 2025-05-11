@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Http;
 
+use CURLFile;
 use Stormmore\Framework\Http\Interfaces\ICookie;
 use Stormmore\Framework\Http\Interfaces\IHeader;
 use Stormmore\Framework\Http\Interfaces\IRequest;
@@ -74,9 +75,8 @@ class Request implements IRequest
         }
 
         if ($this->formData) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->formData);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->getFormData());
         }
-
 
         $body = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -85,5 +85,35 @@ class Request implements IRequest
         $response = new Response($body, $status);
 
         return $response;
+    }
+
+    private function getFormData(): array
+    {
+        $files = $this->formData->getNestedFilesArray();
+        array_walk_recursive($files, function (&$file) {
+            $file = new CurlFile($file);
+        });
+        $postData = array_merge($this->formData->getNestedFieldsArray(), $files);
+        return $this->flattenArray($postData);
+    }
+
+    private function flattenArray(array $data) : array
+    {
+        if(!is_array($data)) {
+            return $data;
+        }
+        foreach($data as $key => $val) {
+            if(is_array($val)) {
+                foreach($val as $k => $v) {
+                    if(is_array($v)) {
+                        $data = array_merge($data, $this->flattenArray(array( "{$key}[{$k}]" => $v)));
+                    } else {
+                        $data["{$key}[{$k}]"] = $v;
+                    }
+                }
+                unset($data[$key]);
+            }
+        }
+        return $data;
     }
 }

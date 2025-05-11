@@ -30,7 +30,7 @@ readonly class ExceptionMiddleware implements IMiddleware
             $this->logger->logI("Request finished `{$this->request->path}` [{$this->response->code}]");
         } catch (Throwable $throwable) {
             $this->handle($throwable);
-            $this->logger->logE("Request failed  `{$this->request->path}` [{$this->response->code}]");
+            $this->logger->logE("Request failed  `{$this->request->path}` [{$this->response->code}]", $throwable);
         }
     }
 

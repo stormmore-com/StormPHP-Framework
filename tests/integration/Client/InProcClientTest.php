@@ -1,6 +1,6 @@
 <?php
 
-namespace request;
+namespace Client;
 
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Cookie;
@@ -8,7 +8,7 @@ use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Header;
 use Stormmore\Framework\Tests\Client\AppClient;
 
-class InProcRequestTest extends TestCase
+class InProcClientTest extends TestCase
 {
     private AppClient $appClient;
     private string $files;

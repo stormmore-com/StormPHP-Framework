@@ -18,7 +18,7 @@ class Response implements IResponse
 
     public function getJson(): object
     {
-        // TODO: Implement getJson() method.
+        return json_decode($this->body);
     }
 
     public function getBody(): string

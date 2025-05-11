@@ -127,13 +127,12 @@ class CliArguments
         return "";
     }
 
-
     public function getPostParameters(): array
     {
         /** @var FormData $form */
         if (array_key_exists('-form', $this->arguments)) {
             $form = $this->arguments['-form'][0];
-            return $form->getFields();
+            return $form->getNestedFieldsArray();
         }
 
         return [];

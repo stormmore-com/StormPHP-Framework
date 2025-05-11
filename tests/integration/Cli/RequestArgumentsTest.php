@@ -1,6 +1,6 @@
 <?php
 
-namespace request;
+namespace Cli;
 
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Cli\CliArguments;

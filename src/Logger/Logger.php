@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Logger;
 
+use Throwable;
 use DateTime;
 use Stormmore\Framework\AppConfiguration;
 
@@ -23,8 +24,11 @@ class Logger implements ILogger
         $this->uuid = bin2hex(random_bytes(8));
     }
 
-    public function log(string $level, string $message): void
+    public function log(string $level, string $message, Throwable $t = null): void
     {
+        if ($t) {
+            $message .= "\n" . $t->getTraceAsString();
+        }
         $this->write($level, $message);
     }
 
@@ -48,9 +52,9 @@ class Logger implements ILogger
         $this->log(self::WARNING, $message);
     }
 
-    public function logE(string $message): void
+    public function logE(string $message, Throwable $t = null): void
     {
-        $this->log(self::ERROR, $message);
+        $this->log(self::ERROR, $message, $t);
     }
 
     public function logF(string $message): void

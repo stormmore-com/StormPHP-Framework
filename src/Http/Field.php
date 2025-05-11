@@ -15,6 +15,11 @@ class Field
         $this->separateNameAndArrayChain();
     }
 
+    public function getField(): string
+    {
+        return $this->field;
+    }
+
     public function getName(): string
     {
         return $this->name;

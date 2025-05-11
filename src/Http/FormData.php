@@ -28,14 +28,30 @@ class FormData
         return $this;
     }
 
+    /**
+     * @return Field[]
+     */
     public function getFiles(): array
     {
         return $this->files;
     }
 
+    /**
+     * @return Field[]
+     */
     public function getFields(): array
     {
+        return $this->fields;
+    }
+
+    public function getNestedFieldsArray(): array
+    {
         return $this->toNestedArray($this->fields);
+    }
+
+    public function getNestedFilesArray(): array
+    {
+        return $this->toNestedArray($this->files);
     }
 
     /**
