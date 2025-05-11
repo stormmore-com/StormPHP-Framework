@@ -9,14 +9,19 @@ use Stormmore\Framework\Http\Interfaces\IResponse;
 
 class Request implements IRequest
 {
+    private null|object|string $json = null;
+    private null|FormData $formData = null;
+
     public function __construct(private string $url, private string $method)
     {
+        $this->method = strtoupper($this->method);
     }
 
     public function withQuery(array $query): IRequest
     {
+        $queryString = http_build_query($query);
+        $this->url .= str_contains($this->url, '?') ? '&' . $queryString : '?' . $queryString;
         return $this;
-        // TODO: Implement withQuery() method.
     }
 
     public function withHeader(IHeader $header): IRequest
@@ -33,13 +38,16 @@ class Request implements IRequest
 
     public function withForm(FormData $formData): IRequest
     {
-        // TODO: Implement withForm() method.
+        $this->formData = $formData;
         return $this;
     }
 
     public function withJson(mixed $json): IRequest
     {
-        // TODO: Implement withJson() method.
+        if (is_object($json)) {
+            $json = json_encode($json);
+        }
+        $this->json = $json;
         return $this;
     }
 
@@ -52,8 +60,24 @@ class Request implements IRequest
     public function send(): IResponse
     {
         $ch = curl_init($this->url);
+
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        if ($this->method === 'POST') {
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }
+
+        if ($this->json) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->json);
+        }
+
+        if ($this->formData) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $this->formData);
+        }
+
+
         $body = curl_exec($ch);
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);

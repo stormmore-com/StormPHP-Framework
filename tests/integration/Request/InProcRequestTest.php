@@ -81,12 +81,10 @@ class InProcRequestTest extends TestCase
         ], $response->getJson());
     }
 
-//     md5
-//    public function testPostBody(): void
-//    {
-//
-//    }
+    public function tesPostBody(): void
+    {
 
+    }
 
     public function testInternalServerError(): void
     {

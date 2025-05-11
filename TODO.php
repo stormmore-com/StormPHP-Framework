@@ -5,6 +5,8 @@
  * requesty http
  * requesty cli
  *
+ * https
+ * testy put/patch/delete
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)
  * tlumaczenia iterałów
