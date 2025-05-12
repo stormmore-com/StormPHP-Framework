@@ -65,6 +65,7 @@ class Request implements IRequest
     public function send(): IResponse
     {
         $headers = [];
+        $cookies = [];
 
         $ch = curl_init($this->url);
 
@@ -101,13 +102,26 @@ class Request implements IRequest
         }
 
         curl_setopt($ch, CURLOPT_HEADERFUNCTION,
-            function($curl, $header) use (&$headers)
+            function($curl, $header) use (&$headers, &$cookies)
             {
                 $len = strlen($header);
                 if (!str_contains($header, ':')) return $len;
                 list($key, $value) = explode(':', $header);
+                $key = strtolower(trim($key));
+                $value = trim($value);
 
-                $headers[strtolower(trim($key))] = trim($value);
+                $headers[$key] = $value;
+                if ($key == 'set-cookie') {
+                    $setCookie = explode(';', $value);
+                    if (count($setCookie) > 1) {
+                        list($key, $value) = explode('=', $setCookie[0]);
+                        if ($key and $value) {
+                            $key = trim($key);
+                            $value = trim($value);
+                            $cookies[$key] = $value;
+                        }
+                    }
+                }
 
                 return $len;
             }
@@ -117,7 +131,7 @@ class Request implements IRequest
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-       return new Response($body, $status, $headers);
+       return new Response($body, $status, $headers, $cookies);
     }
 
     private function getFormData(): array

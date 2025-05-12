@@ -5,6 +5,7 @@
  * requesty http
  * requesty cli
  *
+ * -> timeout
  * -> reading img
  * -> https
  * -> testy put/patch/delete

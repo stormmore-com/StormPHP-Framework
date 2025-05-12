@@ -2,17 +2,17 @@
 
 namespace Stormmore\Framework\Http;
 
+use Stormmore\Framework\Http\Interfaces\ICookie;
 use Stormmore\Framework\Http\Interfaces\IHeader;
 use Stormmore\Framework\Http\Interfaces\IResponse;
-use Stormmore\Framework\Mvc\IO\Headers\Headers;
 
-class Response implements IResponse
+readonly class Response implements IResponse
 {
-    private array $headers;
-
-    public function __construct(private string $body, private int $status = 200, array $headers = [])
+    public function __construct(private string $body,
+                                private int $status = 200,
+                                private array $headers = [],
+                                private array $cookies = [])
     {
-        $this->headers = $headers;
     }
 
     public function getStatusCode(): int
@@ -41,5 +41,13 @@ class Response implements IResponse
     public function getHeaders(): array
     {
         return $this->headers;
+    }
+
+    public function getCookie(string $name): null|ICookie
+    {
+        if (array_key_exists($name, $this->cookies)) {
+            return new Cookie($name, $this->cookies[$name]);
+        }
+        return null;
     }
 }

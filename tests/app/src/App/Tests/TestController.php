@@ -63,7 +63,7 @@ readonly class TestController
     #[Route("/test/get500")]
     public function get500(): string
     {
-        throw new Exception();
+        throw new Exception("Standard error");
     }
 
     #[Route("/test/concatenate-query-params")]

@@ -120,6 +120,15 @@ class HttpClientTest extends TestCase
         $this->assertEquals("service-key-unique-value", $response->getBody());
     }
 
+    public function testReadingCookieFromRequest(): void
+    {
+        $response = $this->client
+            ->request("GET", "/test/read-cookie")
+            ->send();
+
+        $this->assertEquals("0987654321", $response->getCookie('session-id')->getValue());
+    }
+
 
     public function setUp(): void
     {
