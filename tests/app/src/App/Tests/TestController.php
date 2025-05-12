@@ -7,6 +7,9 @@ use stdClass;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Get;
 use Stormmore\Framework\Mvc\Attributes\Post;
+use Stormmore\Framework\Mvc\Attributes\Put;
+use Stormmore\Framework\Mvc\Attributes\Patch;
+use Stormmore\Framework\Mvc\Attributes\Delete;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Request\Request;
 use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
@@ -27,12 +30,34 @@ readonly class TestController
         return "OK";
     }
 
+    #[Put]
+    #[Route("/test/put")]
+    public function put(): string
+    {
+        return "OK";
+    }
+
+    #[Patch]
+    #[Route("/test/patch")]
+    public function patch(): string
+    {
+        return "OK";
+    }
+
+    #[Delete]
+    #[Route("/test/delete")]
+    public function delete(): string
+    {
+        return "OK";
+    }
+
     #[Post]
     #[Route("/test/post")]
     public function post(): string
     {
         return "OK";
     }
+
 
     #[Post]
     #[Route("/test/post/json")]

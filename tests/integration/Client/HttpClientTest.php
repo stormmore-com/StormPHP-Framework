@@ -23,6 +23,73 @@ class HttpClientTest extends TestCase
         $this->assertEquals("OK", $response->getBody());
     }
 
+    public function testPostRequest(): void
+    {
+        $response = $this->client->request("POST", "/test/post")->send();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("OK", $response->getBody());
+    }
+
+    public function testPutRequest(): void
+    {
+        $response = $this->client->request("PUT", "/test/put")->send();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("OK", $response->getBody());
+    }
+
+    public function testPatchRequest(): void
+    {
+        $response = $this->client->request("PATCH", "/test/patch")->send();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("OK", $response->getBody());
+    }
+
+    public function testDeleteRequest(): void
+    {
+        $response = $this->client->request("DELETE", "/test/delete")->send();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("OK", $response->getBody());
+    }
+
+    public function testGetEndpointWithPost(): void
+    {
+        $response = $this->client->request("POST", "/test/get")->send();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testPostEndpointWithGet(): void
+    {
+        $response = $this->client->request("GET", "/test/post")->send();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testPutEndpointWithGet(): void
+    {
+        $response = $this->client->request("GET", "/test/put")->send();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testPatchEndpointWithGet(): void
+    {
+        $response = $this->client->request("GET", "/test/patch")->send();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testDeleteEndpointWithGet(): void
+    {
+        $response = $this->client->request("GET", "/test/delete")->send();
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
     public function testQueryParameters(): void
     {
         $response = $this->client
@@ -41,14 +108,6 @@ class HttpClientTest extends TestCase
             ->send();
 
         $this->assertEquals("onetwothree", $response->getBody());
-    }
-
-    public function testPostRequest(): void
-    {
-        $response = $this->client->request("POST", "/test/post")->send();
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals("OK", $response->getBody());
     }
 
     public function testPostJson(): void
@@ -139,6 +198,16 @@ class HttpClientTest extends TestCase
             ->send();
 
         $this->assertEquals("session-id-unique-value", $response->getBody());
+    }
+
+    public function testAjax(): void
+    {
+        $response = $this->client->request("GET", "/test/ajax")->send();
+
+        $json = $response->getJson();
+
+        $this->assertEquals("Micheal", $json->name);
+        $this->assertEquals(20, $json->age);
     }
 
 

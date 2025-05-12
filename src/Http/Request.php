@@ -75,9 +75,8 @@ class Request implements IRequest
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        if ($this->method === 'POST') {
-            curl_setopt($ch, CURLOPT_POST, 1);
-        }
+        in_array($this->method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']) or throw new HttpClientException("Invalid request type `{$this->method}`");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
 
         if ($this->method !== 'GET') {
             if ($this->content) {
