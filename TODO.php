@@ -6,6 +6,7 @@
  * requesty cli
  *
  * -> timeout
+ * -> jak nie ma curla to exception
  * -> reading img
  * -> https
  * -> testy put/patch/delete

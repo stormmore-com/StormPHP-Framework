@@ -9,7 +9,7 @@ use Stormmore\Framework\Mvc\Attributes\Get;
 use Stormmore\Framework\Mvc\Attributes\Post;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Request\Request;
-use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Response;
 
 #[Controller]
@@ -85,10 +85,10 @@ readonly class TestController
     }
 
     #[Route("/test/read-cookie")]
-    public function readCookie(): string
+    public function setCookie(): string
     {
-        $this->response->setCookie(new Cookie("session-id", "0987654321"));
-        $this->response->setCookie(new Cookie("locale", "en-US"));
+        $this->response->setCookie(new SetCookie("session-id", "0987654321"));
+        $this->response->setCookie(new SetCookie("locale", "en-US"));
         return "";
     }
 

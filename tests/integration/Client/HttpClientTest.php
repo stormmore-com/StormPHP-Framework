@@ -4,6 +4,7 @@ namespace Client;
 
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Client;
+use Stormmore\Framework\Http\Cookie;
 use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Header;
 use Stormmore\Framework\Http\Interfaces\IClient;
@@ -127,6 +128,17 @@ class HttpClientTest extends TestCase
             ->send();
 
         $this->assertEquals("0987654321", $response->getCookie('session-id')->getValue());
+    }
+
+    public function testSendingCookieToApp(): void
+    {
+        $response = $this->client
+            ->request("GET", "/test/write-cookie-to-body")
+            ->withCookie(new Cookie('session-id', 'session-id-unique-value'))
+            ->withCookie(new Cookie("service-key", "service-key-unique-value"))
+            ->send();
+
+        $this->assertEquals("session-id-unique-value", $response->getBody());
     }
 
 

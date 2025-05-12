@@ -6,9 +6,10 @@ use DateTime;
 use Exception;
 use stdClass;
 use Stormmore\Framework\App\RequestContext;
+use Stormmore\Framework\Http\Interfaces\ICookie;
 use Stormmore\Framework\Http\Interfaces\IHeader;
 use Stormmore\Framework\Internationalization\Locale;
-use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\Headers\Header;
 use Stormmore\Framework\Mvc\IO\Headers\Headers;
@@ -117,7 +118,7 @@ class Request
         return $this->cookies->has($name);
     }
 
-    public function getCookie(string $name): Cookie
+    public function getCookie(string $name): ICookie
     {
         return $this->cookies->get($name);
     }

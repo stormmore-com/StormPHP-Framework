@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Mvc\IO;
 
-use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 
 class Response
@@ -23,7 +23,7 @@ class Response
         $this->messages = new RedirectMessage($cookies);
     }
 
-    public function setCookie(Cookie $cookie): void
+    public function setCookie(SetCookie $cookie): void
     {
         $this->cookies->setCookie($cookie);
     }

@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Mvc\IO\Cookie;
 
-readonly class Cookie
+readonly class SetCookie
 {
     public function __construct(private string $name, private string $value, private int $expires = 0, private string $path = "/")
     {

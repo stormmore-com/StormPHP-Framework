@@ -17,7 +17,7 @@ use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mail\Mailer;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Route;
-use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Redirect;
 use Stormmore\Framework\Mvc\IO\Request\Request;
 use Stormmore\Framework\Mvc\IO\Response;
@@ -114,7 +114,7 @@ readonly class ServiceController
     {
         $tag = $this->request->getDefault('tag', '');
         if ($this->settings->localeExists($tag)) {
-            $this->response->setCookie(new Cookie('locale', $tag));
+            $this->response->setCookie(new SetCookie('locale', $tag));
         }
         return back();
     }

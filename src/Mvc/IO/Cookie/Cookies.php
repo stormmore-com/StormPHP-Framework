@@ -2,6 +2,8 @@
 
 namespace Stormmore\Framework\Mvc\IO\Cookie;
 
+use Stormmore\Framework\Http\Interfaces\ICookie;
+
 class Cookies
 {
     private array $setCookies = [];
@@ -13,7 +15,7 @@ class Cookies
         $this->cookies = $cookies;
     }
 
-    function get(string $name): Cookie
+    function get(string $name): ICookie
     {
         return $this->cookies[$name];
     }
@@ -33,7 +35,7 @@ class Cookies
         return $this->unsetCookies;
     }
 
-    public function setCookie(Cookie $cookie): void
+    public function setCookie(SetCookie $cookie): void
     {
         $this->setCookies[] = $cookie;
     }

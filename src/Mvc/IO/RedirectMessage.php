@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Mvc\IO;
 
-use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 
 class RedirectMessage
@@ -31,7 +31,7 @@ class RedirectMessage
 
     public function add(string $name, string $message = '1'): void
     {
-        $this->cookies->setCookie(new Cookie($this->prefix . $name, $message));
+        $this->cookies->setCookie(new SetCookie($this->prefix . $name, $message));
     }
 
     public function get($name): string

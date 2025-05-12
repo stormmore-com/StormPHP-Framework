@@ -4,7 +4,7 @@ namespace src\Infrastructure;
 
 use DateTime;
 use stdClass;
-use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Response;
 
 readonly class SessionStorage
@@ -21,7 +21,7 @@ readonly class SessionStorage
         $session->createdAt = $now->format("Y-m-d H:i:s");
         $session->privileges = $privileges;
         $json = json_encode($session);
-        $this->response->setCookie(new Cookie('session', $json));
+        $this->response->setCookie(new SetCookie('session', $json));
     }
 
     public function delete(): void

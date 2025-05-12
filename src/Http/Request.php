@@ -10,6 +10,7 @@ use Stormmore\Framework\Http\Interfaces\IResponse;
 
 class Request implements IRequest
 {
+    private array $cookies = [];
     private array $headers = [];
     private null|string $content = null;
     private null|string $contentType = null;
@@ -36,7 +37,7 @@ class Request implements IRequest
 
     public function withCookie(ICookie $cookie): IRequest
     {
-        // TODO: Implement withCookie() method.
+        $this->cookies[$cookie->getName()] = $cookie;
         return $this;
     }
 
@@ -64,7 +65,8 @@ class Request implements IRequest
 
     public function send(): IResponse
     {
-        $headers = [];
+        $reqHeaders = [];
+        $resHeaders = [];
         $cookies = [];
 
         $ch = curl_init($this->url);
@@ -79,12 +81,12 @@ class Request implements IRequest
 
         if ($this->method !== 'GET') {
             if ($this->content) {
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: $this->contentType"));
+                $reqHeaders[] = "Content-Type:" . $this->contentType;
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $this->content);
             }
 
             if ($this->json) {
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                $reqHeaders[] = 'Content-Type:application/json';
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $this->json);
             }
 
@@ -94,15 +96,21 @@ class Request implements IRequest
         }
 
         if (count($this->headers)) {
-            $requestHeaders = [];
             foreach($this->headers as $header) {
-                $requestHeaders[] = $header->getName() .  ":" .  $header->getValue();
+                $reqHeaders[] = $header->getName() .  ":" .  $header->getValue();
             }
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $requestHeaders);
         }
+        if (count($this->cookies)) {
+            $cookieHeader = "Cookie:";
+            foreach($this->cookies as $cookie) {
+                $cookieHeader .= $cookie->getName() . "=" . $cookie->getValue() . ";";
+            }
+            $reqHeaders[] = $cookieHeader;
+        }
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $reqHeaders);
 
         curl_setopt($ch, CURLOPT_HEADERFUNCTION,
-            function($curl, $header) use (&$headers, &$cookies)
+            function($curl, $header) use (&$resHeaders, &$cookies)
             {
                 $len = strlen($header);
                 if (!str_contains($header, ':')) return $len;
@@ -110,7 +118,7 @@ class Request implements IRequest
                 $key = strtolower(trim($key));
                 $value = trim($value);
 
-                $headers[$key] = $value;
+                $resHeaders[$key] = $value;
                 if ($key == 'set-cookie') {
                     $setCookie = explode(';', $value);
                     if (count($setCookie) > 1) {
@@ -131,7 +139,7 @@ class Request implements IRequest
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-       return new Response($body, $status, $headers, $cookies);
+       return new Response($body, $status, $resHeaders, $cookies);
     }
 
     private function getFormData(): array

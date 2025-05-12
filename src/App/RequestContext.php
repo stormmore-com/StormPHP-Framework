@@ -3,7 +3,8 @@
 namespace Stormmore\Framework\App;
 
 use Stormmore\Framework\Cli\CliArguments;
-use Stormmore\Framework\Mvc\IO\Cookie\Cookie;
+use Stormmore\Framework\Http\Cookie;
+use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\Headers\Header;
 use Stormmore\Framework\Mvc\IO\Headers\Headers;
