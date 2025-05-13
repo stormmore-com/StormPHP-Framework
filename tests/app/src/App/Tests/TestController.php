@@ -123,6 +123,13 @@ readonly class TestController
         return $this->request->getCookie("session-id")->getValue();
     }
 
+    #[Route("/test/timeout")]
+    public function timeout(): string
+    {
+        sleep(2);
+        return "OK";
+    }
+
     #[Route("/test/ajax")]
     public function ajax(): object
     {

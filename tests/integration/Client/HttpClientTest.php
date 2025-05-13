@@ -5,6 +5,8 @@ namespace Client;
 use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Client;
 use Stormmore\Framework\Http\Cookie;
+use Stormmore\Framework\Http\Exceptions\HttpClientException;
+use Stormmore\Framework\Http\Exceptions\HttpTimeoutException;
 use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Header;
 use Stormmore\Framework\Http\Interfaces\IClient;
@@ -12,7 +14,7 @@ use Stormmore\Framework\Http\Interfaces\IClient;
 class HttpClientTest extends TestCase
 {
     private string $stormFilepath;
-    private string $filesDirectory;
+    private string $cert;
     private IClient $client;
 
     public function testGetRequest(): void
@@ -130,7 +132,7 @@ class HttpClientTest extends TestCase
                 ->add('prime[]', 2)
                 ->add('number', 7)
                 ->add('name', 'Micheal')
-                ->addFile('file', $this->filesDirectory . "/storm.webp"))
+                ->addFile('file', $this->stormFilepath))
             ->send();
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -210,11 +212,39 @@ class HttpClientTest extends TestCase
         $this->assertEquals(20, $json->age);
     }
 
+    public function testTimeout(): void
+    {
+        $this->expectException(HttpTimeoutException::class);
+
+        $this->client->request("GET", "/test/timeout")->send();
+    }
+
+    public function testHttpsRequest(): void
+    {
+        $client = Client::create(cert: $this->cert, timeout: 1);
+
+        $response = $client
+            ->request("GET", "https://www.google.com/")
+            ->send();
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testImageRequest(): void
+    {
+        $response = $this->client
+            ->request("GET", "/public/image.webp")
+            ->send();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals('1648c2a85dd50f2dfaa51fb5c8478261', md5($response->getBody()));
+    }
 
     public function setUp(): void
     {
-        $this->filesDirectory = dirname(__FILE__) . "/files" ;
-        $this->stormFilepath = $this->filesDirectory . "/storm.webp";
-        $this->client = Client::create("http://localhost:7123");
+        $filesDirectory = dirname(__FILE__) . "/files" ;
+        $this->cert = $filesDirectory . "/cacert.pem";
+        $this->stormFilepath = $filesDirectory . "/storm.webp";
+        $this->client = Client::create("http://localhost:7123", timeout: 1);
     }
 }

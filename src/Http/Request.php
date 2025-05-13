@@ -3,6 +3,9 @@
 namespace Stormmore\Framework\Http;
 
 use CURLFile;
+use Stormmore\Framework\Http\Exceptions\HttpClientException;
+use Stormmore\Framework\Http\Exceptions\HttpCurlException;
+use Stormmore\Framework\Http\Exceptions\HttpTimeoutException;
 use Stormmore\Framework\Http\Interfaces\ICookie;
 use Stormmore\Framework\Http\Interfaces\IHeader;
 use Stormmore\Framework\Http\Interfaces\IRequest;
@@ -17,7 +20,11 @@ class Request implements IRequest
     private null|object|string $json = null;
     private null|FormData $formData = null;
 
-    public function __construct(private string $url, private string $method)
+    public function __construct(private string $url,
+                                private string $method,
+                                private bool $verifyPeer = true,
+                                private string $cert = "",
+                                private int $timeout = 0)
     {
         $this->method = strtoupper($this->method);
     }
@@ -65,17 +72,43 @@ class Request implements IRequest
 
     public function send(): IResponse
     {
+        function_exists('curl_init') or throw new HttpClientException("CURL not installed");
+
+        in_array($this->method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']) or throw new HttpClientException("Invalid request type `{$this->method}`");
+
         $reqHeaders = [];
         $resHeaders = [];
         $cookies = [];
 
+        if (count($this->headers)) {
+            foreach($this->headers as $header) {
+                $reqHeaders[] = $header->getName() .  ":" .  $header->getValue();
+            }
+        }
+        if (count($this->cookies)) {
+            $cookieHeader = "Cookie:";
+            foreach($this->cookies as $cookie) {
+                $cookieHeader .= $cookie->getName() . "=" . $cookie->getValue() . ";";
+            }
+            $reqHeaders[] = $cookieHeader;
+        }
+
         $ch = curl_init($this->url);
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
+        if ($this->cert) {
+            file_exists($this->cert) or throw new HttpCurlException("Certificate `$this->cert` not found.");
+            curl_setopt($ch, CURLOPT_CAINFO, $this->cert);
+        }
+
+        if ($this->timeout) {
+            curl_setopt($ch, CURLOPT_TIMEOUT, $this->timeout);
+        }
 
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        in_array($this->method, ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']) or throw new HttpClientException("Invalid request type `{$this->method}`");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $this->method);
 
         if ($this->method !== 'GET') {
@@ -94,18 +127,6 @@ class Request implements IRequest
             }
         }
 
-        if (count($this->headers)) {
-            foreach($this->headers as $header) {
-                $reqHeaders[] = $header->getName() .  ":" .  $header->getValue();
-            }
-        }
-        if (count($this->cookies)) {
-            $cookieHeader = "Cookie:";
-            foreach($this->cookies as $cookie) {
-                $cookieHeader .= $cookie->getName() . "=" . $cookie->getValue() . ";";
-            }
-            $reqHeaders[] = $cookieHeader;
-        }
         curl_setopt($ch, CURLOPT_HTTPHEADER, $reqHeaders);
 
         curl_setopt($ch, CURLOPT_HEADERFUNCTION,
@@ -129,13 +150,21 @@ class Request implements IRequest
                         }
                     }
                 }
-
                 return $len;
             }
         );
 
         $body = curl_exec($ch);
+        if (curl_errno($ch)) {
+            $errno = curl_errno($ch);
+            match ($errno) {
+                28 => throw new HttpTimeoutException("Timeout expired"),
+                60 => throw new HttpClientException("SSL certificate problem (cURL error code 60)"),
+                default => throw new HttpCurlException("Unexpected CURL error `$errno` occurred", $errno),
+            };
+        }
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
         curl_close($ch);
 
        return new Response($body, $status, $resHeaders, $cookies);
