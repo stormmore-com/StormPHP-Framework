@@ -18,12 +18,14 @@ class AppResponse implements IResponse
     {
         $this->parseOutput($output);
         $this->parseHeaders();
-        $this->parseCookies();
     }
 
     public function getStatusCode(): int
     {
-        return $this->headers['Status-Code'];
+        if (array_key_exists('Status-Code', $this->headers)) {
+            return $this->headers['Status-Code'];
+        }
+        return 0;
     }
 
     public function getBody(): string
@@ -96,12 +98,5 @@ class AppResponse implements IResponse
             }
 
         }
-    }
-
-    private function parseCookies(): void
-    {
-//        if (array_key_exists("Set-Cookie", $this->rawHeaders)) {
-//
-//        }
     }
 }
