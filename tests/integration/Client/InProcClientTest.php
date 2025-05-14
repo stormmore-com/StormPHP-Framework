@@ -26,10 +26,10 @@ class InProcClientTest extends TestCase
     {
         $response = $this->client
             ->request("GET", "/test/concatenate-query-params")
-            ->withQuery(['a' => 'one', 'b' => 'two', 'c' => 'three'])
+            ->withQuery(['a' => '11', 'b' => '22', 'c' => '33'])
             ->send();
 
-        $this->assertEquals("onetwothree", $response->getBody());
+        $this->assertEquals("112233", $response->getBody());
     }
 
     public function testQueryParametersWithUrl(): void
@@ -109,7 +109,7 @@ class InProcClientTest extends TestCase
         $this->assertEquals("123456790", $header->getValue());
     }
 
-    public function testSendingHeaderToApp(): void
+    public function testSendingHeader(): void
     {
         $response = $this->client
             ->request("GET", "/test/get-header")
@@ -129,7 +129,7 @@ class InProcClientTest extends TestCase
         $this->assertEquals("0987654321", $response->getCookie('session-id')->getValue());
     }
 
-    public function testSendingCookieToApp(): void
+    public function testSendingCookie(): void
     {
         $response = $this->client
             ->request("GET", "/test/write-cookie-to-body")

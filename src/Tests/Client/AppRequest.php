@@ -18,14 +18,14 @@ class AppRequest implements IRequest
 
     public function __construct(private readonly string $indexFilePath,
                                 private readonly string $method,
-                                private string $uri)
+                                private string          $url)
     {
     }
 
     public function withQuery(array $query): IRequest
     {
         $queryString = http_build_query($query);
-        $this->uri .= str_contains($this->uri, '?') ? '&' . $queryString : '?' . $queryString;
+        $this->url .= str_contains($this->url, '?') ? '&' . $queryString : '?' . $queryString;
         return $this;
     }
 
@@ -67,10 +67,21 @@ class AppRequest implements IRequest
         $dir = dirname($this->indexFilePath);
         $filename = basename($this->indexFilePath);
 
+        $url = $this->url;
+        $parameters = [];
+
+        if (($pos = strpos($this->url, "?")) !== false) {
+            $query = substr($this->url, $pos);
+            $query = substr($query, 1);
+            $parameters = explode("&", $query);
+            $this->url = substr($this->url, 0, $pos);
+        }
+
         $headers = array_map(fn($item) => $item->getName() . ":" . $item->getValue(), $this->headers);
         $cookies = array_map(fn($item) => $item->getName() . ":" . $item->getValue(), $this->cookies);
         $args = ["index.php",
-            "-r", $this->uri,
+            "-r", $url,
+            "-parameters", ...$parameters,
             "-method", $this->method,
             "-headers", ...$headers,
             "-cookies", ...$cookies,

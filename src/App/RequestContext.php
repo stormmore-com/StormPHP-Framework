@@ -36,13 +36,11 @@ class RequestContext
             $this->isCli = true;
             $this->arguments = $arg = new CliArguments();
 
-
             $this->printHeaders = $arg->printHeaders();
             $this->path = $arg->getPath();
             $this->query = $arg->getQuery();
             $this->method = $arg->getMethod();
-            parse_str($this->getQuery(), $result);
-            $this->get = new Parameters($result);
+            $this->get = new Parameters($arg->getGetParameters());
             $this->post = new Parameters($arg->getPostParameters());
             $this->contentType = $arg->getContentType();
             $cookies = $arg->getCookies();

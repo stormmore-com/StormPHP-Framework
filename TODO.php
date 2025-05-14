@@ -5,7 +5,7 @@
  *
  *
  *
- *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy)
+ *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy, struktura)
  * tlumaczenia iterałów
  *
  * multidimensional files
@@ -13,6 +13,7 @@
  *
  *
  *  refaktor
+ *
  *   -> przejrzec katalog i klasa po klasie
  *   -> refaktor request -> pozbyc sie properties
  *   -> strukture frameworka

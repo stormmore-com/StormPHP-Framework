@@ -11,6 +11,7 @@ class CliArguments
     );
     private $handledFlags = array(
         '-r', '-t', '-m', "-p",
+        "-parameters",
         "-method",
         "-headers",
         "-cookies",
@@ -86,7 +87,7 @@ class CliArguments
     public function getMethod(): string
     {
         if (array_key_exists('-method', $this->arguments)) {
-            return $this->arguments['-method'][0];
+            return strtoupper($this->arguments['-method'][0]);
         }
         return "GET";
     }
@@ -125,6 +126,20 @@ class CliArguments
             return $uri;
         }
         return "";
+    }
+
+    public function getGetParameters(): array
+    {
+        $parameters = [];
+        if (array_key_exists('-parameters', $this->arguments)) {
+            foreach($this->arguments['-parameters'] as $nameValue) {
+                if (str_contains($nameValue, '=')) {
+                    list($name, $value) = explode("=", $nameValue);
+                    $parameters[$name] = trim($value);
+                }
+            }
+        }
+        return $parameters;
     }
 
     public function getPostParameters(): array

@@ -171,7 +171,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals("123456790", $header->getValue());
     }
 
-    public function testSendingHeaderToApp(): void
+    public function testSendingHeader(): void
     {
         $response = $this->client
             ->request("GET", "/test/get-header")
@@ -191,7 +191,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals("0987654321", $response->getCookie('session-id')->getValue());
     }
 
-    public function testSendingCookieToApp(): void
+    public function testSendingCookie(): void
     {
         $response = $this->client
             ->request("GET", "/test/write-cookie-to-body")
