@@ -12,7 +12,7 @@ class CliClientTest extends TestCase
 {
     public function testGetRequest(): void
     {
-        $command = "-r /test/get";
+        $command = "-r /test/get -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -22,7 +22,7 @@ class CliClientTest extends TestCase
 
     public function testPostRequest(): void
     {
-        $command = "-r /test/post -method post";
+        $command = "-r /test/post -method post -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -32,7 +32,7 @@ class CliClientTest extends TestCase
 
     public function testPutRequest(): void
     {
-        $command = "-r /test/put -method put";
+        $command = "-r /test/put -method put -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -42,7 +42,7 @@ class CliClientTest extends TestCase
 
     public function testPatchRequest(): void
     {
-        $command = "-r /test/patch -method patch";
+        $command = "-r /test/patch -method patch -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -52,7 +52,7 @@ class CliClientTest extends TestCase
 
     public function testDeleteRequest(): void
     {
-        $command = "-r /test/delete -method delete";
+        $command = "-r /test/delete -method delete -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -65,7 +65,7 @@ class CliClientTest extends TestCase
      */
     public function testQueryParameters(): void
     {
-        $command = "-r /test/concatenate-query-params -parameters a=1 b=2 c=3";
+        $command = "-r /test/concatenate-query-params -parameters a=1 b=2 c=3 -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -75,7 +75,7 @@ class CliClientTest extends TestCase
 
     public function testSendingHeader(): void
     {
-        $command = "-r /test/get-header -headers service-key:123abc321";
+        $command = "-r /test/get-header -headers service-key:123abc321 -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -85,7 +85,7 @@ class CliClientTest extends TestCase
 
     public function testSendingCookie(): void
     {
-        $command = "-r /test/write-cookie-to-body -cookies session-id:54321 service-key:123abc321";
+        $command = "-r /test/write-cookie-to-body -cookies session-id:54321 service-key:123abc321 -print-headers";
 
         $response = $this->runCommand($command);
 
@@ -128,15 +128,18 @@ class CliClientTest extends TestCase
     /**
      * TODO
      */
-    public function tesSavingResult(): void
+    public function testSavingResult(): void
     {
+        $command = "-r /test/get > output.txt";
 
+        $this->runCommand($command);
     }
 
     private function runCommand(string $command): AppResponse
     {
         $cwd = getcwd();
-        chdir("app/public_html");
+        $public_html = dirname(__FILE__) . '/../../app/public_html';
+        chdir($public_html);
         exec("php index.php $command", $output);
         chdir($cwd);
 

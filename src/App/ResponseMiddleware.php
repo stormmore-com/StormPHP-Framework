@@ -22,12 +22,23 @@ readonly class ResponseMiddleware implements IMiddleware
         }
 
         if ($this->requestContext->isCliRequest()) {
-            echo "<http-header>Status-Code: {$this->response->code}</http-header>\n";
-            foreach($this->response->headers as $name => $value) {
-                echo "<http-header>$name: $value</http-header>\n";
+            $content = '';
+            if ($this->requestContext->printHeaders()) {
+                $content =  "<http-header>Status-Code: {$this->response->code}</http-header>\n";
+                foreach($this->response->headers as $name => $value) {
+                    $content .= "<http-header>$name: $value</http-header>\n";
+                }
+                foreach($this->response->getCookies()->getSetCookies() as $cookie) {
+                    $content .= "<http-header>Set-Cookie: {$cookie->getName()}={$cookie->getValue()}</http-header>\n";
+                }
             }
-            foreach($this->response->getCookies()->getSetCookies() as $cookie) {
-                echo "<http-header>Set-Cookie: {$cookie->getName()}={$cookie->getValue()}</http-header>\n";
+            $content .= $this->response->body;
+
+            if ($this->requestContext->getCliArguments()->isOutputToFile()) {
+                file_put_contents($this->requestContext->getCliArguments()->getOutputFile(), $content);
+            }
+            else {
+                echo $content;
             }
         }
         else {
@@ -45,7 +56,7 @@ readonly class ResponseMiddleware implements IMiddleware
             foreach ($this->response->headers as $name => $value) {
                 header("$name: $value");
             }
+            echo $this->response->body;
         }
-        echo $this->response->body;
     }
 }

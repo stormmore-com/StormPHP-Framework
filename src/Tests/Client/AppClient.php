@@ -8,7 +8,7 @@ use Stormmore\Framework\Http\Interfaces\IRequest;
 
 readonly class AppClient implements IClient
 {
-    private function __construct(private readonly string $indexFilePath)
+    private function __construct(private string $indexFilePath)
     {
     }
 

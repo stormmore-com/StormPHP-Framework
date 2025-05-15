@@ -66,14 +66,16 @@ class AppResponse implements IResponse
 
     private function parseOutput(string $output): void
     {
+        $ending = 0;
         $beginning = strpos($output, "<http-header>");
-        $ending = strpos($output, "</http-header>", $beginning) + strlen("</http-header>");
-        while(($found = strpos($output, "<http-header>", $ending)) !== false and $found - $ending == 1)
-        {
-            $ending = strpos($output, "</http-header>", $found) + strlen("</http-header>");
+        if ($beginning !== false) {
+            $ending = strpos($output, "</http-header>", $beginning) + strlen("</http-header>");
+            while(($found = strpos($output, "<http-header>", $ending)) !== false and $found - $ending == 1)
+            {
+                $ending = strpos($output, "</http-header>", $found) + strlen("</http-header>");
+            }
+            $ending++;
         }
-        $ending++;
-
         $this->rawHeaders = substr($output, $beginning, $ending - $beginning);
         $this->body = substr($output, $ending);
     }

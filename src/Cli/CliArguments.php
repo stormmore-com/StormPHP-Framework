@@ -10,7 +10,7 @@ class CliArguments
         '-t'
     );
     private $handledFlags = array(
-        '-r', '-t', '-m', "-p",
+        '-r', '-t', '-m', "-p", ">",
         "-parameters",
         "-method",
         "-headers",
@@ -194,5 +194,18 @@ class CliArguments
     public function hasRequestFlag(): bool
     {
         return array_key_exists('-r', $this->arguments);
+    }
+
+    public function isOutputToFile(): bool
+    {
+        return array_key_exists('>', $this->arguments);
+    }
+
+    public function getOutputFile(): string
+    {
+        if (array_key_exists('>', $this->arguments)) {
+            return $this->arguments['>'][0];
+        }
+        return "";
     }
 }
