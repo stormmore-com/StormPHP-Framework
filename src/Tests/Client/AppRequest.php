@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Tests\Client;
 
+use Throwable;
 use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Interfaces\ICookie;
 use Stormmore\Framework\Http\Interfaces\IHeader;
@@ -103,10 +104,15 @@ class AppRequest implements IRequest
         $cwd = getcwd();
         chdir($dir);
         ob_start();
-        if (file_exists($filename)) {
-            include($filename);
+        try {
+            if (file_exists($filename)) {
+                include($filename);
+            }
+            $content = ob_get_flush();
         }
-        $content = ob_get_flush();
+        catch (Throwable) {
+            ob_end_clean();
+        }
         ob_clean();
         chdir($cwd);
 

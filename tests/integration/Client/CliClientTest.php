@@ -130,9 +130,19 @@ class CliClientTest extends TestCase
      */
     public function testSavingResult(): void
     {
-        $command = "-r /test/get > output.txt";
+        $file = getcwd() . DIRECTORY_SEPARATOR . "test.cli";
+        $command = "-r /test/get > $file";
 
         $this->runCommand($command);
+
+        $this->assertEquals("OK", $this->getTempFileContent($file));
+    }
+
+    private function getTempFileContent(string $filename): string
+    {
+        $content = file_get_contents($filename);
+        unlink($filename);
+        return $content;
     }
 
     private function runCommand(string $command): AppResponse
