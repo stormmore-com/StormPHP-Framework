@@ -125,9 +125,6 @@ class CliClientTest extends TestCase
 
     }
 
-    /**
-     * TODO
-     */
     public function testSavingResult(): void
     {
         $file = getcwd() . DIRECTORY_SEPARATOR . "test.cli";

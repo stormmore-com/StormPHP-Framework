@@ -42,9 +42,9 @@ class App
     private Router $router;
     private array $middlewares = [];
 
-    public static function create(string $projectDir, string $sourceDir = "", string $cacheDir = ""): App
+    public static function create(array $directories = []): App
     {
-        self::$instance = new App($projectDir, $sourceDir, $cacheDir);
+        self::$instance = new App($directories);
         return self::$instance;
     }
 
@@ -103,15 +103,13 @@ class App
         $this->router->addRoute($key, $value);
     }
 
-    private function __construct(string $projectDir, string $sourceDir = "", string $cacheDir = "")
+    private function __construct(array $directories = [])
     {
         $context = new RequestContext();
 
         $this->configuration = new Configuration();
         $appConfiguration = new AppConfiguration($this->configuration);
-        $appConfiguration->setProjectDirectory($projectDir);
-        $appConfiguration->setSourceDirectory($sourceDir);
-        $appConfiguration->setCacheDirectory($cacheDir);
+        $appConfiguration->setDirectories($directories);
         $appConfiguration->aliases['@src'] = $appConfiguration->sourceDirectory;
 
         $this->appConfiguration = $appConfiguration;

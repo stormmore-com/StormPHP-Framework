@@ -21,7 +21,6 @@ class AppConfiguration
         $this->configuration->set('environment', 'production');
         $this->configuration->set('logger.enabled', 'true');
         $this->configuration->set('logger.level', 'debug');
-        $this->configuration->set('logger.directory', '@/.logs/');
     }
 
     public function isLoggerEnabled(): bool
@@ -58,38 +57,39 @@ class AppConfiguration
         return 'production';
     }
 
-    public function setProjectDirectory(string $projectDirectory): void
+    public function setDirectories(array $directories): void
     {
-        if (empty($projectDirectory)) {
-            $projectDirectory = getcwd();
+        $project = getcwd();
+        if (array_key_exists('project', $directories)) {
+            $project = $directories['project'];
         }
-        if (!file_exists($projectDirectory)) {
-            throw new Error("Project directory '$projectDirectory' does not exist: ");
-        }
-        $this->projectDirectory = realpath($projectDirectory);
-    }
+        is_dir($project) or throw new Error("Project directory '$project' does not exist.");
+        $this->projectDirectory = realpath($project);
 
-    public function setSourceDirectory(string $sourceDirectory): void
-    {
-        if (empty($sourceDirectory)) {
-            $sourceDirectory = $this->projectDirectory;
+        $source = getcwd();
+        if (array_key_exists('source', $directories)) {
+            $source = $directories['source'];
         }
-        if (!file_exists($sourceDirectory)) {
-            throw new Error("Source directory '$sourceDirectory' does not exist: ");
-        }
-        $this->sourceDirectory = realpath($sourceDirectory);
-    }
+        is_dir($source) or throw new Error("Source directory '$source' does not exist.");
+        $this->sourceDirectory = realpath($source);
 
-    public function setCacheDirectory(string $cacheDirectory): void
-    {
-        if (empty($cacheDirectory)) {
-            $cacheDirectory = $this->projectDirectory . "/.cache";
+        $cache = $source . "/.cache";
+        if (array_key_exists('cache', $directories)) {
+            $cache = $directories['cache'];
         }
+        if (!is_dir($cache)) {
+            mkdir($cache, 0777, true);
+        }
+        $this->cacheDirectory = realpath($cache);
 
-        if (!is_dir($cacheDirectory)) {
-            mkdir($cacheDirectory, 0777, true);
+        $logs = $project . "/.logs";
+        if (array_key_exists('logs', $directories)) {
+            $logs = $directories['logs'];
         }
-        $this->cacheDirectory = realpath($cacheDirectory);
+        if (!is_dir($logs)) {
+            mkdir($logs, 0777, true);
+        }
+        $this->configuration->set('logger.directory', realpath($logs));
     }
 
     public function getLoggerDirectory(): string

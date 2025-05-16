@@ -9,10 +9,12 @@ use src\Infrastructure\Middleware\SettingsMiddleware;
 use src\Infrastructure\Middleware\TransactionMiddleware;
 use Stormmore\Framework\App;
 
-$app = App::create(
-    projectDir: "../",
-    sourceDir: "../src",
-    cacheDir: "../.cache");
+$app = App::create(directories: [
+    'project' => '../',
+    'source' => '../src',
+    'cache' => '../.cache',
+    'logs' => '../.logs'
+]);
 
 $app->addRoute('/hello', function() {
     return "hello world";
