@@ -33,5 +33,7 @@ class QueriesMiddleware implements IMiddleware
         $connection = ConnectionFactory::createFromString($connectionString, $user, $password);
 
         $this->container->register($connection);
+
+        $next();
     }
 }
