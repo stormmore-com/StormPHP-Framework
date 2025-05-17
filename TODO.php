@@ -3,7 +3,8 @@
  *
  * requesty cli
  *
- *
+ *  middleware z locale
+ *  middlewe configuration z nazwami settingów które ma ładowac
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy, struktura)
  * tlumaczenia iterałów
