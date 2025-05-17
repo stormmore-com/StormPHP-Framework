@@ -1,0 +1,34 @@
+<?php
+
+namespace Stormmore\Framework\Queries;
+
+use closure;
+use Exception;
+use Stormmore\Framework\App\IMiddleware;
+use Stormmore\Framework\Configuration\Configuration;
+use Stormmore\Framework\DependencyInjection\Container;
+use Stormmore\Queries\Connection;
+use Stormmore\Queries\ConnectionFactory;
+use Stormmore\Queries\IConnection;
+use Stormmore\Queries\StormQueries;
+
+
+class QueriesMiddleware implements IMiddleware
+{
+    public function __construct(private Configuration $configuration, private Container $container)
+    {
+    }
+
+    public function run(closure $next): void
+    {
+        class_exists('Stormmore\Queries\ConnectionFactory') or throw new Exception("Install StormQueries library.");
+
+        $connectionString = $this->configuration->get('database.connection');
+        $user = $this->configuration->get('database.user');
+        $password = $this->configuration->get('database.password');
+
+        $connection = ConnectionFactory::createFromString($connectionString, $user, $password);
+
+        $this->container->register($connection);
+    }
+}
