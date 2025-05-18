@@ -1,9 +1,11 @@
 <?php
 /**
- * @var \Stormmore\Framework\Mvc\View\View $view
+ * @var View $view
  * @var Stormmore\Framework\Internationalization\Locale[] $locales
  * @var Stormmore\Framework\AppConfiguration $configuration
  */
+
+use Stormmore\Framework\Mvc\View\View;
 
 $view->setTitle(t('status.title'));
 $view->setLayout('@templates/includes/layout.php');

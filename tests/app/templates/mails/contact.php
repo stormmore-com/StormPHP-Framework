@@ -1,8 +1,11 @@
 <?php
 /**
- * @var \Stormmore\Framework\Mvc\View\View $view
- * @var \Stormmore\Framework\Mvc\View\ViewBag $bag
+ * @var View $view
+ * @var ViewBag $bag
  **/
+
+use Stormmore\Framework\Mvc\View\View;
+use Stormmore\Framework\Mvc\View\ViewBag;
 
 $view->setLayout("@templates/mails/layout.php");
 ?>

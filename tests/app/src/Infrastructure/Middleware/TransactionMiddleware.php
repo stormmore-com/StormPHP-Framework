@@ -8,7 +8,7 @@ use Throwable;
 
 class TransactionMiddleware implements IMiddleware
 {
-    public function run(closure $next): void
+    public function run(closure $next, array $options = []): void
     {
         try {
             //open transaction

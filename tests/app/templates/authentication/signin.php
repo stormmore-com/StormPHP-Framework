@@ -1,5 +1,7 @@
 <?php
-/** @var \Stormmore\Framework\Mvc\View\View $view */
+/** @var View $view */
+
+use Stormmore\Framework\Mvc\View\View;
 
 $view->setLayout('@templates/includes/layout.php');
 ?>

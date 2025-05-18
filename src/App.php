@@ -7,6 +7,7 @@ use Exception;
 use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionMiddleware;
 use Stormmore\Framework\App\IMiddleware;
+use Stormmore\Framework\App\MiddlewareChain;
 use Stormmore\Framework\App\RequestContext;
 use Stormmore\Framework\App\ResponseMiddleware;
 use Stormmore\Framework\Cli\CliMiddleware;
@@ -40,7 +41,7 @@ class App
     private Response $response;
     private Request $request;
     private Router $router;
-    private array $middlewares = [];
+    private MiddlewareChain $middlewareChain;
 
     public static function create(array $directories = []): App
     {
@@ -93,9 +94,9 @@ class App
         return $this->response;
     }
 
-    public function addMiddleware(string $middlewareClassName): void
+    public function addMiddleware(string $middlewareClassName, array $options = []): void
     {
-        $this->middlewares[] = $middlewareClassName;
+        $this->middlewareChain->add($middlewareClassName, $options);
     }
 
     public function addRoute(string $key, $value): void
@@ -134,6 +135,12 @@ class App
         $this->container->register($this->viewConfiguration);
         $this->container->register($this->response);
         $this->container->register($this->request);
+
+        $this->middlewareChain = new MiddlewareChain($this->resolver);
+        $this->middlewareChain
+            ->add(ResponseMiddleware::class)
+            ->add(ExceptionMiddleware::class)
+            ->add(CliMiddleware::class);
     }
 
     public function run(): void
@@ -146,33 +153,8 @@ class App
         $this->sourceCode->loadCache();
         $this->classLoader->register();
 
-        $this->runMiddlewares();
-    }
+        $this->middlewareChain->add(MvcMiddleware::class);
 
-
-    private function runMiddlewares(): void
-    {
-        $this->middlewares = [
-            ResponseMiddleware::class,
-            ExceptionMiddleware::class,
-            CliMiddleware::class,
-            ...$this->middlewares,
-            MvcMiddleware::class
-        ];
-        $first = $this->getMiddlewareAsCallable(0);
-        $first();
-    }
-
-    private function getMiddlewareAsCallable(int $i): closure
-    {
-        if ($i >= count($this->middlewares)) {
-            return function() { };
-        }
-        return function() use ($i) {
-            $className = $this->middlewares[$i];
-            $middleware = $this->resolver->resolve($className);
-            $middleware instanceof IMiddleware or throw new Exception("Class `$className` does not implement IMiddleware interface");
-            $middleware->run($this->getMiddlewareAsCallable($i + 1));
-        };
+        $this->middlewareChain->run();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\FluentReflection\Class;
 
+use Exception;
 use ReflectionClass;
 use Stormmore\Framework\FluentReflection\Shared\IFluentProperties;
 use Stormmore\Framework\FluentReflection\Shared\IFluentProperty;
@@ -14,6 +15,6 @@ class FluentClassProperties
 
     public function get(string $name)
     {
-        throw new \Exception("Not implemented yet");
+        throw new Exception("Not implemented yet");
     }
 }

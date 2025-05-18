@@ -1,9 +1,12 @@
 <?php
 /**
  * @var array $days
- * @var \Stormmore\Framework\Mvc\View\View $view
- * @var \src\App\Service\CustomMessagesForm $form
+ * @var View $view
+ * @var CustomMessagesForm $form
  */
+
+use src\App\Service\CustomMessagesForm;
+use Stormmore\Framework\Mvc\View\View;
 
 $view->setLayout('@templates/includes/layout.php');
 ?>

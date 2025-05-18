@@ -1,10 +1,13 @@
 <?php
 /**
- * @var \Stormmore\Framework\Mvc\View\View $view
- * @var \Stormmore\Framework\Mvc\View\ViewBag $bag
+ * @var View $view
+ * @var ViewBag $bag
  * @var string $name
  * @var array $errors
  */
+
+use Stormmore\Framework\Mvc\View\View;
+use Stormmore\Framework\Mvc\View\ViewBag;
 
 $view->setTitle("Storm App - Emails");
 $view->setLayout("@templates/includes/layout.php");

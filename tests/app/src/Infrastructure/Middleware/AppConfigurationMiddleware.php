@@ -12,7 +12,7 @@ readonly class AppConfigurationMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next): void
+    public function run(closure $next, array $options = []): void
     {
 
         $this->appConfiguration->addAliases([

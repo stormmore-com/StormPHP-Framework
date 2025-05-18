@@ -1,9 +1,12 @@
 <?php
 /**
  * @var array $days
- * @var \Stormmore\Framework\Mvc\View\View $view
- * @var \src\App\Service\BasicForm $form
+ * @var View $view
+ * @var BasicForm $form
  */
+
+use src\App\Service\BasicForm;
+use Stormmore\Framework\Mvc\View\View;
 
 $view->setLayout('@templates/includes/layout.php');
 ?>

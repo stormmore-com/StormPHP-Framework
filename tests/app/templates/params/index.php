@@ -1,8 +1,10 @@
 <?php
 /**
- * @var \Stormmore\Framework\Mvc\View\View $view
+ * @var View $view
  * @var string $name
  */
+
+use Stormmore\Framework\Mvc\View\View;
 
 $view->setTitle("Storm App - Params");
 $view->setLayout("@templates/includes/layout.php");

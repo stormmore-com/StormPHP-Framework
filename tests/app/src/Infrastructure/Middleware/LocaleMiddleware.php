@@ -54,7 +54,7 @@ readonly class LocaleMiddleware implements IMiddleware
         }
     }
 
-    public function run(closure $next): void
+    public function run(closure $next, array $options = []): void
     {
         $locale = $this->getAcceptedLocale();
 

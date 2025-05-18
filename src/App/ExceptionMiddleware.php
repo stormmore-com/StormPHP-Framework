@@ -22,7 +22,7 @@ readonly class ExceptionMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next): void
+    public function run(closure $next, array $options = []): void
     {
         $this->logger->logI("Request started  `{$this->request->path}`");
         try {

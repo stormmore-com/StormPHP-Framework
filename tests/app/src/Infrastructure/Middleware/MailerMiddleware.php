@@ -9,13 +9,13 @@ use Stormmore\Framework\Mail\Mailer;
 use Stormmore\Framework\Mail\Senders\IMailSender;
 use Stormmore\Framework\Mail\Senders\SmtpSender;
 
-readonly class SettingsMiddleware implements IMiddleware
+readonly class MailerMiddleware implements IMiddleware
 {
-    public function __construct(private Configuration $configuration, private Mailer $mailer)
+    public function __construct(private Mailer $mailer)
     {
     }
 
-    public function run(closure $next): void
+    public function run(closure $next, array $options = []): void
     {
         $this->mailer->addMailServer("local-smtp", new SmtpSender());
         $this->mailer->useMailSender("local-smtp");
@@ -28,7 +28,6 @@ readonly class SettingsMiddleware implements IMiddleware
             "hkha rkze keoi agma"
         ));
         $this->mailer->useMailSender('gmail');
-        $this->configuration->loadFile('@/settings.conf');
         $next();
     }
 }

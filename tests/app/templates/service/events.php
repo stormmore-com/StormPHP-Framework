@@ -1,8 +1,10 @@
 <?php
 /**
- * @var \Stormmore\Framework\Mvc\View\View $view
+ * @var View $view
  * @var string[] $history
  */
+
+use Stormmore\Framework\Mvc\View\View;
 
 $view->setLayout('@templates/includes/layout.php');
 ?>
