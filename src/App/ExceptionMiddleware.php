@@ -84,11 +84,15 @@ readonly class ExceptionMiddleware implements IMiddleware
     {
         $this->response->body = "";
         if ($this->configuration->isDevelopment()) {
-            $this->response->body .= "<h2>{$throwable->getMessage()}</h2>";
+            $this->response->body .= "<h2>Exception: {$throwable->getMessage()}</h2>";
+
+            $this->response->body .= "<h3>#0 " . $throwable->getFile() . ': ' . $throwable->getLine() . "</h3>\n";
             $this->response->body .= "<pre>";
+
             foreach ($throwable->getTrace() as $k => $trace) {
                 if (array_key_exists('file', $trace) and array_key_exists('line', $trace)) {
-                    $this->response->body .= "#$k " . $trace['file'] . ':' . $trace['line'] . '</br>';
+                    $idx = $k + 1;
+                    $this->response->body .= "#$idx " . $trace['file'] . ': ' . $trace['line'] . '</br>';
                 }
             }
             $this->response->body .= "</pre>";
