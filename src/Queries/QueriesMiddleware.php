@@ -34,6 +34,15 @@ class QueriesMiddleware implements IMiddleware
 
         $this->container->registerAs($connection, 'Stormmore\Queries\IConnection');
 
-        $next();
+        try {
+            //open transaction
+            $next();
+            //close transaction
+        }
+        catch(Throwable $throwable) {
+            //rollback transaction
+            throw $throwable;
+        }
+
     }
 }

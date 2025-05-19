@@ -46,11 +46,11 @@ class Configuration
         return false;
     }
 
-    public function getArray(string $name): array
+    public function getArray(string $name, string $separator = ","): array
     {
         if (array_key_exists($name, $this->configuration)) {
             $value = $this->configuration[$name];
-            return array_map(fn($item) => trim($item), explode(',', $value));
+            return array_map(fn($item) => trim($item), explode($separator, $value));
         }
 
         return [];

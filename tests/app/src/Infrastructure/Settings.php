@@ -16,9 +16,9 @@ class Settings
 
     public function __construct(Configuration $configuration)
     {
-        $this->isMultiLanguage = $configuration->getBool("i18n.isMultiLanguage");
-        $this->defaultLocale = new Locale($configuration->get('i18n.defaultLocale'));
-        $this->locales = array_map(fn($item) => new Locale($item), $configuration->getArray('i18n.locales'));
+        $this->isMultiLanguage = $configuration->getBool("i18n.multi_language");
+        $this->defaultLocale = new Locale($configuration->get('i18n.default_language'));
+        $this->locales = array_map(fn($item) => new Locale($item), $configuration->getArray('i18n.languages'));
     }
 
     public function localeExists(string $locale): bool
