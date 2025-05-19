@@ -4,7 +4,6 @@
  *  odpalanie testów z główgo katalogu
  * requesty cli
  *
- * authentication middleware
  *
  *  porzadek z apka testowa refaktor (tylko tym powinna byc, 1 jezyk + 1 testowy, struktura)
  * tlumaczenia iterałów

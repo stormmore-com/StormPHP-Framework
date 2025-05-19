@@ -2,7 +2,6 @@
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-use src\Infrastructure\Middleware\AppConfigurationMiddleware;
 use src\Infrastructure\Middleware\AppUserConfiguration;
 use Stormmore\Framework\App;
 use Stormmore\Framework\App\AliasMiddleware;
@@ -20,7 +19,6 @@ $app = App::create(directories: [
 $app->addRoute('/hello', function () {
     return "hello world";
 });
-
 $app->addMiddleware(AliasMiddleware::class, [
     '@templates' => "@/templates"
 ]);
