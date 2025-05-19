@@ -58,10 +58,10 @@ readonly class ExceptionMiddleware implements IMiddleware
         $code = (!is_int($throwable->getCode()) or $throwable->getCode() == 0) ? 500 : $throwable->getCode();
         $this->response->code = $code;
 
-        if (array_key_exists($code, $errors) and is_string($errors[$code])) {
+        if ($this->configuration->isDevelopment() and $code == 500) {
+            $this->printException($throwable);
+        } else if (array_key_exists($code, $errors)) {
             $this->response->body = $this->getErrorPageContent(resolve_path_alias($errors[$code]), $throwable);
-        } else if (array_key_exists('default', $errors)) {
-            $this->response->body = $this->getErrorPageContent(resolve_path_alias($errors['default']), $throwable);
         } else {
             $this->printException($throwable);
         }

@@ -7,7 +7,7 @@ use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\Mvc\IO\Request\Request;
 
-readonly class LocaleMiddleware implements IMiddleware
+readonly class LanguageMiddleware implements IMiddleware
 {
     public function __construct(private Request       $request,
                                 private Configuration $configuration,

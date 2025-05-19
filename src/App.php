@@ -2,11 +2,8 @@
 
 namespace Stormmore\Framework;
 
-use closure;
-use Exception;
 use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionMiddleware;
-use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\App\MiddlewareChain;
 use Stormmore\Framework\App\RequestContext;
 use Stormmore\Framework\App\ResponseMiddleware;
