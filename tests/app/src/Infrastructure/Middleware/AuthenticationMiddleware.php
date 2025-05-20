@@ -7,7 +7,7 @@ use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
 use Stormmore\Framework\Mvc\IO\Request\Request;
 
-readonly class AppUserConfiguration implements IMiddleware
+readonly class AuthenticationMiddleware implements IMiddleware
 {
     public function __construct(private AppUser $appUser, private Request $request)
     {

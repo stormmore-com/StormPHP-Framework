@@ -11,6 +11,8 @@
  * multidimensional files
  * mail -> tablica plików
  *
+ * env zobaczyc czy nie lepsze inf + parse_inf_file
+ *
  *
  *  refaktor
  *

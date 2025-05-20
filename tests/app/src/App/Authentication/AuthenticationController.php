@@ -2,7 +2,6 @@
 
 namespace src\App\Authentication;
 
-use src\App\Authentication\AuthenticationService;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Redirect;
