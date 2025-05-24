@@ -3,7 +3,7 @@
 namespace Stormmore\Framework\Mvc\Route;
 
 use closure;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\SourceCode\SourceCode;
 
 class Router
@@ -14,7 +14,7 @@ class Router
     {
     }
 
-    public function addRoute($key, $value): void
+    public function addRoute(string $key, callable|string $value): void
     {
         $this->routes[$key] = $value;
     }
@@ -46,7 +46,7 @@ class Router
         return array_merge($this->routes, $this->sourceCode->getRoutes());
     }
 
-    private function createEndpoint(closure|array $target): Endpoint
+    private function createEndpoint(closure|array|string $target): Endpoint
     {
         return new Endpoint($target);
     }

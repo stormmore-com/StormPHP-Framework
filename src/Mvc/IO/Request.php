@@ -1,6 +1,6 @@
 <?php
 
-namespace Stormmore\Framework\Mvc\IO\Request;
+namespace Stormmore\Framework\Mvc\IO;
 
 use DateTime;
 use Exception;
@@ -9,13 +9,12 @@ use Stormmore\Framework\App\RequestContext;
 use Stormmore\Framework\Http\Interfaces\ICookie;
 use Stormmore\Framework\Http\Interfaces\IHeader;
 use Stormmore\Framework\Internationalization\Locale;
-use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
-use Stormmore\Framework\Mvc\IO\Headers\Header;
 use Stormmore\Framework\Mvc\IO\Headers\Headers;
-use Stormmore\Framework\Mvc\IO\RedirectMessage;
+use Stormmore\Framework\Mvc\IO\Request\Files;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
+use Stormmore\Framework\Mvc\IO\Request\RequestMapper;
 
 class Request
 {

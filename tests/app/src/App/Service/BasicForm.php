@@ -4,7 +4,7 @@ namespace src\App\Service;
 
 use DateTime;
 use Stormmore\Framework\Form\Form;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 
 class BasicForm extends Form
 {

@@ -9,12 +9,13 @@ use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\DependencyInjection\Container;
 use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\Mvc\IO\Redirect;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\Route\ExecutionRoute;
 use Stormmore\Framework\Mvc\Route\Router;
 use Stormmore\Framework\Mvc\View\View;
 use Stormmore\Framework\SourceCode\SourceCode;
+use Throwable;
 
 readonly class MvcMiddleware implements IMiddleware
 {
@@ -47,15 +48,35 @@ readonly class MvcMiddleware implements IMiddleware
             return $callable();
         }
         if ($endpoint->isController()) {
-            $controllerReflection = new ControllerReflection($this->request, $this->di, $this->diResolver, $endpoint->getControllerActionList());
+            $controllerReflection = new ControllerReflection(
+                $this->request,
+                $this->di, $this->diResolver,
+                $endpoint->getControllerActionList());
             $controllerReflection->validate();
             return $controllerReflection->invoke();
+        }
+        if ($endpoint->isScript()) {
+            return $this->getScriptContent($endpoint->getScriptPath());
         }
 
         $this->request->files->delete();
 
         return null;
     }
+
+    private function getScriptContent(string $filename): string
+    {
+        ob_start();
+        try {
+            $request = $this->request;
+            require resolve_path_alias($filename);
+            return ob_get_clean();
+        } catch(Throwable $t) {
+            ob_clean();
+            throw $t;
+        }
+    }
+
 
     private function handleResult(mixed $result): void
     {

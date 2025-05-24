@@ -19,7 +19,7 @@ use Stormmore\Framework\Mvc\Authentication\Authenticate;
 use Stormmore\Framework\Mvc\Authentication\AuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\Authorize;
 use Stormmore\Framework\Mvc\Authentication\AuthorizedException;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 
 readonly class ControllerReflection
 {

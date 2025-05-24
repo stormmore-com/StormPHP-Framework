@@ -59,9 +59,4 @@ readonly class ResponseMiddleware implements IMiddleware
             echo $this->response->body;
         }
     }
-
-    public function setOptions(array $options): void
-    {
-        // TODO: Implement setOptions() method.
-    }
 }

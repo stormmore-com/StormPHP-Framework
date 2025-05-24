@@ -20,8 +20,8 @@ class Configuration
 
     public function loadFile(string $file): void
     {
-        $confFileLoader = new ConfFileLoader($file);
-        $this->configuration = array_merge($this->configuration, $confFileLoader->parse());
+        $file = resolve_path_alias($file);
+        $this->configuration = array_merge($this->configuration, parse_ini_file($file));
     }
 
     public function has(string $name): bool

@@ -7,7 +7,7 @@ use stdClass;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 use Throwable;
 
 class View extends stdClass

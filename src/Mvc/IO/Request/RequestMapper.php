@@ -2,8 +2,9 @@
 
 namespace Stormmore\Framework\Mvc\IO\Request;
 
-use Stormmore\Framework\FluentReflection\Object\FluentObject;
 use AllowDynamicProperties;
+use Stormmore\Framework\FluentReflection\Object\FluentObject;
+use Stormmore\Framework\Mvc\IO\Request;
 
 class RequestMapper
 {

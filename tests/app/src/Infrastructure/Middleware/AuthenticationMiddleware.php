@@ -5,7 +5,7 @@ namespace src\Infrastructure\Middleware;
 use closure;
 use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 
 readonly class AuthenticationMiddleware implements IMiddleware
 {

@@ -6,10 +6,9 @@ use Stormmore\Framework\DependencyInjection\Resolver;
 use Stormmore\Framework\FluentReflection\Class\FluentClass;
 use Stormmore\Framework\FluentReflection\Class\FluentClassParameter;
 use Stormmore\Framework\FluentReflection\Class\FluentClassParameters;
-use Stormmore\Framework\FluentReflection\Object\FluentObject;
 use Stormmore\Framework\FluentReflection\Shared\SafeValue;
 use Stormmore\Framework\Mvc\Attributes\Bindable;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\IO\Request\RequestMapper;
 
 class ControllerActionArguments

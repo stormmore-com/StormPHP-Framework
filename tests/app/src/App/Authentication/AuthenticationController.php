@@ -5,7 +5,7 @@ namespace src\App\Authentication;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Redirect;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\View\View;
 
 #[Controller]

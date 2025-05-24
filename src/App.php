@@ -15,7 +15,7 @@ use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Logger\Logger;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\MvcMiddleware;
 use Stormmore\Framework\Mvc\Route\Router;
@@ -96,7 +96,7 @@ class App
         $this->middlewareChain->add($middlewareClassName, $options);
     }
 
-    public function addRoute(string $key, $value): void
+    public function addRoute(string $key, callable|string $value): void
     {
         $this->router->addRoute($key, $value);
     }
@@ -142,7 +142,7 @@ class App
 
     public function run(): void
     {
-        $environmentFilePath = $this->appConfiguration->projectDirectory . "/env.conf";
+        $environmentFilePath = $this->appConfiguration->projectDirectory . "/env.ini";
         if (file_path_exist($environmentFilePath)) {
             $this->configuration->loadFile($environmentFilePath);
         }

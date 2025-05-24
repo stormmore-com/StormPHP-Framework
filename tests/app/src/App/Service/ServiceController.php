@@ -2,12 +2,10 @@
 
 namespace src\App\Service;
 
-use src\App\Service\BasicForm;
+use Exception;
 use src\App\Service\Commands\ExampleCommand;
 use src\App\Service\Commands\ServiceCommand;
-use src\App\Service\CustomMessagesForm;
 use src\App\Service\Events\ServiceEvent;
-use Exception;
 use src\Infrastructure\Settings;
 use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Cqs\Gate;
@@ -19,12 +17,10 @@ use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Redirect;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Mvc\View\View;
-use Stormmore\Framework\Mvc\View\ViewBag;
 use Stormmore\Framework\Validation\Field;
-use Stormmore\Framework\Validation\Validator;
 
 #[Controller]
 readonly class ServiceController
@@ -40,7 +36,7 @@ readonly class ServiceController
     }
 
     #[Route('/send-mail')]
-    public function quickEmailUsingLocalSmtp(): View|Redirect
+    public function sendEmail(): View|Redirect
     {
         $form = (new Form($this->request))
             ->setModel(['email' => 'czerski.michal@gmail.com', 'subject' => 'Testing STMP', 'content' => 'Hello...'])
@@ -49,7 +45,7 @@ readonly class ServiceController
             ->add(Field::for('content')->required());
 
         if ($form->isSubmittedSuccessfully()) {
-            $i18n = I18n::create("en", "@/i18n/en.conf", "@/i18n/culture/en-US.conf");
+            $i18n = I18n::create("en", "@src/lang/en.ini", "@src/lang/culture/en-US.ini");
             $builder = $this->mailer
                 ->create()
                 ->withSender('admin@example.com', "Admistrator")

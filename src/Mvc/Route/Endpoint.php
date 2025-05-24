@@ -6,7 +6,7 @@ use closure;
 
 readonly class Endpoint
 {
-    public function __construct(private closure|array $endpoint)
+    public function __construct(private closure|array|string $endpoint)
     {
     }
 
@@ -20,7 +20,17 @@ readonly class Endpoint
         return is_callable($this->endpoint);
     }
 
+    public function isScript(): bool
+    {
+        return is_string($this->endpoint);
+    }
+
     public function getCallable(): callable
+    {
+        return $this->endpoint;
+    }
+
+    public function getScriptPath(): string
     {
         return $this->endpoint;
     }

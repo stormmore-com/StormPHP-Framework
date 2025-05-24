@@ -11,7 +11,7 @@ class Files
 
     public function __construct(array $files)
     {
-        $this->parseFiles($files);
+        //$this->parseFiles($files);
     }
 
     /**

@@ -6,7 +6,7 @@ use closure;
 use Stormmore\Framework\App\IMiddleware;
 use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\DependencyInjection\Container;
-use Stormmore\Framework\Mvc\IO\Request\Request;
+use Stormmore\Framework\Mvc\IO\Request;
 
 readonly class LanguageMiddleware implements IMiddleware
 {
