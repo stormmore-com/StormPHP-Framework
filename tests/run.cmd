@@ -1,1 +1,0 @@
-../vendor/bin/phpunit --display-deprecations --display-phpunit-deprecations --display-warnings

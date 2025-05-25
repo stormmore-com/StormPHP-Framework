@@ -13,6 +13,15 @@ class Path
         
     }
 
+    public static function getRootPath(string $path, string $root): null|string
+    {
+        $lastOccuranceOfRoot = strrpos($path, $root);
+        if ($lastOccuranceOfRoot === false) {
+            return null;
+        }
+        return substr($path, 0, $lastOccuranceOfRoot + strlen($root));
+    }
+
     /**
      * @param int $length length with or without extension. Default 64. Optional.
      * @param string $extension file extension. Optional.
@@ -39,6 +48,7 @@ class Path
 
         return $filename;
     }
+
     public static function concatenate_paths(string ...$paths): string
     {
         $path = '';
@@ -54,7 +64,6 @@ class Path
         }
         return $path;
     }
-
 
     public static function resolve_path_alias(string $templatePath): string
     {

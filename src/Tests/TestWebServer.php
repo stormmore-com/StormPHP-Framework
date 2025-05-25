@@ -4,6 +4,8 @@ namespace Stormmore\Framework\Tests;
 
 class TestWebServer
 {
+    private static $instances = array();
+
     private $process;
 
     public function __construct(private readonly string $directory, private readonly int $port)
@@ -12,6 +14,13 @@ class TestWebServer
 
     public function run(): void
     {
+        $directory = realpath($this->directory);
+        $key = $directory . $this->port;
+        if (!$directory or array_key_exists($key, self::$instances)) {
+            return;
+        }
+        self::$instances[$key] = $this;
+
         $cwd = getcwd();
         chdir($this->directory);
 
@@ -32,14 +41,8 @@ class TestWebServer
         chdir($cwd);
     }
 
-    function __destruct()
-    {
-        $this->shutdown();
-    }
-
     public function shutdown(): void
     {
-
         if ($this->process) {
             $os = php_uname('s');
             $isWindows = str_contains(strtolower($os), 'win');
@@ -49,5 +52,10 @@ class TestWebServer
             proc_close($this->process);
             $this->process = null;
         }
+    }
+
+    function __destruct()
+    {
+        $this->shutdown();
     }
 }

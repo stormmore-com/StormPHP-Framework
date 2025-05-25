@@ -12,6 +12,7 @@ readonly class ShutdownTestWebServer implements ExecutionFinishedSubscriber
     {
     }
 
+
     public function notify(ExecutionFinished $event): void
     {
         $this->testWebServer->shutdown();

@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Stormmore\Framework\Http\Cookie;
 use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Header;
+use Stormmore\Framework\Std\Path;
 use Stormmore\Framework\Tests\Client\AppClient;
 
 class InProcClientTest extends TestCase
@@ -154,6 +155,7 @@ class InProcClientTest extends TestCase
     {
         $this->filesDirectory = dirname(__FILE__) . "/files" ;
         $this->stormFilepath = $this->filesDirectory . "/storm.webp";
-        $this->client = AppClient::create("app/public_html/index.php");
+        $testDirectory = Path::getRootPath(__FILE__, "tests");
+        $this->client = AppClient::create(Path::concatenate_paths($testDirectory, "app/public_html/index.php"));
     }
 }

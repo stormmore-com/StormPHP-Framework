@@ -10,6 +10,8 @@ use Stormmore\Framework\Http\Exceptions\HttpTimeoutException;
 use Stormmore\Framework\Http\FormData;
 use Stormmore\Framework\Http\Header;
 use Stormmore\Framework\Http\Interfaces\IClient;
+use Stormmore\Framework\Std\Path;
+use Stormmore\Framework\Tests\TestWebServer;
 
 class HttpClientTest extends TestCase
 {
@@ -214,9 +216,11 @@ class HttpClientTest extends TestCase
 
     public function testTimeout(): void
     {
+        $client = Client::create("http://localhost:7123", timeout: 1);
+
         $this->expectException(HttpTimeoutException::class);
 
-        $this->client->request("GET", "/test/timeout")->send();
+        $client->request("GET", "/test/timeout")->send();
     }
 
     public function testHttpsRequest(): void
