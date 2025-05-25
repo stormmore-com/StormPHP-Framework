@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Logger;
 
+use Stormmore\Framework\Std\Path;
 use Throwable;
 use DateTime;
 use Stormmore\Framework\AppConfiguration;
@@ -79,8 +80,8 @@ class Logger implements ILogger
         $y = date('Y');
         $m = date('m');
         $d = date('d');
-        $dir = resolve_path_alias($this->configuration->getLoggerDirectory());
-        $logDirectory = concatenate_paths($dir, $y, $m, $d);
+        $dir = Path::resolve_path_alias($this->configuration->getLoggerDirectory());
+        $logDirectory = Path::concatenate_paths($dir, $y, $m, $d);
         if (!is_dir($logDirectory)) {
             mkdir($logDirectory, 0777, true);
         }

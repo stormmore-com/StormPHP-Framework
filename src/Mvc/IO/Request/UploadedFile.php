@@ -2,6 +2,8 @@
 
 namespace Stormmore\Framework\Mvc\IO\Request;
 
+use Stormmore\Framework\Std\Path;
+
 class UploadedFile
 {
     function __construct(
@@ -71,7 +73,7 @@ class UploadedFile
         if (is_array_key_value_equal($options, 'gen-unique-filename', true)) {
             $length = array_key_value($options, 'gen-filename-len', 64);
             list(, $extension) = split_file_name_and_ext($this->name);
-            $filename = gen_unique_file_name($length, $extension, $directory);
+            $filename = Path::gen_unique_file_name($length, $extension, $directory);
         }
         if (move_uploaded_file($this->tmp, $directory . "/" . $filename)) {
             $this->name = $filename;

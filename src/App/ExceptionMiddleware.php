@@ -10,6 +10,7 @@ use Stormmore\Framework\Mvc\Authentication\AuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\AuthorizedException;
 use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\IO\Response;
+use Stormmore\Framework\Std\Path;
 use Throwable;
 
 readonly class ExceptionMiddleware implements IMiddleware
@@ -61,7 +62,7 @@ readonly class ExceptionMiddleware implements IMiddleware
         if ($this->configuration->isDevelopment() and $code == 500) {
             $this->printException($throwable);
         } else if (array_key_exists($code, $errors)) {
-            $this->response->body = $this->getErrorPageContent(resolve_path_alias($errors[$code]), $throwable);
+            $this->response->body = $this->getErrorPageContent(Path::resolve_path_alias($errors[$code]), $throwable);
         } else {
             $this->printException($throwable);
         }
@@ -71,7 +72,7 @@ readonly class ExceptionMiddleware implements IMiddleware
     {
         ob_start();
         try {
-            include_once resolve_path_alias($path);
+            include_once Path::resolve_path_alias($path);
             return ob_get_clean();
         }
         catch(Throwable $t) {

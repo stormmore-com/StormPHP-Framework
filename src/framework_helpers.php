@@ -1,15 +1,18 @@
 <?php
 
-use Random\Randomizer;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mvc\IO\Redirect;
+use Stormmore\Framework\Mvc\View\IViewComponent;
+use Stormmore\Framework\Mvc\View\View;
+use Stormmore\Framework\Mvc\View\ViewBag;
+use Stormmore\Framework\Std\Path;
 
 if (!function_exists('array_is_list')) {
     function array_is_list(array $array): bool
     {
         $count = count($array);
-        for($i = 0; $i < $count; ++$i) {
+        for ($i = 0; $i < $count; ++$i) {
             if (!key_exists($i, $array)) {
                 return false;
             }
@@ -18,37 +21,9 @@ if (!function_exists('array_is_list')) {
     }
 }
 
-function resolve_path_alias(string $templatePath): string
-{
-    $configuration = App::getInstance()->getAppConfiguration();
-    $appDirectory = $configuration->projectDirectory;
-    $aliases = $configuration->aliases;
-    if (str_starts_with($templatePath, "@/")) {
-        return str_replace("@", $appDirectory, $templatePath);
-    } else if (str_starts_with($templatePath, '@')) {
-        $firstSeparator = strpos($templatePath, "/");
-        if ($firstSeparator) {
-            $alias = substr($templatePath, 0, $firstSeparator);
-            $path = substr($templatePath, $firstSeparator);
-        } else {
-            $alias = $templatePath;
-            $path = '';
-        }
-        if (!array_key_exists($alias, $aliases)) { return false;}
-        $aliasPath = $aliases[$alias];
-        if (str_starts_with($aliasPath, '@')) {
-            $aliasPath = resolve_path_alias($aliasPath);
-        }
-
-        $templatePath = $aliasPath . $path;
-    }
-
-    return $templatePath;
-}
-
 function file_path_exist(string $filePath): bool
 {
-    $filePath = resolve_path_alias($filePath);
+    $filePath = Path::resolve_path_alias($filePath);
     return file_exists($filePath);
 }
 
@@ -71,49 +46,6 @@ function split_file_name_and_ext(string $filename): array
         return [$name, $ext];
     }
     return [$filename, ''];
-}
-
-function concatenate_paths(string ...$paths): string
-{
-    $path = '';
-    for ($i = 0; $i < count($paths); $i++) {
-        $element = $paths[$i];
-        if ($i < count($paths) - 1 and !str_ends_with($element, "/")) {
-            $element .= "/";
-        }
-        if (str_ends_with($path, "/") and str_starts_with($element, "/")) {
-            $element = substr($element, 1);
-        }
-        $path .= $element;
-    }
-    return $path;
-}
-
-/**
- * @param int $length length with or without extension. Default 64. Optional.
- * @param string $extension file extension. Optional.
- * @param string $directory to check whether unique file exist or not. Optional
- * @return string generated unique file name
- */
-function gen_unique_file_name(int $length = 64, string $extension = '', string $directory = ''): string
-{
-    $filename = '';
-    if (!empty($extension)) {
-        $length = $length - strlen($extension) - 1;
-    }
-    do {
-        $randomizer = new Randomizer();
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
-        $charactersLength = strlen($characters);
-        for ($i = 0; $i < $length; $i++) {
-            $filename .= $characters[$randomizer->getInt(0, $charactersLength - 1)];
-        }
-        if (!empty($extension)) {
-            $filename .= '.' . $extension;
-        }
-    } while (!empty($directory) and file_exists($directory . "/" . $filename));
-
-    return $filename;
 }
 
 function none_empty_explode($delimiter, $string, $limit = PHP_INT_MAX): array
@@ -165,26 +97,6 @@ function _args(string $phrase, array $args): string
     return $translatedPhrase;
 }
 
-/**
- * @throws Exception
- */
-function import(string $file): void
-{
-    $file = resolve_path_alias($file);
-    if (str_ends_with($file, "/*")) {
-        $dir = str_replace("/*", "", $file);
-        $files = scandir($dir);
-        foreach ($files as $file) {
-            if (str_ends_with($file, ".php")) {
-                require_once($dir . "/" . $file);
-            }
-        }
-    } else {
-        file_exists($file) or throw new Exception("IMPORT: file [$file] doesn't exists");
-        require_once($file);
-    }
-}
-
 function url($path, $args = array()): string
 {
     $request = App::getInstance()->getRequest();
@@ -195,9 +107,9 @@ function url($path, $args = array()): string
     }
     $pos = strrpos($path, '.');
     if ($pos !== false and strlen($path) - $pos < 5) {
-        return concatenate_paths($request->path, $path);
+        return Path::concatenate_paths($request->path, $path);
     }
-    return concatenate_paths($request->path, $path);
+    return Path::concatenate_paths($request->path, $path);
 }
 
 function back(string $url = "/", string|bool $success = false, string|bool $failure = false): Redirect
@@ -218,4 +130,31 @@ function redirect(string $url = "/", string|bool $success = false, string|bool $
         $response->messages->add("failure", $failure);
     }
     return new Redirect($url);
+}
+
+function view(string $templateFileName, array|ViewBag $data = []): View
+{
+    return new View($templateFileName, $data);
+}
+
+function print_view($templateFileName, array|object $data = []): void
+{
+    $view = view($templateFileName, $data);
+    echo $view->toHtml();
+}
+
+function print_component(string $componentName): void
+{
+    $classLoader = App::getInstance()->getClassLoader();
+    $fullyQualifiedComponentName = $classLoader->includeFileByClassName($componentName);
+    if (!class_exists($fullyQualifiedComponentName)) {
+        throw new Exception("Component $fullyQualifiedComponentName does not exist");
+    }
+    $resolver = App::getInstance()->getResolver();
+    $component = $resolver->resolve($fullyQualifiedComponentName);
+    if ($component instanceof IViewComponent) {
+        echo $component->view()->toHtml();
+    } else {
+        throw new Exception("VIEW: @component [$componentName] is not a view component");
+    }
 }

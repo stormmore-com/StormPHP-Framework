@@ -18,7 +18,6 @@ readonly class MailerMiddleware implements IMiddleware
     public function run(closure $next, array $options = []): void
     {
         $this->mailer->addMailServer("local-smtp", new SmtpSender());
-        $this->mailer->useMailSender("local-smtp");
         $this->mailer->addMailServer('gmail', new SmtpSender(
             "smtp.gmail.com",
             465,
@@ -27,6 +26,7 @@ readonly class MailerMiddleware implements IMiddleware
             "christxpdev@gmail.com",
             "hkha rkze keoi agma"
         ));
+        $this->mailer->useMailSender("local-smtp");
         $this->mailer->useMailSender('gmail');
         $next();
     }

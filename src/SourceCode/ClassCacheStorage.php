@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\SourceCode;
 use Stormmore\Framework\AppConfiguration;
+use Stormmore\Framework\Std\Path;
 
 class ClassCacheStorage
 {
@@ -11,7 +12,7 @@ class ClassCacheStorage
     function __construct(AppConfiguration $configuration, $fileName)
     {
         $this->cacheDirectory = $configuration->getCacheDirectory();
-        $this->cacheFilePath = concatenate_paths($this->cacheDirectory, $fileName);
+        $this->cacheFilePath = Path::concatenate_paths($this->cacheDirectory, $fileName);
     }
 
     function exist(): bool

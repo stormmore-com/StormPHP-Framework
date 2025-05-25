@@ -6,6 +6,7 @@ use Stormmore\Framework\AppConfiguration;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\IO\Response;
+use Stormmore\Framework\Std\Path;
 
 class ResponseCache
 {
@@ -30,7 +31,7 @@ class ResponseCache
         if (!$this->configuration->cacheEnabled) return null;
 
         $id = $this->requestToFileName($this->request);
-        $cacheFilePath = concatenate_paths($this->cacheDir(), $id);
+        $cacheFilePath = Path::concatenate_paths($this->cacheDir(), $id);
         if (is_file($cacheFilePath)) {
             $cacheFile = new stdClass();
             $cacheFile->headers = [];
@@ -69,7 +70,7 @@ class ResponseCache
 
         if ($this->cacheRequest and $this->response->code == 200) {
             $id = $this->requestToFileName($this->request);
-            $filePath = concatenate_paths($this->cacheDir(), $id);
+            $filePath = Path::concatenate_paths($this->cacheDir(), $id);
 
             $file = fopen($filePath, "w");
             fwrite($file, date('m-d-Y H:i:s') . "\n");
@@ -119,7 +120,7 @@ class ResponseCache
 
     private function cacheDir(): string
     {
-        return concatenate_paths($this->configuration->getCacheDirectory(), "/responses");
+        return Path::concatenate_paths($this->configuration->getCacheDirectory(), "/responses");
     }
 
     private function requestToFileName(Request $request): string

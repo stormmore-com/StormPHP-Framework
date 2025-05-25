@@ -15,6 +15,7 @@ use Stormmore\Framework\Mvc\Route\ExecutionRoute;
 use Stormmore\Framework\Mvc\Route\Router;
 use Stormmore\Framework\Mvc\View\View;
 use Stormmore\Framework\SourceCode\SourceCode;
+use Stormmore\Framework\Std\Path;
 use Throwable;
 
 readonly class MvcMiddleware implements IMiddleware
@@ -69,7 +70,7 @@ readonly class MvcMiddleware implements IMiddleware
         ob_start();
         try {
             $request = $this->request;
-            require resolve_path_alias($filename);
+            require Path::resolve_path_alias($filename);
             return ob_get_clean();
         } catch(Throwable $t) {
             ob_clean();

@@ -2,6 +2,8 @@
 
 namespace Stormmore\Framework\Configuration;
 
+use Stormmore\Framework\Std\Path;
+
 class Configuration
 {
     protected array $configuration = [];
@@ -20,7 +22,7 @@ class Configuration
 
     public function loadFile(string $file): void
     {
-        $file = resolve_path_alias($file);
+        $file = Path::resolve_path_alias($file);
         $this->configuration = array_merge($this->configuration, parse_ini_file($file));
     }
 

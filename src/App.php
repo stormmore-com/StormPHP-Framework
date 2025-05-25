@@ -33,7 +33,6 @@ class App
     private Resolver $resolver;
     private Configuration $configuration;
     private AppConfiguration $appConfiguration;
-    private ViewConfiguration $viewConfiguration;
     private I18n $i18n;
     private Response $response;
     private Request $request;
@@ -49,11 +48,6 @@ class App
     public static function getInstance(): App
     {
         return self::$instance;
-    }
-
-    public function getViewConfiguration(): ViewConfiguration
-    {
-        return $this->viewConfiguration;
     }
 
     public function getAppConfiguration(): AppConfiguration
@@ -116,7 +110,7 @@ class App
         $this->sourceCode = new SourceCode($this->appConfiguration);
         $this->router = new Router($this->sourceCode);
         $this->i18n = new I18n();
-        $this->viewConfiguration = new ViewConfiguration();
+
         $this->classLoader = new ClassLoader($this->sourceCode, $this->appConfiguration);
         $this->response = new Response($context->getCookies());
         $this->request = new Request($context);
@@ -129,7 +123,6 @@ class App
         $this->container->register($this->router);
         $this->container->register(new AppUser());
         $this->container->register($this->i18n);
-        $this->container->register($this->viewConfiguration);
         $this->container->register($this->response);
         $this->container->register($this->request);
 

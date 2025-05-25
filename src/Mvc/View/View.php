@@ -8,6 +8,7 @@ use Stormmore\Framework\App;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
 use Stormmore\Framework\Mvc\IO\Request;
+use Stormmore\Framework\Std\Path;
 use Throwable;
 
 class View extends stdClass
@@ -52,16 +53,7 @@ class View extends stdClass
      */
     public function toHtml(): string
     {
-        $app = App::getInstance();
-        $conf = $app->getViewConfiguration();
-        foreach ($conf->getHelpers() as $helper) {
-            if (!str_ends_with($helper, '.php')) {
-                $helper .= '.php';
-            }
-            import($helper);
-        }
-
-        $templateFilePath = resolve_path_alias($this->fileName);
+        $templateFilePath = Path::resolve_path_alias($this->fileName);
         file_exists($templateFilePath) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");
 
         return $this->getTemplateContent($templateFilePath);
