@@ -46,5 +46,6 @@ $app->run();
 ```
 
 ## TODO
-- docs
-- simple real-life application
+- Documentation
+- Template for empty application
+- Real-life example application
