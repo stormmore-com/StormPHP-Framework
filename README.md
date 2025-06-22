@@ -1,43 +1,35 @@
-# PHP Storm Framework &#9889;
+# StormPHP Framework &#9889;
 
-Made with love without unnecessary complexity. 
+Made with love, without unnecessary complexity, to deliver high-quality solutions.
 
-- Easy to learn (simplest app have literally 4 lines)
+- Easy to learn (the simplest app has four lines)
 - Small footprint (100Kb, no dependencies)
 - Blazing fast
 - Built-in dependency injection container
 - Built-in middleware support
 - **Built-in CQS (command query separation)**
-- Built-in event dispatcher 
-- Built-in multilanguage support
+- Built-in event dispatcher
+- Built-in multilingual support
 - Built-in authentication and authorization system
 - Built-in logger
-- Built-in class autoloader with scanning source code (detect automatically controllers)
+- Built-in class autoloader with scanning source code (detects automatically controllers)
 - Built-in path alias system ('@templates/homepage.php' refers to /your/project/dir/templates/homepage.php)
-- Built-in mature view system using pure PHP, views can control content of layout (adding css/jss scripts or changing title
-- Build-in validation
-- Build-in forms
-- Build-in mailing (i18n, smtp client)
-- Support cli tasks (define tasks and run it from cli)
-- Support for running controller from cli
-- Support e2e tests with php cli (test automatically your entire backend stack from phpunit easilly)
+- Built-in mature view system using pure PHP, child views can control the content of the master layout (adding CSS/JSS scripts or changing the title)
+- Built-in validation
+- Built-in forms
+- Build-in mailing (i18n, SMTP client)
+- Support CLI tasks (define tasks and run them from the CLI)
+- Support for running the controller from CLI
+- Support e2e tests with PHP CLI (test automatically your entire backend stack from PHPUnit easily)
 - Support error customization
-- Support middleware (put your code to pipeline before and after request is handled)
+- Support middleware (You can put code in the pipeline before and after the request is handled)
 - Support Docker out of the box
 - Support PHP8 and greater
-- Works with StormQueries
+- Works with StormPHP Queries
 
-To learn more visit https://keycode13.com/php-storm-framework \
-\
-If you want to join project or share with ideas fell free to contact me. 
-
-### keycode13.com
-
-Framework designed to deliver. 
+If you would like to join the project or share your ideas, please don't hesitate to contact me.
 
 ## Quick start
-
-You can use `ready to develop` template with basic functionality. Download it here.
 
 ### Simplest application
 Install by typing
@@ -53,23 +45,6 @@ $app->addRoute('/', function() { return "hello world";});
 $app->run();
 ```
 
-### Run demonstration
-
-#### Use docker
-
-```php
-docker composer up
-```
-
-You  can change source code and watch changes on http://localhost:91
-
-#### Use build-in web server
-Go to `test/server`directory and run `php -S localhost:90` command.
-
-## Tutorial
-Designed to be intuitive as scratching your nose but there is some things you should know.
-
-### Views
-
-Thaks to alias system you can easilly change templates
-
+## TODO
+- docs
+- simple real-life application
