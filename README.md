@@ -151,14 +151,29 @@ my_app_made_with_love
 
 ## Obsługa żądań
 
-Obsługa żadań odbywa się poprzez definiowanie metody w klasie `app` lub za pomoca kontrolera. Klasy obsługując dane urle.
-
-### Funkcja
+Obsługa żądania w Storm odbywa się na trzy sposoby.
+1) Jako funkcja definiowana w klasie `app`
 ```php
 $app->addRoute('/', function() { return "hello world";});
 ```
+2) Jako plik statyczny
+```php
+$app->addRoute('/files', '@/src/static/files.php');
+```
+Plik statyczny ma dostęp do żadania poprzez obiekt `request`.\
+Przykładowy plik
+```php
+/** @var Request $request */
+if ($request->isPost()) {
+    ...
+}
+```
+3. Przez kontroler
 
-### Kontroler
+
+
+
+## Kontroler
 ```php
 namespace src\App;
 
@@ -266,6 +281,50 @@ public function getValue(): mixed
 ```
 
 ### Żądanie
+Obiekt `request` reprezentuje żadanie. Daje interfejs do argumentów żądania, pól POST jak i plików. 
+
+### Widok
+
+Widoki w Storm są zwykłymi plikami PHP ale oferuję znaczeni więcej niż zwykły plik z HTML ponad to są szybkie bo nie potrzebują kompilacji. 
+
+#### Układ strony 
+Zazwyczaj aplikacji posiada na stale zdefiniowany nagłowek i stopkę a zmienia się zawartość. Niezmienianlną część nazywamy układem.
+```php
+<?php 
+/** @var View $view */
+use Stormmore\Framework\Mvc\View\View; 
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/public/style.css" >
+    <?php
+        $view->printCss();
+        $view->printJs();
+        $view->printTitle("StormApp");
+    ?>
+</head>
+    <body>
+        <main>
+            <div style="width: 1024px; margin:0 auto">
+                <?php print_view("@templates/includes/header"); ?>
+                <?php echo $view->content ?>
+            </div>
+        </main>
+    </body>
+</html>
+```
+
+Poprzez dostęp do obiektu `$view` klasy `View` można obsłużyć szablon.\
+`printCss` i `printJs` wyświetlaja zasoby zdefiniowane w widoku podrzędnym. 
+Jest to przydatne kiedy chcesz dodać plik JS i CSS w nagłówku dla konkretnych widoków. 
+W ten sposób pobierane są tylko potrzebne zasoby.\
+`printTitle` wyświetla tytuł z podstrony bądz podany jeśli go nie ma. 
+`view->content` wyświetla podstronę. 
+
+#### Widok
 
 
-### Views
+### Internatiolization (i18n)
+
+
