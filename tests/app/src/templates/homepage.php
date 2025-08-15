@@ -7,7 +7,7 @@
 use Stormmore\Framework\Mvc\View\View;
 
 $view->setTitle("Storm App - Homepage");
-$view->setLayout("@templates/includes/layout.php");
+$view->setLayout("@templates/includes/layout");
 ?>
 <h2>It works!</h2>
 

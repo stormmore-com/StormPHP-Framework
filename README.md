@@ -229,7 +229,12 @@ public function article(string $title, int $id): View
     return view("@templates/homepage");
 }
 ```
-Obsługiwany url `/article?title=awesome-phg-tool&id=1`
+Obsługiwany url `/article?title=awesome-phg-tool&id=1`.\
+
+Możesz definiować domyśle wartości parametrów
+```php
+public function article(string $title = "default title", int $id = null): View
+```
 
 ##### Path parameters
 ```php
@@ -322,8 +327,44 @@ W ten sposób pobierane są tylko potrzebne zasoby.\
 `printTitle` wyświetla tytuł z podstrony bądz podany jeśli go nie ma. 
 `view->content` wyświetla podstronę. 
 
-#### Widok
+#### Szablon
+```php
+<?php
+use Stormmore\Framework\Mvc\View\View;
+/** @var View $view*/
+$view->setLayout('@templates/includes/layout');
+?>
 
+<h2>Success!</h2>
+It's your first template. 
+</br>
+```
+
+`setLayout` służy do definiowaniu układu szablonu
+
+#### Kontroler
+```php
+#[Route("/product")]
+public function getProduct(): View
+{
+    return view('@templates/product')
+}
+```
+Wystarczy zwrócić scięzkę do szablonu. 
+
+#### Wiele szablonów
+Podmień scięzke dla aliasu by zmienić cały look and feel aplikacji 
+```php
+$app->addMiddleware(AliasMiddleware::class, ['@templates' => "@/src/templates/white"]);
+```
+na
+```php
+$app->addMiddleware(AliasMiddleware::class, ['@templates' => "@/src/templates/black"]);
+```
+
+Możesz napisać własny middleware ktory będzie tworzył alis dla każdego użytkownika osobno.
+
+#### Helpery
 
 ### Internatiolization (i18n)
 
