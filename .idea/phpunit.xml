@@ -3,7 +3,8 @@
   <component name="PHPUnit">
     <option name="directories">
       <list>
-        <option value="D:\php-storm-framework\tests" />
+        <option value="$PROJECT_DIR$/tests/unit" />
+        <option value="$PROJECT_DIR$/tests/integration" />
       </list>
     </option>
   </component>

@@ -1,0 +1,40 @@
+.error {
+    color: crimson;
+}
+
+.success {
+    background: lightseagreen;
+    color: white;
+    padding: 5px 10px;
+    margin: 10px 0px;
+    font-size: 18px
+}
+
+.failure {
+    background: crimson;
+    color: white;
+    padding: 5px 10px;
+    margin: 10px 0px;
+    font-size: 18px
+}
+
+table th {
+    text-align: left;
+}
+
+.send-email-form {
+    width: 500px
+}
+.send-email-form .row {
+    margin-bottom: 10px;
+}
+.send-email-form input, textarea {
+    box-sizing: border-box;
+    width: 100%;
+}
+.send-email-form textarea {
+    min-height: 100px;
+}
+.send-email-form button {
+    width: 100%;
+}

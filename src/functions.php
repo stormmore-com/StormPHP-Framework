@@ -21,12 +21,6 @@ if (!function_exists('array_is_list')) {
     }
 }
 
-function file_path_exist(string $filePath): bool
-{
-    $filePath = Path::resolve_path_alias($filePath);
-    return file_exists($filePath);
-}
-
 function is_array_key_value_equal(array $array, string $key, mixed $value): bool
 {
     return array_key_exists($key, $array) and $array[$key] == $value;
@@ -36,6 +30,14 @@ function array_key_value(array $array, string $key, mixed $default): mixed
 {
     return array_key_exists($key, $array) ? $array[$key] : $default;
 }
+
+
+function file_path_exist(string $filePath): bool
+{
+    $filePath = Path::resolve_path_alias($filePath);
+    return file_exists($filePath);
+}
+
 
 function split_file_name_and_ext(string $filename): array
 {

@@ -5,7 +5,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="Stormmore\Framework\" />
       <sourceFolder url="file://$MODULE_DIR$/tests/integration" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests/unit" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/myclabs/deep-copy" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/php-parser" />

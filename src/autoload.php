@@ -1,14 +1,17 @@
 <?php
 
-function storm_framework_autoloader()
-{
-    $list = array();
-    $directory = new RecursiveDirectoryIterator(__DIR__ . "/Framework");
-    $iterator = new RecursiveIteratorIterator($directory);
-    foreach ($iterator as $filename) {
-        if (!$filename->isDir()) {
-            $list[] = $filename->getPathname();
-            require_once $filename->getPathname();
+require_once __DIR__ . "/" . "functions.php";
+
+spl_autoload_register(function($className) {
+    $prefix = "Stormmore\Framework";
+    if (str_starts_with($className, $prefix)) {
+        $filename = str_replace($prefix, "", $className);
+        $filename = str_replace("\\", "/", $filename);
+        $filename .= ".php";
+
+        $filepath = __DIR__ . $filename;
+        if (file_exists($filepath)) {
+            require_once $filepath;
         }
     }
-}
+});
