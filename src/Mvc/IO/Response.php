@@ -8,7 +8,6 @@ use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 class Response
 {
     public int $code = 200;
-    public string $redirect;
     public ?string $location = null;
     public ?string $body = null;
     /**
@@ -55,5 +54,10 @@ class Response
             $json = json_encode($json);
         }
         $this->body = $json;
+    }
+
+    public function redirect(string $location): void
+    {
+        $this->location = $location;
     }
 }

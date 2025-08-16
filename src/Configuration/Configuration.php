@@ -22,7 +22,7 @@ class Configuration
 
     public function loadFile(string $file): void
     {
-        $file = Path::resolve_path_alias($file);
+        $file = Path::resolve_alias($file);
         $this->configuration = array_merge($this->configuration, parse_ini_file($file));
     }
 

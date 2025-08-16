@@ -53,7 +53,7 @@ class View extends stdClass
      */
     public function toHtml(): string
     {
-        $templateFilePath = Path::resolve_path_alias($this->fileName);
+        $templateFilePath = Path::resolve_alias($this->fileName);
         file_exists($templateFilePath) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");
 
         return $this->getTemplateContent($templateFilePath);

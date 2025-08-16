@@ -65,31 +65,31 @@ class Path
         return $path;
     }
 
-    public static function resolve_path_alias(string $templatePath): string
+    public static function resolve_alias(string $pathAlias): string
     {
         $configuration = App::getInstance()->getAppConfiguration();
         $appDirectory = $configuration->projectDirectory;
         $aliases = $configuration->aliases;
-        if (str_starts_with($templatePath, "@/")) {
-            return str_replace("@", $appDirectory, $templatePath);
-        } else if (str_starts_with($templatePath, '@')) {
-            $firstSeparator = strpos($templatePath, "/");
+        if (str_starts_with($pathAlias, "@/")) {
+            return str_replace("@", $appDirectory, $pathAlias);
+        } else if (str_starts_with($pathAlias, '@')) {
+            $firstSeparator = strpos($pathAlias, "/");
             if ($firstSeparator) {
-                $alias = substr($templatePath, 0, $firstSeparator);
-                $path = substr($templatePath, $firstSeparator);
+                $alias = substr($pathAlias, 0, $firstSeparator);
+                $path = substr($pathAlias, $firstSeparator);
             } else {
-                $alias = $templatePath;
+                $alias = $pathAlias;
                 $path = '';
             }
             if (!array_key_exists($alias, $aliases)) { return false;}
             $aliasPath = $aliases[$alias];
             if (str_starts_with($aliasPath, '@')) {
-                $aliasPath = Path::resolve_path_alias($aliasPath);
+                $aliasPath = Path::resolve_alias($aliasPath);
             }
 
-            $templatePath = $aliasPath . $path;
+            $pathAlias = $aliasPath . $path;
         }
 
-        return $templatePath;
+        return $pathAlias;
     }
 }

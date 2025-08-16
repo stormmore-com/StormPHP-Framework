@@ -25,8 +25,7 @@ $app->addMiddleware(MailerMiddleware::class);
 $app->addMiddleware(AliasMiddleware::class, [
     '@templates' => "@/src/templates"
 ]);
-$app->addMiddleware(ConfigurationMiddleware::class, [
-    '@/settings.ini']);
+$app->addMiddleware(ConfigurationMiddleware::class, ['@/settings.ini']);
 $app->addMiddleware(ErrorTemplateMiddleware::class, [
     404 => '@templates/errors/404.php',
     500 => '@templates/errors/500.php',

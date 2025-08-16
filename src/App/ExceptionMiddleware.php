@@ -62,7 +62,7 @@ readonly class ExceptionMiddleware implements IMiddleware
         if ($this->configuration->isDevelopment() and $code == 500) {
             $this->printException($throwable);
         } else if (array_key_exists($code, $errors)) {
-            $this->response->body = $this->getErrorPageContent(Path::resolve_path_alias($errors[$code]), $throwable);
+            $this->response->body = $this->getErrorPageContent(Path::resolve_alias($errors[$code]), $throwable);
         } else {
             $this->printException($throwable);
         }
@@ -72,7 +72,7 @@ readonly class ExceptionMiddleware implements IMiddleware
     {
         ob_start();
         try {
-            include_once Path::resolve_path_alias($path);
+            include_once Path::resolve_alias($path);
             return ob_get_clean();
         }
         catch(Throwable $t) {

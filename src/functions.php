@@ -34,7 +34,7 @@ function array_key_value(array $array, string $key, mixed $default): mixed
 
 function file_path_exist(string $filePath): bool
 {
-    $filePath = Path::resolve_path_alias($filePath);
+    $filePath = Path::resolve_alias($filePath);
     return file_exists($filePath);
 }
 

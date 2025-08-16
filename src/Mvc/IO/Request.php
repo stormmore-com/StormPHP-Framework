@@ -25,10 +25,10 @@ class Request
 
     public Files $files;
     public string $path;
-    public string $query;
+    public string $queryString;
     public ?array $acceptedLanguages = [];
-    public IParameters $queryParameters;
-    public IParameters $postParameters;
+    public IParameters $query;
+    public IParameters $post;
 
     public RedirectMessage $messages;
 
@@ -36,11 +36,11 @@ class Request
     {
         $this->cookies = $this->context->getCookies();
         $this->files = $this->context->getFiles();
-        $this->query = $this->context->getQuery();
+        $this->queryString = $this->context->getQuery();
         $this->path = $this->context->getPath();
         $this->method = $this->context->getMethod();
-        $this->queryParameters = $this->context->queryParameters();
-        $this->postParameters = $this->context->postParameters();
+        $this->query = $this->context->queryParameters();
+        $this->post = $this->context->postParameters();
         $this->headers = $this->context->getHeaders();
         $this->messages = new RedirectMessage($this->cookies);
     }
@@ -99,7 +99,7 @@ class Request
         return $this->method == 'DELETE';
     }
 
-    public function getJson(): ?object
+    public function json(): ?object
     {
         if ($this->context->getContentType() == "application/json") {
             return json_decode($this->context->getContent());
@@ -107,7 +107,7 @@ class Request
         return null;
     }
 
-    public function getBody(): mixed
+    public function body(): mixed
     {
         return $this->context->getContent();
     }
@@ -139,8 +139,8 @@ class Request
 
     public function has(string $name): bool
     {
-        return $this->queryParameters->has($name) or
-            $this->postParameters->has($name) or
+        return $this->query->has($name) or
+            $this->post->has($name) or
             $this->routeParameters->has($name) or
             $this->files->has($name);
     }
@@ -155,11 +155,11 @@ class Request
         if ($this->files->has($name)) {
             return $this->files->get($name);
         }
-        if ($this->queryParameters->has($name)) {
-            return $this->queryParameters->get($name);
+        if ($this->query->has($name)) {
+            return $this->query->get($name);
         }
-        if ($this->postParameters->has($name)) {
-            return $this->postParameters->get($name);
+        if ($this->post->has($name)) {
+            return $this->post->get($name);
         }
         if ($this->routeParameters->has($name)) {
             return $this->routeParameters->get($name);
@@ -190,8 +190,8 @@ class Request
 
     public function getAll(): array
     {
-        return array_merge($this->queryParameters->toArray(),
-            $this->postParameters->toArray(),
+        return array_merge($this->query->toArray(),
+            $this->post->toArray(),
             $this->files->toArray(),
             $this->routeParameters->toArray());
     }
@@ -202,47 +202,6 @@ class Request
             return $this->parameters[$name];
         }
         return $defaultValue;
-    }
-
-    public function getBool(string $name, ?bool $default = null): ?bool
-    {
-        if ($this->has($name)) {
-            $value = strtolower($this->get($name));
-            if ($value == "true" or $value == "1") return true;
-            if ($value == "false" or $value == "0") return false;
-        }
-
-        return $default;
-    }
-
-    public function getInt(string $name, ?int $defaultValue = null): ?int
-    {
-        $value = $this->get($name);
-        if ($value and is_numeric($value)) {
-            return intval($value);
-        }
-        return null;
-    }
-
-    public function getFloat(string $name, ?float $defaultValue = null): ?float
-    {
-        $value = $this->get($name);
-        if ($value and is_numeric($value)) {
-            return floatval($value);
-        }
-        return null;
-    }
-
-    public function getDateTime(string $name, ?DateTime $defaultValue = null): ?DateTime
-    {
-        $value = $this->get($name);
-        if ($value) {
-            try {
-                return new DateTime($value);
-            } catch (Exception) {
-            }
-        }
-        return null;
     }
 
     /**

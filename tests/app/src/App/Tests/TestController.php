@@ -4,6 +4,7 @@ namespace app\src\App\Tests;
 
 use Exception;
 use stdClass;
+use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\Mvc\Attributes\Controller;
 use Stormmore\Framework\Mvc\Attributes\Delete;
 use Stormmore\Framework\Mvc\Attributes\Get;
@@ -19,8 +20,16 @@ use Stormmore\Framework\Mvc\IO\Response;
 readonly class TestController
 {
     public function __construct(private Request $request,
-                                private Response $response)
+                                private Response $response,
+                                private Configuration $configuration)
     {
+    }
+
+    #[Get]
+    #[Route("/print-env")]
+    public function printEnv(): string
+    {
+        return $this->configuration->get("environment");
     }
 
     #[Get]
@@ -63,7 +72,7 @@ readonly class TestController
     #[Route("/test/post/json")]
     public function postJson(): object
     {
-        return $this->request->getJson();
+        return $this->request->json();
     }
 
     #[Post]
@@ -71,9 +80,9 @@ readonly class TestController
     public function postForm(): void
     {
         $this->response->setJson((object)[
-            'name' => $this->request->postParameters->get('name'),
-            'number' => $this->request->postParameters->get('number'),
-            'prime' => $this->request->postParameters->get('prime'),
+            'name' => $this->request->post->get('name'),
+            'number' => $this->request->post->get('number'),
+            'prime' => $this->request->post->get('prime'),
             'file-md5' => md5_file($this->request->files->get('file')->path)
         ]);
     }
@@ -82,7 +91,7 @@ readonly class TestController
     #[Route("/test/post/file-in-body")]
     public function sendFileInBody(): string
     {
-        return md5($this->request->getBody());
+        return md5($this->request->body());
     }
 
     #[Route("/test/get500")]

@@ -70,7 +70,7 @@ readonly class MvcMiddleware implements IMiddleware
         ob_start();
         try {
             $request = $this->request;
-            require Path::resolve_path_alias($filename);
+            require Path::resolve_alias($filename);
             return ob_get_clean();
         } catch(Throwable $t) {
             ob_clean();

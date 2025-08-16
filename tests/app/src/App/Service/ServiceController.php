@@ -14,6 +14,8 @@ use Stormmore\Framework\Form\Form;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mail\Mailer;
 use Stormmore\Framework\Mvc\Attributes\Controller;
+use Stormmore\Framework\Mvc\Attributes\Get;
+use Stormmore\Framework\Mvc\Attributes\Post;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Redirect;
@@ -32,6 +34,18 @@ readonly class ServiceController
                                 private Response         $response,
                                 private Gate             $gate,
                                 private EventDispatcher  $eventDispatcher)
+    {
+    }
+
+    #[Get]
+    #[Route("/endpoint")]
+    public function endpointGet()
+    {
+    }
+
+    #[Post]
+    #[Route("/endpoint")]
+    public function endpointPost()
     {
     }
 

@@ -148,6 +148,16 @@ my_app_made_with_love
 `.logs` logi aplikacji\
 `public_html` katalog do udostępnienia przez serwer na zewnątrz. Prócz `index.php` nie powinno tu być żadnych innych plików `php`
 
+**Konfiguracja środowiska**\
+
+Storm ładuje informacje o środowisku z pliku `env.init` znajdującego się w katalogu projektu.\
+Na każdym ze środowisk powinien być osobny plik.\
+
+Przykładowa plik konfiguracyjny
+```php
+environment = development
+logger.level = info
+```
 
 ## Obsługa żądań
 
@@ -169,8 +179,6 @@ if ($request->isPost()) {
 }
 ```
 3. Przez kontroler
-
-
 
 
 ## Kontroler
@@ -365,7 +373,50 @@ $app->addMiddleware(AliasMiddleware::class, ['@templates' => "@/src/templates/bl
 Możesz napisać własny middleware ktory będzie tworzył alis dla każdego użytkownika osobno.
 
 #### Helpery
+`print_view` sluży do printowania cząstki html.
+
+
+
+
+### Konfiguracja
+By uzyć konfiguracji należy dodać middleware do aplikacji wraz ze scieżką do pliku
+```php
+$app->addMiddleware(ConfigurationMiddleware::class, ['@/settings.ini']);
+```
+
+#### Czytanie konfiguracji
+
+```php
+#[Controller]
+readonly class TestController
+{
+    public function __construct(private Configuration $configuration) { }
+    
+    #[Route("/print-env")]
+    public function printEnv(): string
+    {
+        return $this->configuration->get("environment");
+    }
+}
+```
+
 
 ### Internatiolization (i18n)
+
+By właczyć internacjonalizacje dodaj middleware
+```php
+$app->addMiddleware(LanguageMiddleware::class);
+```
+
+Wymaga on wpisów w konfiguracji (możesz umieścić je w settings.ini bądz env.ini)
+
+```ini
+i18n.multi_language = true
+i18n.default_language = en-US
+i18n.languages = en-US, en-GB, fr-FR, de-DE, pl-PL
+i18n.cookie.name = locale
+i18n.translation.file_pattern = @/src/lang/%file%.ini
+i18n.culture.file_pattern = @/src/lang/culture/%file%.ini
+```
 
 

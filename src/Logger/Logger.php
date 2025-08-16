@@ -80,7 +80,7 @@ class Logger implements ILogger
         $y = date('Y');
         $m = date('m');
         $d = date('d');
-        $dir = Path::resolve_path_alias($this->configuration->getLoggerDirectory());
+        $dir = Path::resolve_alias($this->configuration->getLoggerDirectory());
         $logDirectory = Path::concatenate_paths($dir, $y, $m, $d);
         if (!is_dir($logDirectory)) {
             mkdir($logDirectory, 0777, true);

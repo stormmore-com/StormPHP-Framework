@@ -127,8 +127,8 @@ class ResponseCache
     {
         $id = $request->path;
         $id .= "-" . $this->i18n->culture->getLanguage()->primary;
-        if ($request->query != '') {
-            $id .= "-" . $request->query;
+        if ($request->queryString != '') {
+            $id .= "-" . $request->queryString;
         }
         if ($id != "/") {
             $id = substr($id, 1);
