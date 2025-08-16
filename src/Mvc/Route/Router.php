@@ -10,7 +10,7 @@ class Router
 {
     private array $routes = [];
 
-    public function __construct(private SourceCode $sourceCode)
+    public function __construct(private readonly SourceCode $sourceCode)
     {
     }
 
@@ -22,23 +22,54 @@ class Router
     public function find(Request $request): ?ExecutionRoute
     {
         $requestUri = $request->path;
-        foreach ($this->getAllRoutes() as $pattern => $target) {
-            if ($pattern == $requestUri) {
-                return new ExecutionRoute($pattern, $this->createEndpoint($target));
+
+        [$target, $parameters] = $this->findTarget($request->path);
+
+        if ($target) {
+            if (is_array($target)) {
+                $target = $this->filterTargets($request, $target);
+                if ($target == null) {
+                    return null;
+                }
             }
+            return new ExecutionRoute($requestUri, $this->createEndpoint($target), $parameters);
         }
 
-        $requestSegments = none_empty_explode("/", $requestUri);
-        foreach ($this->getAllRoutes() as $route => $target) {
-            if (substr_count($route, "/") == substr_count($requestUri, "/")) {
-                $routeSegments = none_empty_explode("/", $route);
-                $parameters = $this->matchSegments($routeSegments, $requestSegments);
-                if ($parameters) {
-                    return new ExecutionRoute($route, $this->createEndpoint($target), $parameters);
-                }
+        return null;
+    }
+
+    private function filterTargets(Request $request, array $targets): null|array
+    {
+        foreach($targets as $target) {
+            $types = $target[2];
+            if (count($types) == 0) {
+                return $target;
+            }
+            if (in_array($request->method, $types)) {
+                return $target;
             }
         }
         return null;
+    }
+
+    private function findTarget(string $requestUri): array {
+        $routes = $this->getAllRoutes();
+
+        if (array_key_exists($requestUri, $routes)) {
+            return [$routes[$requestUri], []];
+        }
+        else {
+            $requestSegments = none_empty_explode("/", $requestUri);
+            foreach (array_keys($routes) as $route) {
+                if (substr_count($route, "/") == substr_count($requestUri, "/")) {
+                    $routeSegments = none_empty_explode("/", $route);
+                    if (($parameters = $this->matchSegments($routeSegments, $requestSegments))){
+                        return [$routes[$route], $parameters];
+                    }
+                }
+            }
+        }
+        return [];
     }
 
     private function getAllRoutes(): array

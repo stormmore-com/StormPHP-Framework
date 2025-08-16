@@ -44,18 +44,6 @@ readonly class ControllerReflection
             $user->isAuthenticated() or throw new AjaxAuthenticationException("APP: authentication required", 401);
         }
 
-        $methodAttributes = [
-            'GET' => Get::class,
-            'POST' => Post::class,
-            'PUT' => Put::class,
-            'PATCH' => Patch::class,
-            'DELETE' => Delete::class];
-        foreach($methodAttributes as $name => $class) {
-            if ($this->endpointHasAttribute($class)) {
-                $this->request->is($name) or throw new Exception("$name required", 404);
-            }
-        }
-
         if ($this->endpointHasAttribute(Authenticate::class)) {
             $user->isAuthenticated() or throw new AuthenticationException("APP: authentication required", 401);
         }

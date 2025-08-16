@@ -21,7 +21,7 @@ class Request
     private Cookies $cookies;
     private IParameters $routeParameters;
     private Headers $headers;
-    private string $method;
+    public string $method;
 
     public Files $files;
     public string $path;

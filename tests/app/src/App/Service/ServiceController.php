@@ -37,18 +37,6 @@ readonly class ServiceController
     {
     }
 
-    #[Get]
-    #[Route("/endpoint")]
-    public function endpointGet()
-    {
-    }
-
-    #[Post]
-    #[Route("/endpoint")]
-    public function endpointPost()
-    {
-    }
-
     #[Route('/send-mail')]
     public function sendEmail(): View|Redirect
     {

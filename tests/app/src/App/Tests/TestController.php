@@ -26,6 +26,21 @@ readonly class TestController
     }
 
     #[Get]
+    #[Route("/endpoint")]
+    public function endpointGet()
+    {
+        echo "GET";
+    }
+
+    #[Post]
+    #[Put]
+    #[Route("/endpoint")]
+    public function endpointPost()
+    {
+        echo "POST";
+    }
+
+    #[Get]
     #[Route("/print-env")]
     public function printEnv(): string
     {
