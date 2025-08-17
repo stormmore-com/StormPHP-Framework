@@ -2,6 +2,8 @@
 
 namespace Stormmore\Framework\Validation;
 
+use Exception;
+use closure;
 use stdClass;
 
 class Validator
@@ -19,12 +21,19 @@ class Validator
         return new Validator();
     }
 
-    public function add(Field $field): Validator
+    public function field(string $field, closure $closure): Validator
     {
-        $this->fields[] = $field;
+        $field = new Field($field);
+        $closure->__invoke($field);
+        $this->fields[$field->getName()] = $field;
         return $this;
     }
 
+    public function add(Field $field): Validator
+    {
+        $this->fields[$field->getName()] = $field;
+        return $this;
+    }
     public function for(string $name): Field
     {
         foreach ($this->fields as $field) {

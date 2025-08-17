@@ -5,6 +5,7 @@ namespace src\App\Service;
 use DateTime;
 use Stormmore\Framework\Form\Form;
 use Stormmore\Framework\Mvc\IO\Request;
+use Stormmore\Framework\Validation\Field;
 
 class BasicForm extends Form
 {
@@ -12,9 +13,17 @@ class BasicForm extends Form
     {
         parent::__construct($request);
 
-        $this->validator->for('alpha')->alpha();
-        $this->validator->for('alphaMin')->alpha()->min(2)->required();
-        $this->validator->for('alphaMax')->alpha()->max(5)->required();
+        $this->validator
+        ->field('alpha', function(Field $field) {
+            $field->alpha()->required();
+        })
+        ->field('alphaMin', function(Field $field) {
+            $field->alpha()->min(2)->required();
+        })
+        ->field('alphaMax', function(Field $field) {
+            $field->alpha()->max(5)->required();
+        });
+        $this->validator->add(Field::for('alphaNum')->alphaNumeric()->required());
         $this->validator->for('alphaNum')->alphaNumeric()->required();
         $this->validator->for('radio')->values(array('on', 'off'))->required();
         $this->validator->for('radioBool')->values(array(true, false))->required();
