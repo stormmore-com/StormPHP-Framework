@@ -89,6 +89,15 @@ class View extends stdClass
         return array_key_exists($key, $this->data);
     }
 
+    public function useHelper(string $path): void
+    {
+        if (!str_ends_with($path, '.php')) {
+            $path .= '.php';
+        }
+        $path = Path::resolve_alias($path);
+        require_once $path;
+    }
+
     public function setLayout(string $filename): void
     {
         $this->layoutFileName = $filename;

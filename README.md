@@ -373,7 +373,15 @@ $app->addMiddleware(AliasMiddleware::class, ['@templates' => "@/src/templates/bl
 Możesz napisać własny middleware ktory będzie tworzył alis dla każdego użytkownika osobno.
 
 #### Helpery
-`print_view` sluży do printowania cząstki html.
+
+`print_view` sluży do printowania szablonu.
+
+Możesz dodać plik z własnymi funkcjami np. do katalogu `templates` i w szablonie zadeklarować 
+```php
+$view->useHelper('@templates/helpers')
+```
+##### Wbudowane helpery
+
 
 
 
