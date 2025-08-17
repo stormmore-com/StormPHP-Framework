@@ -33,6 +33,12 @@ class BasicForm extends Form
         $this->validator->for('image')->image(types: [IMAGETYPE_JPEG]);
         $this->validator->for('file')->file(extensions: ['txt'], size: 10);
         $this->validator->for('day')->values(['Saturday', 'Sunday'])->required();
+        $this->validator->for('password')->required();
+        $this->validator->for('password_confirm')->callback(function() {
+            $pass = $this->request->post->get('password');
+            $confirm = $this->request->post->get('password_confirm');
+            return $pass == $confirm;
+        }, 'Passwords do not match');
         if ($this->request->getDefault('files-required', false)) {
             $this->validator->for('image')->required();
             $this->validator->for('file')->required();

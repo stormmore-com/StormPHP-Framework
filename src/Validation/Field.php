@@ -2,9 +2,11 @@
 
 namespace Stormmore\Framework\Validation;
 
+use closure;
 use DateTime;
 use Stormmore\Framework\Validation\Validators\AlphaNumValidator;
 use Stormmore\Framework\Validation\Validators\AlphaValidator;
+use Stormmore\Framework\Validation\Validators\CallbackValidator;
 use Stormmore\Framework\Validation\Validators\DateTimeRangeValidator;
 use Stormmore\Framework\Validation\Validators\DateTimeValidator;
 use Stormmore\Framework\Validation\Validators\EmailValidator;
@@ -42,6 +44,12 @@ class Field
     public function alphaNumeric(null|string $message = null): Field
     {
         $this->validators[] = new AlphaNumValidator($message);
+        return $this;
+    }
+
+    public function callback(closure $closure, string $message): Field
+    {
+        $this->validators[] = new CallbackValidator($closure, $message);
         return $this;
     }
 

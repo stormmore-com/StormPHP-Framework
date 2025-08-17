@@ -265,6 +265,25 @@ $view->setLayout('@templates/includes/layout.php');
                 <?php endif ?>
             </td>
         </tr>
+        <!-- Password -->
+        <tr>
+            <td><label for="password">Password: </label></td>
+            <td>
+                <div><input id="password" type="password" name="password" value="<?php echo $form->password ?>" /></div>
+                <div><input id="confirm_password" type="password" name="password_confirm" /></div>
+            </td>
+            <td>Callback validator</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="error">
+                <?php if ($form->errors->password): ?>
+                    <div><?php echo $form->errors->password ?></div>
+                <?php endif ?>
+                <?php if ($form->errors->password_confirm): ?>
+                    <div><?php echo $form->errors->password_confirm  ?></div>
+                <?php endif ?>
+            </td>
+        </tr>
         <!-- Weekend -->
         <tr>
             <td><label for="option">Weekend:</label></td>
