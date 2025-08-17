@@ -2,10 +2,12 @@
 
 namespace Stormmore\Framework\Form;
 
-use ArrayAccess;
+use IteratorAggregate;
 use Stormmore\Framework\Validation\ValidationResult;
+use Traversable;
+use ArrayIterator;
 
-class Errors implements ArrayAccess
+class Errors implements IteratorAggregate
 {
     private null|ValidationResult $validationResult;
 
@@ -24,17 +26,8 @@ class Errors implements ArrayAccess
         return $this->validationResult?->__get($name)?->message;
     }
 
-    public function offsetExists(mixed $offset): bool
+    public function getIterator(): Traversable
     {
-        return $this->validationResult?->__get($offset) != null;
+        return new ArrayIterator($this->validationResult?->getErrors() ?? []);
     }
-
-    public function offsetGet(mixed $offset): mixed
-    {
-        return $this->validationResult?->__get($offset);
-    }
-
-    public function offsetSet(mixed $offset, mixed $value): void { }
-
-    public function offsetUnset(mixed $offset): void { }
 }
