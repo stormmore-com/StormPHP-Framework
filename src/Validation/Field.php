@@ -9,6 +9,7 @@ use Stormmore\Framework\Validation\Validators\AlphaValidator;
 use Stormmore\Framework\Validation\Validators\CallbackValidator;
 use Stormmore\Framework\Validation\Validators\DateTimeRangeValidator;
 use Stormmore\Framework\Validation\Validators\DateTimeValidator;
+use Stormmore\Framework\Validation\Validators\DomainUrlValidator;
 use Stormmore\Framework\Validation\Validators\EmailValidator;
 use Stormmore\Framework\Validation\Validators\FileValidator;
 use Stormmore\Framework\Validation\Validators\FloatValidator;
@@ -50,6 +51,12 @@ class Field
     public function callback(closure $closure, string $message): Field
     {
         $this->validators[] = new CallbackValidator($closure, $message);
+        return $this;
+    }
+
+    public function domainUrl(null|string $message = null): Field
+    {
+        $this->validators[] = new DomainUrlValidator($message);
         return $this;
     }
 

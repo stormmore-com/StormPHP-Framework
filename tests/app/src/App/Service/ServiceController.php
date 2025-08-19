@@ -8,14 +8,13 @@ use src\App\Service\Commands\ServiceCommand;
 use src\App\Service\Events\ServiceEvent;
 use src\Infrastructure\Settings;
 use Stormmore\Framework\AppConfiguration;
+use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\Cqs\Gate;
 use Stormmore\Framework\Events\EventDispatcher;
 use Stormmore\Framework\Form\Form;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mail\Mailer;
 use Stormmore\Framework\Mvc\Attributes\Controller;
-use Stormmore\Framework\Mvc\Attributes\Get;
-use Stormmore\Framework\Mvc\Attributes\Post;
 use Stormmore\Framework\Mvc\Attributes\Route;
 use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Redirect;
@@ -103,8 +102,17 @@ readonly class ServiceController
         }
         return view("@templates/service/index", [
             'configuration' => $this->configuration,
-            'locales' => $locales
+            'settings' => $this->settings,
+            'locales' => $locales,
         ]);
+    }
+
+    #[Route("/change-url")]
+    public function changeUrl(): Redirect
+    {
+        $url = $this->request->post->get('url');
+        Configuration::update('@/settings.ini', ['url' => $url]);
+        return back();
     }
 
     #[Route("/locale/change")]

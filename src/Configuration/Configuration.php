@@ -15,6 +15,61 @@ class Configuration
         return $configuration;
     }
 
+    public static function update($filename, $changes): void
+    {
+        $filename = Path::resolve_alias($filename);
+        $lines = file($filename, FILE_IGNORE_NEW_LINES);
+        $output = [];
+        $currentSection = null;
+
+        foreach ($lines as $line) {
+            $trim = trim($line);
+
+            if (preg_match('/^\[(.+)\]$/', $trim, $m)) {
+                $currentSection = $m[1];
+                $output[] = $line;
+                continue;
+            }
+
+            if ($trim === '' || $trim[0] === ';' || $trim[0] === '#') {
+                $output[] = $line;
+                continue;
+            }
+
+            if (preg_match('/^([^=]+)=(.*)$/', $line, $m)) {
+                $key = trim($m[1]);
+                $val = trim($m[2]);
+
+                if ($currentSection !== null &&
+                    isset($changes[$currentSection][$key])) {
+                    $newVal = $changes[$currentSection][$key];
+                    $line = "$key = \"$newVal\"";
+                    unset($changes[$currentSection][$key]); // zmiana zużyta
+                } elseif ($currentSection === null &&
+                    isset($changes[$key])) {
+                    $newVal = $changes[$key];
+                    $line = "$key = \"$newVal\"";
+                    unset($changes[$key]);
+                }
+            }
+
+            $output[] = $line;
+        }
+
+        foreach ($changes as $section => $values) {
+            if (is_array($values)) {
+                $output[] = "[$section]";
+                foreach ($values as $key => $val) {
+                    $output[] = "$key = \"$val\"";
+                }
+            } else {
+                $output[] = "$section = \"$values\"";
+            }
+        }
+
+        file_put_contents($filename, implode(PHP_EOL, $output) . PHP_EOL);
+    }
+
     public function set(string $name, string $value)
     {
         $this->configuration[$name] = $value;

@@ -3,8 +3,10 @@
  * @var View $view
  * @var Stormmore\Framework\Internationalization\Locale[] $locales
  * @var Stormmore\Framework\AppConfiguration $configuration
+ * @var Settings $settings
  */
 
+use src\Infrastructure\Settings;
 use Stormmore\Framework\Mvc\View\View;
 
 $view->setTitle(t('status.title'));
@@ -37,13 +39,22 @@ $view->setLayout('@templates/includes/layout.php');
         <td><?php echo $configuration->cacheDirectory ?></td>
     </tr>
     <tr>
+        <td><?php echo t('status.url') ?></td>
+        <td>
+            <form action="/change-url" method="post">
+                <input type="text" name="url" value="<?php echo $settings->url ?>" />
+                <button><?php echo t('status.change') ?></button>
+            </form>
+        </td>
+    </tr>
+    <tr>
         <td><?php echo t('status.locale') ?>:</td>
         <td>
             <form action="/locale/change">
                 <select name="tag">
                     <?php $view->html->options($locales, $view->i18n->locale->tag) ?>
                 </select>
-                <button><?php echo t('status.change_locale') ?></button>
+                <button><?php echo t('status.change') ?></button>
             </form>
         </td>
     </tr>

@@ -284,6 +284,21 @@ $view->setLayout('@templates/includes/layout.php');
                 <?php endif ?>
             </td>
         </tr>
+        <!-- Domain -->
+        <tr>
+            <td><label for="domain">Domain: </label></td>
+            <td>
+                <div><input id="domain" type="text" name="domain" value="<?php echo $form->domain ?>" /></div>
+            </td>
+            <td>Domain validator</td>
+        </tr>
+        <tr>
+            <td colspan="3" class="error">
+                <?php if ($form->errors->domain): ?>
+                    <div><?php echo $form->errors->domain ?></div>
+                <?php endif ?>
+            </td>
+        </tr>
         <!-- Weekend -->
         <tr>
             <td><label for="option">Weekend:</label></td>

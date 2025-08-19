@@ -7,6 +7,7 @@ use Stormmore\Framework\Internationalization\Locale;
 
 class Settings
 {
+    public string $url;
     public bool $isMultiLanguage;
     public Locale $defaultLocale;
     /**
@@ -19,6 +20,7 @@ class Settings
         $this->isMultiLanguage = $configuration->getBool("i18n.multi_language");
         $this->defaultLocale = new Locale($configuration->get('i18n.default_language'));
         $this->locales = array_map(fn($item) => new Locale($item), $configuration->getArray('i18n.languages'));
+        $this->url = $configuration->get("url");
     }
 
     public function localeExists(string $locale): bool

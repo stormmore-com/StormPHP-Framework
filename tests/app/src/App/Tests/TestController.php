@@ -26,7 +26,7 @@ readonly class TestController
     }
 
     #[Get]
-    #[Route("/endpoint")]
+    #[Route("/test/endpoint")]
     public function endpointGet()
     {
         echo "GET";
@@ -34,14 +34,14 @@ readonly class TestController
 
     #[Post]
     #[Put]
-    #[Route("/endpoint")]
+    #[Route("/test/endpoint")]
     public function endpointPost()
     {
         echo "POST";
     }
 
     #[Get]
-    #[Route("/print-env")]
+    #[Route("/test/print-env")]
     public function printEnv(): string
     {
         return $this->configuration->get("environment");
