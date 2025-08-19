@@ -69,7 +69,7 @@ class Router
                 }
             }
         }
-        return [];
+        return [null, null];
     }
 
     private function getAllRoutes(): array
