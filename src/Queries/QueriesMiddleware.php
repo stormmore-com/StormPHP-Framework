@@ -33,7 +33,10 @@ readonly class QueriesMiddleware implements IMiddleware
 
         $connection = ConnectionFactory::createFromString($connectionString, $user, $password);
 
+        $queries = new StormQueries($connection);
+
         $this->container->registerAs($connection, 'Stormmore\Queries\IConnection');
+        $this->container->register($queries);
 
         try {
             $connection->begin();
