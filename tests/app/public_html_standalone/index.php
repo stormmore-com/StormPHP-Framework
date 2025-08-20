@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../../src/autoload.php';
 
-use src\Infrastructure\Middleware\AuthenticationMiddleware;
+use src\Infrastructure\Middleware\Authentication2Middleware;
 use src\Infrastructure\Middleware\MailerMiddleware;
 use Stormmore\Framework\App;
 use Stormmore\Framework\App\AliasMiddleware;
@@ -33,6 +33,6 @@ $app->addMiddleware(ErrorTemplateMiddleware::class, [
     'unauthorized' => redirect('/signin')
 ]);
 $app->addMiddleware(LanguageMiddleware::class);
-$app->addMiddleware(AuthenticationMiddleware::class);
+$app->addMiddleware(Authentication2Middleware::class);
 
 $app->run();

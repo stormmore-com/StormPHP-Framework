@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework;
 
+use closure;
 use Stormmore\Framework\App\ClassLoader;
 use Stormmore\Framework\App\ExceptionMiddleware;
 use Stormmore\Framework\App\MiddlewareChain;
@@ -85,7 +86,7 @@ class App
         return $this->response;
     }
 
-    public function addMiddleware(string $middlewareClassName, array $options = []): void
+    public function addMiddleware(string $middlewareClassName, closure|string|array $options = []): void
     {
         $this->middlewareChain->add($middlewareClassName, $options);
     }

@@ -6,5 +6,5 @@ use closure;
 
 interface IMiddleware
 {
-    public function run(closure $next, array $options = []): void;
+    public function run(closure $next, mixed $options = []): void;
 }

@@ -19,7 +19,7 @@ readonly class QueriesMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next, array $options = []): void
+    public function run(closure $next, mixed $options = []): void
     {
         class_exists('Stormmore\Queries\ConnectionFactory') or throw new Exception("Install StormQueries library.");
         $this->configuration->has('database.connection') and

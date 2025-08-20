@@ -11,11 +11,11 @@ class MiddlewareChain
     private array $middlewares;
     private array $options = [];
 
-    public function __construct(private Resolver $resolver)
+    public function __construct(private readonly Resolver $resolver)
     {
     }
 
-    public function add(string $middleware, array $options = []): MiddlewareChain
+    public function add(string $middleware, closure|string|array $options = []): MiddlewareChain
     {
         $this->middlewares[] = $middleware;
         $this->options[count($this->middlewares) - 1] = $options;

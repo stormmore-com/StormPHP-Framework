@@ -31,7 +31,7 @@ readonly class MvcMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next, array $options = []): void
+    public function run(closure $next, mixed $options = []): void
     {
         $route = $this->find();
         $route or throw new Exception("APP: route for [{$this->request->path}] doesn't exist", 404);

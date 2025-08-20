@@ -14,7 +14,7 @@ readonly class ResponseMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next, array $options = []): void
+    public function run(closure $next, mixed $options = []): void
     {
         try {
             if ($this->configuration->isProduction()) ob_start();

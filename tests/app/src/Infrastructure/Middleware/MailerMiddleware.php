@@ -15,7 +15,7 @@ readonly class MailerMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next, array $options = []): void
+    public function run(closure $next, mixed $options = []): void
     {
         $this->mailer->addMailServer("local-smtp", new SmtpSender());
         $this->mailer->addMailServer('gmail', new SmtpSender(

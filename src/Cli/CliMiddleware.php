@@ -13,7 +13,7 @@ readonly class CliMiddleware implements IMiddleware
     {
     }
 
-    public function run(closure $next, array $options = []): void
+    public function run(closure $next, mixed $options = []): void
     {
         if ($this->requestContext->isCliCommand()) {
             $this->commandRunner->run();
