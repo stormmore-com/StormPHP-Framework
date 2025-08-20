@@ -25,8 +25,8 @@ $app->addRoute('/hello', function () {
 $app->addMiddleware(ErrorHandlerMiddleware::class, [
     404 => '@templates/errors/404.php',
     500 => '@templates/errors/500.php',
-    'unauthenticated' => redirect('/signin'),
-    'unauthorized' => redirect('/signin')
+    401 => redirect('/signin'),
+    403 => redirect('/signin')
 ]);
 $app->addMiddleware(ConfigurationMiddleware::class, ['@/settings.ini']);
 $app->addMiddleware(MailerMiddleware::class);

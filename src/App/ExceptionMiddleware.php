@@ -8,6 +8,7 @@ use Stormmore\Framework\Logger\ILogger;
 use Stormmore\Framework\Mvc\Authentication\AjaxAuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\AuthenticationException;
 use Stormmore\Framework\Mvc\Authentication\AuthorizedException;
+use Stormmore\Framework\Mvc\IO\Redirect;
 use Stormmore\Framework\Mvc\IO\Request;
 use Stormmore\Framework\Mvc\IO\Response;
 use Stormmore\Framework\Std\Path;
@@ -43,18 +44,6 @@ readonly class ExceptionMiddleware implements IMiddleware
             $this->response->code = 401;
             return;
         }
-        if ($throwable instanceof AuthenticationException and array_key_exists('unauthenticated', $errors)) {
-            $redirectFrom = $this->request->encodeRequestUri();
-            $redirect = $errors['unauthenticated'];
-            $location = $redirect->location . '?from=' . $redirectFrom;
-            $this->response->location = $location;
-            return;
-        }
-        if ($throwable instanceof AuthorizedException and array_key_exists('unauthorized', $errors)) {
-            $redirect = $errors['unauthorized'];
-            $this->response->location = $redirect->location;
-            return;
-        }
 
         $code = (!is_int($throwable->getCode()) or $throwable->getCode() == 0) ? 500 : $throwable->getCode();
         $this->response->code = $code;
@@ -62,7 +51,13 @@ readonly class ExceptionMiddleware implements IMiddleware
         if ($this->configuration->isDevelopment() and $code == 500) {
             $this->printException($throwable);
         } else if (array_key_exists($code, $errors)) {
-            $this->response->body = $this->getErrorPageContent(Path::resolve_alias($errors[$code]), $throwable);
+            $error = $errors[$code];
+            if ($error instanceof Redirect) {
+                $this->response->location = $error->location;
+            }
+            else {
+                $this->response->body = $this->getErrorPageContent(Path::resolve_alias($errors[$code]), $throwable);
+            }
         } else {
             $this->printException($throwable);
         }
