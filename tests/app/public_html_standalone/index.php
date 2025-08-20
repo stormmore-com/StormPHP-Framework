@@ -6,7 +6,7 @@ use src\Infrastructure\Middleware\Authentication2Middleware;
 use src\Infrastructure\Middleware\MailerMiddleware;
 use Stormmore\Framework\App;
 use Stormmore\Framework\App\AliasMiddleware;
-use Stormmore\Framework\App\ErrorTemplateMiddleware;
+use Stormmore\Framework\App\ErrorHandlerMiddleware;
 use Stormmore\Framework\Configuration\ConfigurationMiddleware;
 use Stormmore\Framework\Internationalization\LanguageMiddleware;
 
@@ -26,7 +26,7 @@ $app->addMiddleware(AliasMiddleware::class, [
     '@templates' => "@/src/templates"
 ]);
 $app->addMiddleware(ConfigurationMiddleware::class, ['@/settings.ini']);
-$app->addMiddleware(ErrorTemplateMiddleware::class, [
+$app->addMiddleware(ErrorHandlerMiddleware::class, [
     404 => '@templates/errors/404.php',
     500 => '@templates/errors/500.php',
     'unauthenticated' => redirect('/signin'),

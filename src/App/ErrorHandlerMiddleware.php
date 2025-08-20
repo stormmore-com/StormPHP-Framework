@@ -5,7 +5,7 @@ namespace Stormmore\Framework\App;
 use closure;
 use Stormmore\Framework\AppConfiguration;
 
-readonly class ErrorTemplateMiddleware implements IMiddleware
+readonly class ErrorHandlerMiddleware implements IMiddleware
 {
     public function __construct(private AppConfiguration $appConfiguration)
     {
