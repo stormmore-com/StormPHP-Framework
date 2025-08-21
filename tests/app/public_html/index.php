@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../../../vendor/autoload.php';
 
-use src\Infrastructure\AuthenticationConf;
+use src\Infrastructure\Authenticator;
 use src\Infrastructure\Middleware\MailerMiddleware;
 use Stormmore\Framework\App;
 use Stormmore\Framework\App\AliasMiddleware;
@@ -34,6 +34,6 @@ $app->addMiddleware(AliasMiddleware::class, [
     '@templates' => "@/src/templates"
 ]);
 $app->addMiddleware(LanguageMiddleware::class);
-$app->addMiddleware(AuthenticationMiddleware::class, AuthenticationConf::class);
+$app->addMiddleware(AuthenticationMiddleware::class, Authenticator::class);
 
 $app->run();

@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\Mvc\Authentication;
 
-interface IAuthenticatorConf
+interface IAuthenticator
 {
     public function authenticate(AppUser $appUser);
 }

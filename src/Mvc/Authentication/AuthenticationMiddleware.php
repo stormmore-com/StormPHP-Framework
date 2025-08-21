@@ -20,7 +20,7 @@ readonly class AuthenticationMiddleware implements IMiddleware
         }
         else if (is_string($options)) {
             $object = $this->resolver->resolve($options);
-            if ($object instanceof IAuthenticatorConf) {
+            if ($object instanceof IAuthenticator) {
                 $object->authenticate($this->appUser);
             }
             else {

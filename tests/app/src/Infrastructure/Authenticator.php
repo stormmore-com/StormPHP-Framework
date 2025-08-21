@@ -3,10 +3,10 @@
 namespace src\Infrastructure;
 
 use Stormmore\Framework\Mvc\Authentication\AppUser;
-use Stormmore\Framework\Mvc\Authentication\IAuthenticatorConf;
+use Stormmore\Framework\Mvc\Authentication\IAuthenticator;
 use Stormmore\Framework\Mvc\IO\Request;
 
-readonly class AuthenticationConf implements IAuthenticatorConf
+readonly class Authenticator implements IAuthenticator
 {
     public function __construct(private Request $request)
     {
