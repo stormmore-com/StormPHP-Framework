@@ -52,12 +52,12 @@ class SourceCode
 
     public function scan(): void
     {
-        $fileClassCollection = $this->classScanner->scan();
-        $this->classes = $fileClassCollection->getClassesWithRelativePaths();
-        $this->routes = $this->routeScanner->scan($fileClassCollection);
-        $this->commandHandlers = $this->commandHandlerScanner->scan($fileClassCollection);
-        $this->eventHandlers = $this->eventHandlerScanner->scan($fileClassCollection);
-        $this->tasks = $this->taskScanner->scan($fileClassCollection);
+        $scannedFileClasses = $this->classScanner->scan();
+        $this->classes = $scannedFileClasses->getClassesWithRelativePaths();
+        $this->routes = $this->routeScanner->scan($scannedFileClasses);
+        $this->commandHandlers = $this->commandHandlerScanner->scan($scannedFileClasses);
+        $this->eventHandlers = $this->eventHandlerScanner->scan($scannedFileClasses);
+        $this->tasks = $this->taskScanner->scan($scannedFileClasses);
     }
 
     public function writeCache(): void

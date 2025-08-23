@@ -12,9 +12,9 @@ readonly class ClassScanner
     /**
      * @throws Exception
      */
-    public function scan(): FileClassCollection
+    public function scan(): ScannedFileClasses
     {
-        $classes = new FileClassCollection($this->sourceDirectory);
+        $classes = new ScannedFileClasses($this->sourceDirectory);
         foreach ($this->getPhpFiles() as $phpFilePath) {
             $fileClasses = PhpClassFileParser::parse($phpFilePath);
             foreach($fileClasses as $class) {

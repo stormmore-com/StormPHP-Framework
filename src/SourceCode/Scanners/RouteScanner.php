@@ -14,7 +14,7 @@ use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 
 class RouteScanner
 {
-    public function scan(FileClassCollection $fileClassCollection): array
+    public function scan(ScannedFileClasses $fileClassCollection): array
     {
         $routes = [];
         foreach ($fileClassCollection->getClasses() as $filePath) {

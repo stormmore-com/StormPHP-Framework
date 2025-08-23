@@ -13,7 +13,7 @@ class CommandHandlerScanner
         $this->handlerScanner = new HandlerScanner(CommandHandler::class);
     }
 
-    public function scan(FileClassCollection $classes): array
+    public function scan(ScannedFileClasses $classes): array
     {
         return $this->handlerScanner->scan($classes->getClasses());
     }

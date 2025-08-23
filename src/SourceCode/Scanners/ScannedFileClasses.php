@@ -2,7 +2,7 @@
 
 namespace Stormmore\Framework\SourceCode\Scanners;
 
-class FileClassCollection
+class ScannedFileClasses
 {
     private array $classes = [];
 
@@ -17,7 +17,9 @@ class FileClassCollection
 
     public function getClassesWithRelativePaths(): array
     {
-        return $this->classes;
+        return array_map(function ($filePath) {
+            return str_replace($this->sourceDirectory, '', $filePath);
+        }, $this->classes);
     }
 
     public function getClasses(): array

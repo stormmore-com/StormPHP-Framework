@@ -8,7 +8,7 @@ use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 
 class TaskScanner
 {
-    public function scan(FileClassCollection $fileClassCollection): array
+    public function scan(ScannedFileClasses $fileClassCollection): array
     {
         $tasks = [];
         foreach ($fileClassCollection->getClasses() as $filePath) {
