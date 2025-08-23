@@ -5,25 +5,20 @@ namespace Stormmore\Framework\SourceCode\Scanners;
 use Exception;
 use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 
-class ClassScanner
+readonly class ClassScanner
 {
-    private array $directories;
-
-    function __construct(...$directories)
-    {
-        $this->directories = $directories;
-    }
+    function __construct(private string $sourceDirectory) { }
 
     /**
      * @throws Exception
      */
-    public function scan(): array
+    public function scan(): FileClassCollection
     {
-        $classes = [];
+        $classes = new FileClassCollection($this->sourceDirectory);
         foreach ($this->getPhpFiles() as $phpFilePath) {
             $fileClasses = PhpClassFileParser::parse($phpFilePath);
             foreach($fileClasses as $class) {
-                $classes[$class->getFullyQualifiedName()] = $phpFilePath;
+                $classes->addClass($class->getFullyQualifiedName(), $phpFilePath);
             }
         }
         return $classes;
@@ -34,14 +29,12 @@ class ClassScanner
      */
     private function getPhpFiles(): array
     {
-        $phpFiles = array();
-        foreach ($this->directories as $directory) {
-            is_dir($directory) or throw new Exception("ClassScanner: path [$directory] it's not directory");
+        is_dir($this->sourceDirectory) or throw new Exception("ClassScanner: path [$this->sourceDirectory] it's not directory");
 
-            $directoryPhpFiles = $this->searchPhpFiles($directory);
-            $phpFiles = array_merge($directoryPhpFiles, $phpFiles);
+        $phpFiles = $this->searchPhpFiles($this->sourceDirectory);
+        foreach($phpFiles as $class => $file) {
+            $phpFiles[$class] = $file;
         }
-
         return $phpFiles;
     }
 
@@ -57,7 +50,6 @@ class ClassScanner
                 $phpFiles[] = $path;
             }
         }
-
         return $phpFiles;
     }
 }

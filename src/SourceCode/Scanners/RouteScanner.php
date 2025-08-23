@@ -14,10 +14,10 @@ use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 
 class RouteScanner
 {
-    public function scan(array $classes): array
+    public function scan(FileClassCollection $fileClassCollection): array
     {
         $routes = [];
-        foreach ($classes as $filePath) {
+        foreach ($fileClassCollection->getClasses() as $filePath) {
             $fileRoutes = $this->getClassFileRoutes($filePath);
             $routes = array_merge($routes, $fileRoutes);
         }

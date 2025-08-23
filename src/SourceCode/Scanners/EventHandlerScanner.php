@@ -13,8 +13,8 @@ class EventHandlerScanner
         $this->handlerScanner = new HandlerScanner(EventHandler::class);
     }
 
-    public function scan(array $classes): array
+    public function scan(FileClassCollection $classes): array
     {
-        return $this->handlerScanner->scan($classes);
+        return $this->handlerScanner->scan($classes->getClasses());
     }
 }

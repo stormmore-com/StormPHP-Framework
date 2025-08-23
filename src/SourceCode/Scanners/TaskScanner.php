@@ -8,10 +8,10 @@ use Stormmore\Framework\SourceCode\Parser\PhpClassFileParser;
 
 class TaskScanner
 {
-    public function scan(array $classes): array
+    public function scan(FileClassCollection $fileClassCollection): array
     {
         $tasks = [];
-        foreach ($classes as $filePath) {
+        foreach ($fileClassCollection->getClasses() as $filePath) {
             $classes = PhpClassFileParser::parse($filePath);
             foreach ($classes as $class) {
                 if ($class->hasAttribute(CliTask::class)) {
