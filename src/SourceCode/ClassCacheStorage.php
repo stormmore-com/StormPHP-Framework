@@ -63,6 +63,11 @@ class ClassCacheStorage
     function load(): array
     {
           $config = [];
+          $config['classes'] = [];
+          $config['routes'] = [];
+          $config['commands'] = [];
+          $config['handlers'] = [];
+          $config['tasks'] = [];
           require_once $this->cacheFilePath;
           return $config;;
     }
