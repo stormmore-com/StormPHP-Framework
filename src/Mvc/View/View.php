@@ -27,9 +27,9 @@ class View extends stdClass
     private array $htmlMetaCssScripts = [];
 
     public function __construct(
-        private string $fileName,
-        private array|ViewBag $data = [],
-        private readonly null|string $templateDirectory = null)
+        private string               $fileName,
+        private array|ViewBag        $data = [],
+        private readonly null|string $templatesDirectory = null)
     {
         if (!str_ends_with($this->fileName, '.php')) {
             $this->fileName .= '.php';
@@ -39,8 +39,8 @@ class View extends stdClass
             $this->fileName = Path::resolve_alias($this->fileName);
         }
         else {
-            if ($this->templateDirectory) {
-                $this->fileName = Path::concatenate_paths($this->templateDirectory, $this->fileName);
+            if ($this->templatesDirectory) {
+                $this->fileName = Path::concatenate_paths($this->templatesDirectory, $this->fileName);
             }
         }
         file_exists($this->fileName) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");

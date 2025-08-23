@@ -12,7 +12,7 @@ class AppConfiguration
     public string $projectDirectory;
     public string $sourceDirectory;
     public string $cacheDirectory;
-    public null|string $templateDirectory = null;
+    public null|string $templatesDirectory = null;
     public array $aliases = array();
     public array $errors = array();
 
@@ -83,10 +83,10 @@ class AppConfiguration
         }
         $this->cacheDirectory = realpath($cache);
 
-        if (array_key_exists('template', $directories)) {
-            $templateDirectory = $directories['template'];
-            if (is_dir($templateDirectory)) {
-                $this->templateDirectory = $templateDirectory;
+        if (array_key_exists('templates', $directories)) {
+            $templatesDirectory = $directories['templates'];
+            if (is_dir($templatesDirectory)) {
+                $this->templatesDirectory = $templatesDirectory;
             }
         }
 
