@@ -27,7 +27,7 @@ class SourceCode
     public function __construct(
         private readonly AppConfiguration $configuration)
     {
-        $this->cache = new ClassCacheStorage($this->configuration, 'classes');
+        $this->cache = new ClassCacheStorage($this->configuration, 'cache.php');
         $this->classScanner = new ClassScanner($this->configuration->sourceDirectory);
         $this->routeScanner = new RouteScanner();
         $this->commandHandlerScanner = new CommandHandlerScanner();

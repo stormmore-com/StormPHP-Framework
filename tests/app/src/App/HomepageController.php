@@ -9,7 +9,7 @@ use Stormmore\Framework\Mvc\View\View;
 #[Controller]
 readonly class HomepageController
 {
-    #[Route("/")]
+    #[Route("/", "/homepage")]
     public function index(): View
     {
         return view("homepage");

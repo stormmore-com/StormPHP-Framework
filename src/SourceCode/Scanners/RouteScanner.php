@@ -42,12 +42,14 @@ class RouteScanner
                 foreach($class->functions as $function) {
                     if ($function->access == 'public' and $function->hasAttribute(Route::class)) {
                         $routeAttribute = $function->attributes->getAttribute(Route::class);
-                        $routeName = str_replace(array('"', "'"), "", $routeAttribute->args);
-                        if (!array_key_exists($routeName, $routes)) {
-                            $routes[$routeName] = [];
+                        foreach(explode(",", $routeAttribute->args) as $routeEndpoint) {
+                            $routeName = str_replace(array('"', "'"), "", $routeEndpoint);
+                            if (!array_key_exists($routeName, $routes)) {
+                                $routes[$routeName] = [];
+                            }
+                            $types = $this->getHandledRequestType($function->attributes);
+                            $routes[$routeName][] = [$class->getFullyQualifiedName(), $function->name, $types];
                         }
-                        $types = $this->getHandledRequestType($function->attributes);
-                        $routes[$routeName][] = [$class->getFullyQualifiedName(), $function->name, $types];
                     }
                 }
             }
