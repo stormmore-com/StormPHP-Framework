@@ -336,11 +336,12 @@ W ten sposób pobierane są tylko potrzebne zasoby.\
 `view->content` wyświetla podstronę. 
 
 #### Szablon
+
 ```php
 <?php
 use Stormmore\Framework\Mvc\View\View;
 /** @var View $view*/
-$view->setLayout('@templates/includes/layout');
+$view->useLayout('@templates/includes/layout');
 ?>
 
 <h2>Success!</h2>

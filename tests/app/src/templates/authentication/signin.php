@@ -3,7 +3,7 @@
 
 use Stormmore\Framework\Mvc\View\View;
 
-$view->setLayout('@templates/includes/layout.php');
+$view->useLayout('@templates/includes/layout.php');
 ?>
 <h2>Sign in</h2>
 <div style="border:solid 1px; padding:10px">

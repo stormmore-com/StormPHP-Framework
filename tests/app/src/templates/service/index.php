@@ -10,7 +10,7 @@ use src\Infrastructure\Settings;
 use Stormmore\Framework\Mvc\View\View;
 
 $view->setTitle(t('status.title'));
-$view->setLayout('@templates/includes/layout.php');
+$view->useLayout('@templates/includes/layout.php');
 ?>
 <h1>Application configuration</h1>
 <table>

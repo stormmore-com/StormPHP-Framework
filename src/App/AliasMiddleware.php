@@ -14,7 +14,6 @@ readonly class AliasMiddleware implements IMiddleware
     public function run(closure $next, mixed $options = []): void
     {
         $this->appConfiguration->addAliases($options);
-
         $next();
     }
 }

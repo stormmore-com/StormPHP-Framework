@@ -10,7 +10,7 @@ use Stormmore\Framework\Mvc\View\View;
 use Stormmore\Framework\Mvc\View\ViewBag;
 
 $view->setTitle("Storm App - Emails");
-$view->setLayout("@templates/includes/layout.php");
+$view->useLayout("@templates/includes/layout.php");
 ?>
 
 <?php if ($view->request->messages->isset('success')): ?>

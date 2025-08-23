@@ -8,9 +8,7 @@ use Stormmore\Framework\Mvc\IO\Request;
 
 readonly class Authenticator implements IAuthenticator
 {
-    public function __construct(private Request $request)
-    {
-    }
+    public function __construct(private Request $request) { }
 
     public function authenticate(AppUser $appUser): void
     {

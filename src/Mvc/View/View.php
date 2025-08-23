@@ -28,11 +28,22 @@ class View extends stdClass
 
     public function __construct(
         private string $fileName,
-        private array|ViewBag $data = [])
+        private array|ViewBag $data = [],
+        private readonly null|string $templateDirectory = null)
     {
         if (!str_ends_with($this->fileName, '.php')) {
             $this->fileName .= '.php';
         }
+
+        if (Path::isAlias($this->fileName)) {
+            $this->fileName = Path::resolve_alias($this->fileName);
+        }
+        else {
+            if ($this->templateDirectory) {
+                $this->fileName = Path::concatenate_paths($this->templateDirectory, $this->fileName);
+            }
+        }
+        file_exists($this->fileName) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");
 
         if (is_object($this->data)) {
             $this->data = get_object_vars($this->data);
@@ -53,10 +64,7 @@ class View extends stdClass
      */
     public function toHtml(): string
     {
-        $templateFilePath = Path::resolve_alias($this->fileName);
-        file_exists($templateFilePath) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");
-
-        return $this->getTemplateContent($templateFilePath);
+        return $this->getTemplateContent($this->fileName);
     }
 
     private function getTemplateContent(string $templateFileName): string
@@ -98,7 +106,7 @@ class View extends stdClass
         require_once $path;
     }
 
-    public function setLayout(string $filename): void
+    public function useLayout(string $filename): void
     {
         $this->layoutFileName = $filename;
     }

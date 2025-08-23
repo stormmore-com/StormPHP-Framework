@@ -6,7 +6,7 @@
 
 use Stormmore\Framework\Mvc\View\View;
 
-$view->setLayout('@templates/includes/layout.php');
+$view->useLayout('@templates/includes/layout.php');
 ?>
 
 <h2>Success!</h2>

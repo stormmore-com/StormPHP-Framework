@@ -15,7 +15,8 @@ $app = App::create(directories: [
     'project' => '../',
     'source' => '../src',
     'cache' => '../.cache',
-    'logs' => '../.logs'
+    'logs' => '../.logs',
+    'template' => '../src/templates',
 ]);
 
 $app->addRoute('/files', '@/src/static/files.php');

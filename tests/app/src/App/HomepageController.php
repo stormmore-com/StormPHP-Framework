@@ -12,6 +12,6 @@ readonly class HomepageController
     #[Route("/")]
     public function index(): View
     {
-        return view("@templates/homepage");
+        return view("homepage");
     }
 }

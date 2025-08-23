@@ -65,6 +65,11 @@ class Path
         return $path;
     }
 
+    public static function isAlias(string $path): bool
+    {
+        return str_starts_with($path, "@");
+    }
+
     public static function resolve_alias(string $pathAlias): string
     {
         $configuration = App::getInstance()->getAppConfiguration();

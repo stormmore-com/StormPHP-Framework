@@ -136,7 +136,8 @@ function redirect(string $url = "/", string|bool $success = false, string|bool $
 
 function view(string $templateFileName, array|ViewBag $data = []): View
 {
-    return new View($templateFileName, $data);
+    $templateDirectory = App::getInstance()->getAppConfiguration()->templateDirectory;
+    return new View($templateFileName, $data, $templateDirectory);
 }
 
 function print_view($templateFileName, array|object $data = []): void

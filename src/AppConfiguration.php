@@ -12,6 +12,7 @@ class AppConfiguration
     public string $projectDirectory;
     public string $sourceDirectory;
     public string $cacheDirectory;
+    public null|string $templateDirectory = null;
     public array $aliases = array();
     public array $errors = array();
 
@@ -81,6 +82,13 @@ class AppConfiguration
             mkdir($cache, 0777, true);
         }
         $this->cacheDirectory = realpath($cache);
+
+        if (array_key_exists('template', $directories)) {
+            $templateDirectory = $directories['template'];
+            if (is_dir($templateDirectory)) {
+                $this->templateDirectory = $templateDirectory;
+            }
+        }
 
         $logs = $project . "/.logs";
         if (array_key_exists('logs', $directories)) {

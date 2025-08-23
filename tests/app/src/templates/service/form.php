@@ -8,7 +8,7 @@
 use src\App\Service\BasicForm;
 use Stormmore\Framework\Mvc\View\View;
 
-$view->setLayout('@templates/includes/layout.php');
+$view->useLayout('@templates/includes/layout.php');
 ?>
 
 <?php if ($form->isSubmittedSuccessfully()): ?>

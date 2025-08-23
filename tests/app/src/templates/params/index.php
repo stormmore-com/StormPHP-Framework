@@ -7,7 +7,7 @@
 use Stormmore\Framework\Mvc\View\View;
 
 $view->setTitle("Storm App - Params");
-$view->setLayout("@templates/includes/layout.php");
+$view->useLayout("@templates/includes/layout.php");
 ?>
 
 <!-- non typed -->
