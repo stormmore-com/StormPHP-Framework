@@ -73,8 +73,11 @@ class SourceCode
 
     public function findFileByFullyQualifiedClassName(string $className): bool|string
     {
-        if (isset($this->classes) and array_key_exists($className, $this->classes) and file_exists($this->classes[$className])) {
-            return $this->classes[$className];
+        if (isset($this->classes) and array_key_exists($className, $this->classes)) {
+            $filePath = $this->configuration->sourceDirectory . $this->classes[$className];
+            if (file_exists($filePath)) {
+                return $filePath;
+            }
         }
 
         $classFileName = $this->configuration->sourceDirectory . "/" . $className . '.php';
