@@ -28,6 +28,11 @@ class AppUser
         $this->privileges = $privileges;
     }
 
+    public function hasPrivilege(string $privilege): bool
+    {
+        return in_array($privilege, $this->privileges);
+    }
+
     public function hasPrivileges(array $claims): bool
     {
         return count(array_intersect($this->privileges, $claims)) == count($claims);
