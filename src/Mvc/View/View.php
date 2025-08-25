@@ -101,7 +101,7 @@ class View extends stdClass
 
     public function useLayout(string $filename): void
     {
-        $this->layoutFileName = $this->buildPath($filename);
+        $this->layoutFileName = $filename;
     }
 
     public function setTitle(string $title): void
