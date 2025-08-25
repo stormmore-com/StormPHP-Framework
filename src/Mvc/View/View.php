@@ -75,7 +75,7 @@ class View extends stdClass
         }
 
         if ($this->layoutFileName) {
-            $layoutView = new View($this->layoutFileName);
+            $layoutView = new View($this->layoutFileName, [], $this->templatesDirectory);
             $layoutView->content = $content;
             $layoutView->htmlMetaCssScripts = $this->htmlMetaCssScripts;
             $layoutView->htmlMetaJsScripts = $this->htmlMetaJsScripts;
