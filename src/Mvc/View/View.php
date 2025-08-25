@@ -35,14 +35,7 @@ class View extends stdClass
             $this->fileName .= '.php';
         }
 
-        if (Path::isAlias($this->fileName)) {
-            $this->fileName = Path::resolve_alias($this->fileName);
-        }
-        else {
-            if ($this->templatesDirectory) {
-                $this->fileName = Path::concatenate_paths($this->templatesDirectory, $this->fileName);
-            }
-        }
+        $this->fileName = $this->buildPath($this->fileName);
         file_exists($this->fileName) or throw new Exception("VIEW: `$this->fileName` doesn't exist ");
 
         if (is_object($this->data)) {
@@ -102,13 +95,13 @@ class View extends stdClass
         if (!str_ends_with($path, '.php')) {
             $path .= '.php';
         }
-        $path = Path::resolve_alias($path);
+        $path = $this->buildPath($path);
         require_once $path;
     }
 
     public function useLayout(string $filename): void
     {
-        $this->layoutFileName = $filename;
+        $this->layoutFileName = $this->buildPath($filename);
     }
 
     public function setTitle(string $title): void
@@ -160,5 +153,18 @@ class View extends stdClass
             $title = $this->htmlMetaTitle;
         }
         echo "<title>$title</title>\n";
+    }
+
+    private function buildPath(string $path): string
+    {
+        if (Path::isAlias($path)) {
+            return Path::resolve_alias($path);
+        }
+        else {
+            if ($this->templatesDirectory) {
+                return Path::concatenate_paths($this->templatesDirectory, $path);
+            }
+        }
+        return $path;
     }
 }
