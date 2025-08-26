@@ -25,7 +25,7 @@ class Logger implements ILogger
         $this->uuid = bin2hex(random_bytes(8));
     }
 
-    public function log(string $level, string $message, Throwable $t = null): void
+    public function log(string $level, string $message, ?Throwable $t = null): void
     {
         if ($t) {
             $message  .= "\n" . $t->getMessage() . "\n" . $t->getTraceAsString();
@@ -33,32 +33,32 @@ class Logger implements ILogger
         $this->write($level, $message);
     }
 
-    public function logD(string $message, Throwable $t = null): void
+    public function logD(string $message, ?Throwable $t = null): void
     {
         $this->log(self::DEBUG, $message, $t);
     }
 
-    public function logI(string $message, Throwable $t = null): void
+    public function logI(string $message, ?Throwable $t = null): void
     {
         $this->log(self::INFO, $message, $t);
     }
 
-    public function logN(string $message, Throwable $t = null): void
+    public function logN(string $message, ?Throwable $t = null): void
     {
         $this->log(self::NOTICE, $message, $t);
     }
 
-    public function logW(string $message, Throwable $t = null): void
+    public function logW(string $message, ?Throwable $t = null): void
     {
         $this->log(self::WARNING, $message, $t);
     }
 
-    public function logE(string $message, Throwable $t = null): void
+    public function logE(string $message, ?Throwable $t = null): void
     {
         $this->log(self::ERROR, $message, $t);
     }
 
-    public function logF(string $message, Throwable $t = null): void
+    public function logF(string $message, ?Throwable $t = null): void
     {
         $this->log(self::FATAL, $message, $t);
     }

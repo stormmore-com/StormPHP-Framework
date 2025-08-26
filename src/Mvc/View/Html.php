@@ -23,7 +23,7 @@ class Html
         echo $html;
     }
 
-    function radio(string $id, string $name, mixed $value, mixed $selected, string $className = null): void
+    function radio(string $id, string $name, mixed $value, mixed $selected, ?string $className = null): void
     {
         $html = "<input ";
 
