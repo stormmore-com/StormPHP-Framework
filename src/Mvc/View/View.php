@@ -21,6 +21,8 @@ class View extends stdClass
 
     public ViewBag $bag;
 
+    public ViewFormatter $formatter;
+
     private string|null $layoutFileName = null;
     private string|null $htmlMetaTitle = null;
     private array $htmlMetaJsScripts = [];
@@ -46,6 +48,7 @@ class View extends stdClass
             $this->bag->add($name, $value);
         }
 
+        $this->formatter = new ViewFormatter();
         $this->i18n = App::getInstance()->getContainer()->resolve(I18n::class);
         $this->request = App::getInstance()->getContainer()->resolve(Request::class);
         $this->appUser = App::getInstance()->getContainer()->resolve(AppUser::class);

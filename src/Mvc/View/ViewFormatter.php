@@ -2,18 +2,19 @@
 
 namespace Stormmore\Framework\Mvc\View;
 
+use Stormmore\Framework\App;
 use Stormmore\Framework\Internationalization\I18n;
 
 class ViewFormatter
 {
-    function format_date($date, $format = null): string
+    function date($date, $format = null): string
     {
-        return _format_date($date, false, $format);
+        return $this->_format_date($date, false, $format);
     }
 
-    function format_datetime($date, $format = null): string
+    function dateTime($date, $format = null): string
     {
-        return _format_date($date, true, $format);
+        return $this->_format_date($date, true, $format);
     }
 
     function format_js_datetime($date): string
@@ -36,7 +37,7 @@ class ViewFormatter
             $date = new DateTime($date);
         }
 
-        $i18n = di(I18n::class);
+        $i18n = App::getInstance()->getI18n();
         $date->setTimezone($i18n->culture->timeZone);
         if ($format == null) {
             $format = $includeTime ? $i18n->culture->dateTimeFormat : $i18n->culture->dateFormat;
