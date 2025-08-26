@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Mvc\View;
 
+use DateTime;
 use Stormmore\Framework\App;
 use Stormmore\Framework\Internationalization\I18n;
 
