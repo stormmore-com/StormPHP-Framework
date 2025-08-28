@@ -7,68 +7,38 @@ use Stormmore\Framework\Std\Collection;
 
 class FileArrayParser
 {
-    /**
-     * Transform standard $_FILES structure array into array of objects
-     *
-     * @param array $files
-     * @return array
-     */
-    public function parseToObjectArray(array $files): array
+    public function parse(array $files): array
     {
-        $objects = [];
-        foreach ($files as $fieldName => $values) {
-            if (is_array($values['name'])) {
-                $objects[$fieldName] = $this->parse($values);
-            }
-            else {
-                $object = new stdClass();
-                $object->name = $values['name'];
-                $object->error = $values['error'];
-                $objects[$fieldName] = $object;
-            }
+        $result = [];
+        foreach ($files as $field => $fileData) {
+            $result[$field] = $this->convertFileTree($fileData);
         }
-        return $objects;
+
+        return $result;
     }
 
-    private function parse(array $files): array
+    private function convertFileTree(array $fileTree): mixed
     {
-        $_files = [];
-
-        //name d e
-        $valuesKeyPath = Collection::getValuesKeyPaths($files);
-        foreach($valuesKeyPath as $valueKeyPath) {
-            $keys = $valueKeyPath[1];
-            $propValue = $valueKeyPath[0];
-            $propName = $keys[0];
-
-            $array = &$_files;
-            for($i = 1; $i < count($keys); $i++) {
-                $key = $keys[$i];
-                $exist = array_key_exists($key, $array);
-                $last = $i == count($keys) - 1;
-
-                if (!$exist) {
-                    if ($last) {
-                        $array[$key] = new stdClass();
-                    } else {
-                        $array[$key] = [];
-                    }
-                }
-                $array = &$array[$key];
+        if (is_array($fileTree['name'])) {
+            $result = [];
+            foreach ($fileTree['name'] as $key => $value) {
+                $result[$key] = $this->convertFileTree([
+                    'name'     => $fileTree['name'][$key],
+                    'type'     => $fileTree['type'][$key],
+                    'tmp_name' => $fileTree['tmp_name'][$key],
+                    'error'    => $fileTree['error'][$key],
+                    'size'     => $fileTree['size'][$key],
+                ]);
             }
-
-            $array = &$_files;
-            for($i = 1; $i < count($keys); $i++) {
-                $key = $keys[$i];
-                $value = &$array[$key];
-                if (is_object($value)) {
-                    $value->{$propName} = $propValue;
-                }
-                if (is_array($value)) {
-                    $array = &$value;
-                }
-            }
+            return $result;
         }
-        return $_files;
+
+        return new UploadedFile(
+            $fileTree['name'],
+            $fileTree['tmp_name'],
+            $fileTree['type'],
+            $fileTree['error'],
+            $fileTree['size']
+        );
     }
 }

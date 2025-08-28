@@ -22,15 +22,11 @@ use Stormmore\Framework\Mvc\IO\Request;
 /** @var Request $request */
 
 
-
-
-
-
 if ($request->isPost()) {
 
     $fileParser = new Request\FileArrayParser();
-    $files = $fileParser->parseToObjectArray($_FILES);
+    $files = $fileParser->parse($_FILES);
     echo '<pre>';
-    var_dump($files);
-    echo '</pre>';
+    var_dump($request->files->getAll());
+    echo "</pre>";
 }

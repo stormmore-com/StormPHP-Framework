@@ -8,6 +8,7 @@ use Stormmore\Framework\Mvc\IO\Cookie\SetCookie;
 use Stormmore\Framework\Mvc\IO\Cookie\Cookies;
 use Stormmore\Framework\Mvc\IO\Headers\Header;
 use Stormmore\Framework\Mvc\IO\Headers\Headers;
+use Stormmore\Framework\Mvc\IO\Request\FileArrayParser;
 use Stormmore\Framework\Mvc\IO\Request\Files;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\IParameters;
 use Stormmore\Framework\Mvc\IO\Request\Parameters\Parameters;
@@ -63,7 +64,8 @@ class RequestContext
             $this->contentType = array_key_value($_SERVER, 'CONTENT_TYPE', '');
             $headers = getallheaders();
             $cookies = $_COOKIE;
-            $this->files = new Files($_FILES);
+            $fileParser = new FileArrayParser();
+            $this->files = new Files($fileParser->parse($_FILES));
         }
 
         $_headers = [];

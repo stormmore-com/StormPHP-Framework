@@ -7,7 +7,6 @@ use Stormmore\Framework\Std\Path;
 class UploadedFile
 {
     function __construct(
-        public string $fieldName,
         public string $name,
         public string $path,
         public string $type,
@@ -15,11 +14,6 @@ class UploadedFile
         public int    $size
     )
     {
-    }
-
-    public static function createFromFile(string $file):UploadedFile
-    {
-        return null;
     }
 
     public function isImage(): bool
