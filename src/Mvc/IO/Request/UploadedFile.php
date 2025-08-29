@@ -52,6 +52,7 @@ class UploadedFile
      */
     public function move(string $directory, array $options = []): bool
     {
+        $directory = Path::resolve_alias($directory);
         $filename = $this->name;
         if (is_array_key_value_equal($options, 'filename', true)) {
             $filename = $options['filename'];
