@@ -2,6 +2,7 @@
 
 namespace Stormmore\Framework\Mvc\IO\Request;
 
+use Exception;
 use Stormmore\Framework\Std\Path;
 
 class UploadedFile
@@ -62,9 +63,13 @@ class UploadedFile
             list(, $extension) = split_file_name_and_ext($this->name);
             $filename = Path::gen_unique_file_name($length, $extension, $directory);
         }
-        if (move_uploaded_file($this->tmp, $directory . "/" . $filename)) {
+        $filePath = $directory . "/" . $filename;
+        if (move_uploaded_file($this->tmp, $filePath)) {
             $this->name = $filename;
             return true;
+        }
+        else {
+            throw new Exception("Failed to save uploaded file to $filePath");
         }
 
         return false;
