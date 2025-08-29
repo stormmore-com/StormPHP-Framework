@@ -60,7 +60,7 @@ class UploadedFile
         }
         if (is_array_key_value_equal($options, 'gen-unique-filename', true)) {
             $length = array_key_value($options, 'gen-filename-len', 64);
-            list(, $extension) = split_file_name_and_ext($this->name);
+            $extension = pathinfo($this->name)['extension'];
             $filename = Path::gen_unique_file_name($length, $extension, $directory);
         }
         $filePath = $directory . "/" . $filename;
