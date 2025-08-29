@@ -23,8 +23,8 @@ readonly class MailerMiddleware implements IMiddleware
             $this->configuration->get('mailer.port'),
             $this->configuration->get('mailer.protocol', ""),
             $this->configuration->get('mailer.authenticate', false),
-            $this->configuration->get('mailer.user'),
-            $this->configuration->get('mailer.password')
+            $this->configuration->get('mailer.user', ""),
+            $this->configuration->get('mailer.password', "")
         ));
         $this->mailer->useMailSender('default');
 
