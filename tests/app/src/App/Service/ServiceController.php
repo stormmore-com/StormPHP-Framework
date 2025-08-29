@@ -57,11 +57,11 @@ readonly class ServiceController
                 ->withReplyTo("reply.to@exaples.com", "Replies")
                 ->withSubject($form->subject)
                 ->withContentTemplate('@templates/mails/contact', ['content' => $form->content], $i18n);
-            if ($this->request->files->has('attachment1')) {
+            if ($this->request->files->isUploaded('attachment1')) {
                 $file = $this->request->files->get('attachment1');
                 $builder->withAttachment($file->path, $file->name);
             }
-            if ($this->request->files->has('attachment2')) {
+            if ($this->request->files->isUploaded('attachment2')) {
                 $file = $this->request->files->get('attachment2');
                 $builder->withAttachment($file->path, $file->name);
             }

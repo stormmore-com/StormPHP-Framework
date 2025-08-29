@@ -74,7 +74,7 @@ class MailBuilder
         return $this;
     }
 
-    public function withContentTemplate(string $template, array $variables = [], I18n $i18n = null): MailBuilder
+    public function withContentTemplate(string $template, array $variables = [], null|I18n $i18n = null): MailBuilder
     {
         if ($i18n !== null) {
             $container = App::getInstance()->getContainer();

@@ -80,7 +80,7 @@ readonly class ExceptionMiddleware implements IMiddleware
     {
         $this->response->body = "";
         if ($this->configuration->isDevelopment()) {
-            $this->response->body .= "<h2>Exception: {$throwable->getMessage()}</h2>";
+            $this->response->body .= "<h2>{$throwable->getMessage()}</h2>";
 
             $this->response->body .= "<h3>#0 " . $throwable->getFile() . ': ' . $throwable->getLine() . "</h3>\n";
             $this->response->body .= "<pre>";

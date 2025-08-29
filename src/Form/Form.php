@@ -39,7 +39,7 @@ class Form
 
     public function add(Field $field): Form
     {
-        $this->validator->addField($field);
+        $this->validator->add($field);
         return $this;
     }
 

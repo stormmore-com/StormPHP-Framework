@@ -27,6 +27,14 @@ class Files
         return array_key_exists($name, $this->uploadedFiles);
     }
 
+    public function isUploaded(string $name): bool{
+        $uploadedFile = $this->get($name);
+        if ($uploadedFile) {
+            return $uploadedFile->isUploaded();
+        }
+        return false;
+    }
+
     public function toArray(): array
     {
         return $this->uploadedFiles;

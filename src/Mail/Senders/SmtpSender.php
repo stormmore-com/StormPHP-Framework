@@ -66,13 +66,14 @@ readonly class SmtpSender implements IMailSender
         $multiPartMessage .= "\r\n";
 
         foreach($mail->attachments as $file) {
+            $filename = $file->getFilename();
             $multiPartMessage .= "--" . $mimeBoundary . "\r\n";
             $multiPartMessage .= "Content-Type: $file->getMimeType() ;\r\n";
-            $multiPartMessage .= "	name=\"" . $file->getFilename() . "\"\r\n";
+            $multiPartMessage .= "	name=\"" . $filename . "\"\r\n";
             $multiPartMessage .= "Content-Transfer-Encoding: base64\r\n";
-            $multiPartMessage .= "Content-Description: $file->getFilename() \r\n";
+            $multiPartMessage .= "Content-Description: $filename \r\n";
             $multiPartMessage .= "Content-Disposition: attachment;\r\n";
-            $multiPartMessage .= "	filename=\"$file->getFilename()\"\r\n";
+            $multiPartMessage .= "	filename=\"$filename\"\r\n";
             $multiPartMessage .= "\r\n";
             $multiPartMessage .= $file->getContent(). "\r\n";
             $multiPartMessage .= "\r\n";

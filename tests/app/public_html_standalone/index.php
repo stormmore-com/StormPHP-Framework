@@ -4,7 +4,7 @@ require __DIR__ . '/../../../src/autoload.php';
 
 use src\Infrastructure\Authenticator;
 use src\Infrastructure\Middleware\Authentication2Middleware;
-use src\Infrastructure\Middleware\MailerMiddleware;
+use src\Infrastructure\Middleware\CustomMailerMiddleware;
 use Stormmore\Framework\App;
 use Stormmore\Framework\App\AliasMiddleware;
 use Stormmore\Framework\App\ErrorHandlerMiddleware;
@@ -23,7 +23,7 @@ $app->addRoute('/files', '@/src/static/files.php');
 $app->addRoute('/hello', function () {
     return "hello world";
 });
-$app->addMiddleware(MailerMiddleware::class);
+$app->addMiddleware(CustomMailerMiddleware::class);
 $app->addMiddleware(AliasMiddleware::class, [
     '@templates' => "@/src/templates"
 ]);

@@ -6,7 +6,7 @@ class Attachment
 {
     private string $filename;
 
-    public function __construct(private string $filepath, string $filename = "", private string $mimeType = "application/octet-stream")
+    public function __construct(private readonly string $filepath, string $filename = "", private readonly string $mimeType = "application/octet-stream")
     {
         $this->filename = $filename;
         if (empty($this->filename)) {
