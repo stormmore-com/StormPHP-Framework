@@ -14,10 +14,6 @@ class Files
         $this->uploadedFiles = $files;
     }
 
-    /**
-     * @param string $name
-     * @return UploadedFile|null
-     */
     public function get(string $name): null|UploadedFile|array
     {
         if (array_key_exists($name, $this->uploadedFiles)) {
@@ -26,25 +22,13 @@ class Files
         return null;
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     * Check whether request has uploaded valid file
-     */
     public function has(string $name): bool
     {
-        return $this->get($name)?->isUploaded() ?? false;
+        return array_key_exists($name, $this->uploadedFiles);
     }
 
     public function getAll(): array
     {
         return $this->uploadedFiles;
-    }
-
-    public function delete(): void
-    {
-        foreach($this->uploadedFiles as $file) {
-            $file->delete();
-        }
     }
 }

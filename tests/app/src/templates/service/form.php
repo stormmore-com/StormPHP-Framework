@@ -347,9 +347,9 @@ $view->useLayout('@templates/includes/layout.php');
         <tr>
             <td>Files required ?</td>
             <td>
-                <input id="files-required-y" type="radio" name="files-required" value="true" />
+                <?php  $view->html->radio(id: 'files-required-y', name: 'files_required"', value: 'true', selected: $form->files_required) ?>
                 <label for="files-required-y">Yes</label>
-                <input id="files-required-n" type="radio" name="files-required" value="false" />
+                <?php  $view->html->radio(id: 'files-required-y', name: 'files_required"', value: 'false', selected: $form->files_required) ?>
                 <label for="files-required-n">No</label>
             </td>
             <td></td>

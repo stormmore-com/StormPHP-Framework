@@ -24,7 +24,7 @@ readonly class ImageValidator implements IValidator
                 return new ValidatorResult(false, $message);
             }
             $type = exif_imagetype($file->path);
-            if ($type === false || (!empty($this->allowed) and !in_array($type, $this->allowed))) {
+            if ($type === false or (!empty($this->allowed) and !in_array($type, $this->allowed))) {
                 $message = $this->message ?? t("validation.image_format");
                 return new ValidatorResult(false, t($message));
             }
