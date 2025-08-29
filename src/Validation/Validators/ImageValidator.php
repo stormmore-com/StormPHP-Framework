@@ -15,7 +15,7 @@ readonly class ImageValidator implements IValidator
     function validate(mixed $file, string $name, array $data, mixed $args): ValidatorResult
     {
         if ($file instanceof UploadedFile) {
-            if (!$file->isUploaded() and ($file->error == 1 or $this->error == 2)) {
+            if (!$file->isUploaded() and ($file->error == 1 or $file->error == 2)) {
                 $message = $this->message ?? t("validation.image_max_size");
                 return new ValidatorResult(false, $message);
             }

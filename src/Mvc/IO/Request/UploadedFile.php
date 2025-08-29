@@ -7,11 +7,11 @@ use Stormmore\Framework\Std\Path;
 class UploadedFile
 {
     function __construct(
-        public string $name,
-        public string $path,
-        public string $type,
-        public int    $error,
-        public int    $size
+        public string   $name,
+        public string   $path,
+        public string   $type,
+        public null|int $error = null,
+        public null|int $size = null
     )
     {
     }
@@ -26,19 +26,11 @@ class UploadedFile
         unlink($this->tmp);
     }
 
-    /**
-     * Check whether file was uploaded by user
-     * @return bool
-     */
     public function wasUploaded(): bool
     {
         return $this->error != 4;
     }
 
-    /**
-     * Check whether file was uploaded successfully
-     * @return bool
-     */
     public function isUploaded(): bool
     {
         return $this->error == 0;
