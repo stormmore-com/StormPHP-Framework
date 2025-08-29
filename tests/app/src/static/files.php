@@ -27,6 +27,6 @@ if ($request->isPost()) {
     $fileParser = new Request\FileArrayParser();
     $files = $fileParser->parse($_FILES);
     echo '<pre>';
-    var_dump($request->files->getAll());
+    var_dump($request->files->toArray());
     echo "</pre>";
 }

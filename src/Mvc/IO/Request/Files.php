@@ -27,7 +27,7 @@ class Files
         return array_key_exists($name, $this->uploadedFiles);
     }
 
-    public function getAll(): array
+    public function toArray(): array
     {
         return $this->uploadedFiles;
     }
