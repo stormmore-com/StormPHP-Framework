@@ -19,12 +19,12 @@ class UploadedFile
 
     public function isImage(): bool
     {
-        return $this->isUploaded() and getimagesize($this->tmp) !== false;
+        return $this->isUploaded() and getimagesize($this->path) !== false;
     }
 
     public function delete(): void
     {
-        unlink($this->tmp);
+        unlink($this->path);
     }
 
     public function wasUploaded(): bool
@@ -64,7 +64,7 @@ class UploadedFile
             $filename = Path::gen_unique_file_name($length, $extension, $directory);
         }
         $filePath = $directory . "/" . $filename;
-        if (move_uploaded_file($this->tmp, $filePath)) {
+        if (move_uploaded_file($this->path, $filePath)) {
             $this->name = $filename;
             return true;
         }
