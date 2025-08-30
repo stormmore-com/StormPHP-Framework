@@ -83,7 +83,8 @@ class MailBuilder
         }
 
         try {
-            $view = new View($template, $variables);
+            $templateDirectory = App::getInstance()->getAppConfiguration()->templatesDirectory;
+            $view = new View($template, $variables, templatesDirectory: $templateDirectory);
             $this->content = $view->toHtml();
         }
         catch(Throwable $t) {
