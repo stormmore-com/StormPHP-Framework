@@ -56,6 +56,11 @@ class App
         return $this->appConfiguration;
     }
 
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
+
     public function getResolver(): Resolver
     {
         return $this->resolver;
