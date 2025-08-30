@@ -19,12 +19,21 @@ class I18n
         $this->culture = new Culture();
     }
 
+    public static function load(string $translationFile): I18n
+    {
+        $i18n = new self();
+        $i18n->loadTranslations($translationFile);
+        return $i18n;
+    }
+
     public static function create(string $locale = "", string $translationFile = "", string $cultureFile = ""): I18n
     {
         $i18n = new self();
         $i18n->setLocale(new Locale($locale));
         $i18n->loadTranslations($translationFile);
-        $i18n->loadCulture($cultureFile);
+        if ($cultureFile) {
+            $i18n->loadCulture($cultureFile);
+        }
         return $i18n;
     }
 
@@ -76,5 +85,10 @@ class I18n
         }
 
         return $phrase;
+    }
+
+    public function t(string $phrase): string
+    {
+        return $this->translate($phrase);
     }
 }

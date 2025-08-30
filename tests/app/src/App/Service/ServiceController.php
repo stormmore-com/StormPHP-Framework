@@ -37,6 +37,36 @@ readonly class ServiceController
     {
     }
 
+    #[Get]
+    #[Route("/email-test")]
+    public function testI18nEmail(): mixed
+    {
+        $i18n = I18n::load("@mail/password_en.ini");
+        $this->mailer
+            ->create()
+            ->withSender('admin@example.com', "Admistrator")
+            ->withRecipient('recipient@example.com', "Dear friend")
+            ->withSubject($i18n->t("email.test.subject"))
+            ->withContent($i18n->t('email.test.content'))
+            ->send();
+        return "OK";
+    }
+
+    #[Get]
+    #[Route("/email-template-test")]
+    public function testTemplateEmail(): mixed
+    {
+        $i18n = I18n::load("@mail/password_en.ini");
+        $this->mailer
+            ->create()
+            ->withSender('admin@example.com', "Admistrator")
+            ->withRecipient('recipient@example.com', "Dear friend")
+            ->withSubject($i18n->t("email.test.subject"))
+            ->withContentTemplate('@templates/mails/test',[], $i18n)
+            ->send();
+        return "OK";
+    }
+
     #[Route('/send-mail')]
     public function sendEmail(): View|Redirect
     {
@@ -47,16 +77,17 @@ readonly class ServiceController
             ->add(Field::for('content')->required());
 
         if ($form->isSubmittedSuccessfully()) {
-            $i18n = I18n::create("en", "@src/lang/en.ini", "@src/lang/culture/en-US.ini");
+            $i18n = I18n::load("@src/lang/en.ini");
             $builder = $this->mailer
                 ->create()
+                ->withI18n($i18n)
                 ->withSender('admin@example.com', "Admistrator")
                 ->withRecipient($form->email, "Dear friend")
                 ->withCc("cc@example.com", "CC reader")
                 ->withBcc("bcc@example.com", "BCC reader")
                 ->withReplyTo("reply.to@exaples.com", "Replies")
                 ->withSubject($form->subject)
-                ->withContentTemplate('@templates/mails/contact', ['content' => $form->content], $i18n);
+                ->withContentTemplate('@templates/mails/contact', ['content' => $form->content], );
             if ($this->request->files->isUploaded('attachment1')) {
                 $file = $this->request->files->get('attachment1');
                 $builder->withAttachment($file->path, $file->name);

@@ -33,7 +33,8 @@ $app->addMiddleware(ErrorHandlerMiddleware::class, [
 $app->addMiddleware(ConfigurationMiddleware::class, ['@/settings.ini', '@/smtp.ini']);
 $app->addMiddleware(MailerMiddleware::class);
 $app->addMiddleware(AliasMiddleware::class, [
-    '@templates' => "@/src/templates"
+    '@templates' => "@/src/templates",
+    '@mail' => '@/src/lang/mail'
 ]);
 $app->addMiddleware(LanguageMiddleware::class);
 $app->addMiddleware(AuthenticationMiddleware::class, Authenticator::class);
