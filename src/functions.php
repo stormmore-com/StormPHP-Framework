@@ -74,6 +74,11 @@ function t(string $phrase, ...$args): string
     return _args($phrase, $args);
 }
 
+function echo_t(string $phrase, ...$args): void
+{
+    echo _args($phrase, $args)
+}
+
 function _p(string $phrase, ...$args): void
 {
     echo _args($phrase, $args);
