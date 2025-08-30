@@ -5,6 +5,7 @@ namespace Stormmore\Framework\Mvc\View;
 use Exception;
 use stdClass;
 use Stormmore\Framework\App;
+use Stormmore\Framework\Configuration\Configuration;
 use Stormmore\Framework\Internationalization\I18n;
 use Stormmore\Framework\Mvc\Authentication\AppUser;
 use Stormmore\Framework\Mvc\IO\Request;
@@ -14,6 +15,7 @@ use Throwable;
 class View extends stdClass
 {
     public I18n $i18n;
+    public Configuration $configuration;
     public Request $request;
     public AppUser $appUser;
 
@@ -49,9 +51,10 @@ class View extends stdClass
         }
 
         $this->formatter = new ViewFormatter();
-        $this->i18n = App::getInstance()->getContainer()->resolve(I18n::class);
-        $this->request = App::getInstance()->getContainer()->resolve(Request::class);
+        $this->i18n = App::getInstance()->getI18n();
+        $this->request = App::getInstance()->getRequest();
         $this->appUser = App::getInstance()->getContainer()->resolve(AppUser::class);
+        $this->configuration = App::getInstance()->getConfiguration();
         $this->html = new Html();
     }
 
