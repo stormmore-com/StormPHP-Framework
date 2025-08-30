@@ -13,7 +13,8 @@ class Html
         $html .= $this->html_attr('class', $className);
         if (
             (is_array($selected) and in_array($value, $selected)) or
-            (!is_array($selected) and $value === $selected)
+            (!is_array($selected) and $value === $selected) or
+            (is_bool($selected) and $selected === true)
         )
         {
             $html .= $this->html_attr('checked');
